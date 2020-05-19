@@ -1,0 +1,147 @@
+\lstset{escapeinside={(*@}{@*)}}
+\lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt}
+\begin{lstlisting}[language={pseudocode},label={lst:dcs},caption={On-the-fly Directed Exploration Procedure.},float=ht]
+ function DCS($\E {=} (E, A_E^C)$,$\:\heuristic$):
+   $\initial$ = $\<\init{e}^0,\ldots,\init{e}^n\>$
+   $\structure = \trimlst{(\{ \initial \}, A_E, \emptyset, \initial, M_E \cap \{\initial\})}$
+   $\Goals = \Errors = \emptyset$
+   $\NONE = \{\initial\}$
+   while $\initial \not\in \Errors \cup \Goals$:
+     $(e,\l,e')$ = expandNext($\heuristic$) (*@\label{line:expand}@*)
+     $S_{\structure'} = S_\structure\cup  \{ e' \}$
+     $\structure' = \trimlst{(S_{\structure'} , A_E, \D_\structure \cup \{ e \step{\l}{} e' 
+     \}, \initial, M_E \cap S_{\structure'} )}$
+     if $e' \in \Errors $: (*@\label{line:isLosing}@*)
+       propagateError($\{e'\}$)
+     else if $e' \in \Goals$: (*@\label{line:isWinning}@*)
+       propagateGoal($\{e'\}$)
+     else if canReach($e, e', \structure$): (*@\label{line:isLoop}@*)
+       $\SCC$ = getMaxLoop($e$,$e'$) (*@\label{line:getMaxLoop}@*)
+       C = findNewGoalsIn($\SCC$) (*@\label{line:lookingForWinner}@*)
+       $\Goals = \Goals \cup C$
+       $\NONE = \NONE \setminus C$
+       propagateGoal(C)   (*@\label{line:propagateGoal2}@*)
+       if $C = \emptyset$:
+         P = findNewErrorsIn($\SCC$)
+         $\Errors = \Errors \cup \SCC$
+         $\NONE = \NONE \setminus \SCC$
+         propagateError(P) (*@\label{line:propagateError2}@*)
+     $\structure = \structure'$
+ 
+   if $\initial \in \Goals$:
+     return $\!(\, \lambda w \ldot \{ \, \l \mid \trimlst{\initial \runw{w}{\structure} e \step{\l}{\structure} e'} \wedge e' \in \Goals \, \} )$
+   else:
+     return UNREALIZABLE
+\end{lstlisting}  
+%invariante del ciclo:  Inv($states(\structure), \structure)$
+
+\lstset{numbers=none, numberstyle=\tiny, stepnumber=1, numbersep=5pt}
+\begin{lstlisting}[language={pseudocode},label={lst:dcs.propagate},caption={Status propagation procedures.},float=ht]
+ function propagateGoal($newGoals$):
+   $A$ = ancestorsNone($newGoals$)
+   $C$ = playerCanForce($A,\Goals$)
+   $\Goals = \Goals \cup C$
+   $\NONE = \NONE \setminus C$
+
+ procedure propagateError($newErrors$):
+   $A$ = ancestorsNone($newErrors$)
+   $P$ = ambientCanForce($A,\Errors$)
+   $\Errors = \Errors\ \cup P$
+   $\NONE = \NONE \setminus P$
+\end{lstlisting}
+
+
+\begin{lstlisting}[language={pseudocode},label={lst:dcs.gather},caption={Status confirmation.},float=ht]
+ function findNewGoalsIn($\SCC$):
+   $C = \SCC$
+   $C' = \emptyset$
+   while $C' \neq  C:$
+     $C' = C$
+     $R = playerCanForce(C,(C \cap M_E)\cup \Goals)$
+     $Tr = C \setminus R$
+     $W = ambientCanForce(C, Tr \cup (S_E \setminus (C \cup \Goals)))$
+     $C=C \setminus W$
+   return C
+  
+ function playerCanForce(C,Target): //Attr1
+   $K_0 = \emptyset$
+   $K_1$ = Target
+   $i = 1$
+   while $K_i \neq K_{i-1}$:
+     $K_{i+1} = K_i$
+     for each k in $K_i \setminus K_{i-1}$:
+       for each v in (In(k) $\cap \ C$):
+         if $\nexists \l_u \ldot v \step{\l_u}{} h \wedge h \notin K_i \ then \ K_{i+1} = K_{i+1} \cup \{v\}$
+ return $K_i$
+
+ function ambientCanForce(C,Target): //Attr2
+   $K_0 = \emptyset$
+   $K_1$ = Target
+   $i = 1$
+   while $K_i \neq K_{i-1}$:
+     $K_{i+1} = K_i$
+     for each k in $K_i \setminus K_{i-1}$:
+       for each v in (In(k) $\cap \ C$):
+         if $(\exists \l_u \ldot v \step{\l_u}{} h \wedge h \in K_i)\ \vee (\forall \l_c \ldot v \step{\l_c}{} h \then h \in K_i) $
+         then $K_{i+1} = K_{i+1} \cup \{v\}$
+ return $K_i$
+  
+ function findNewErrorsIn($\SCC$):
+   $C = \SCC$
+   $C' = \emptyset$
+   while $C' \neq  C:$
+     $C' = C$
+     $R = playerCanForce(C,(C \cap M_E)\cup (S_E \setminus (C \cup \Errors)))$
+     $Tr = C \setminus R$
+     $W = ambientCanForce(C,Tr \cup \Errors)$
+     $C=C \setminus W$
+   $P = \SCC \setminus C$
+   return P
+\end{lstlisting}
+
+% AUX FUNCTIONS
+\begin{lstlisting}[language={pseudocode},label={lst:dcs.aux},caption={auxiliary procedures.},float=ht]
+ procedure expandNext($\heuristic$):
+   let $\trimlst{(e,\l,e') \ldot e\in S_\structure \wedge e\step{\l}{E} e' \wedge   
+  \neg e\step{\l}{\structure} e' \wedge }$ 
+           $\trimlst{(\forall s,\l',s') \ldot  s\in S_\structure \wedge s\step{\l}{E} s' \wedge   
+    \neg s\step{\l}{\structure} s' \implies}$ 
+                  $\trimlst{\heuristic(e, \l, e') >=\heuristic(s, \l',   s'))}$
+   if isDeadlock($e'$):
+     $\Errors$ = $\Errors \cup \{e'\}$
+   if $e'\notin \Errors \cup \Goals$:
+     $\NONE = \NONE \cup \{e'\}$
+   return $(e,\l,e')$
+ 
+ function ancestorsNone(targets):
+   return $\{ \, e \in \structure \mid \exists e' \in targets \ldot \exists w \ldot \trimlst{e \runw{w}{\structure} e'} \wedge$
+          $ \nexists s \in w \ldot s \in \Goals \cup \Errors \}$
+   
+ function canBeWinningLoop(loop):
+   return $(\marked{loop}{\structure}) \vee$ 
+          $(\exists s \in loop \ldot $canReachInOneStep($s, \structure, \Goals$)$)$
+   
+ function getMaxLoop($e$,$e'$):
+   return $\{s \mid \exists w, w' \ldot \trimlst{e \runw{w}{\structure'} s} \wedge \trimlst{s \runw{w'}{\structure'} e'} \wedge$ 
+          $\nexists s' \in w,w' \ldot s' \neq e' \wedge s' \in \Goals \cup \Errors \}$
+
+ function forcedTo($s,e,Z$):
+   return $(\exists \l_u \in A_Z^U \ldot \trimlst{s \step{\l_u}{Z} e})\ \vee$
+          $(\forall \l_c \in A_Z^C \ldot \trimlst{s \step{\l_c}{Z} e'} \then e' = e)$ 
+          
+ function isForcedToLose($s, C$):
+    return $\exists e \ldot$ forcedTo($s,e,\unexploredToBottom{\structure'}$)$\wedge \,
+    e\notin (C\cup\Goals)$
+    
+ function cannotBeReached($s, C$):
+    return $\trimlst{\forall s' \in C \ldot \nexists w \ldot s' \runw{w}{\structure'} s \wedge | w | > 0}$
+   
+ function cannotReachGoalOrMarkedIn($s, C$)
+    return $\trimlst{\nexists w \ldot s \runw{w}{C} s' \wedge s'\in C\ \wedge}$ 
+           $($canReachInOneStep$(s', \structure, \Goals)$
+           $\vee\ s'\in\M_{\structure'})$
+           
+ function cannotReachGoalIn($s, C$)
+    return $\trimlst{\nexists w \ldot s \runw{w}{C} s' \wedge s'\in C\ \wedge}$ 
+           canReachInOneStep$(s', \structure, \Goals)$
+\end{lstlisting}
