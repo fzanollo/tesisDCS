@@ -1,4 +1,4 @@
-En esta sección presentamos el algoritmo \DCS, que realiza una exploración sobre la marcha de el espacio de posibilidades de los estados. Por medio de dicha exploración el algoritmo encuentra una solución al problema composicional de "supervisory control". También discutimos la correctitud y completitud del algoritmo \DCS. \\
+En esta sección presentamos el algoritmo \DCS, que realiza una exploración sobre la marcha del espacio de estados. Por medio de dicha exploración el algoritmo encuentra una solución al problema composicional de "supervisory control". También discutimos la correctitud y completitud del algoritmo \DCS. \\
 En la próxima sección presentamos la heurística que guía \DCS aprovechando la forma composicional en el cual describimos los problemas complejos.
 
 
@@ -180,130 +180,88 @@ Lemma~\ref{lem:canBeWinningLoopWorks}).
 
 \begin{lemma}\textbf{\emph{(Condición necesaria/suficiente para ganar/perder)}}
 \label{lem:canBeWinningLoopWorks}
-Let $e \step{\l}{} e'$ be the only difference between two partial explorations, 
-$\structure$ and $\structure'$. Let $\SCC$ = \emph{\texttt{getMaxLoop($e$, 
+Sea $e \step{\l}{} e'$ la única diferencia entre dos eploraciones parciales, 
+$\structure$ y $\structure'$. Sea $\SCC$ = \emph{\texttt{getMaxLoop($e$, 
 $e'$)}}.
-If $e' \in \WESS \setminus \WES$ 
-then \emph{\texttt{canBeWinningLoop}($\SCC$)}. In addition, if \\ 
-\emph{\texttt{canBeWinningLoop}($\SCC$)} then $e' \notin \LESS$ 
+Si $e' \in \WESS \setminus \WES$ 
+entonces \emph{\texttt{canBeWinningLoop}($\SCC$)}. Además, si \\ 
+\emph{\texttt{canBeWinningLoop}($\SCC$)} entonces $e' \notin \LESS$ 
 \end{lemma}
 
 \begin{Proof Sketch}
-To prove $e' \in \WESS \setminus \WES$ implies  \texttt{canBeWinningLoop($\SCC$)}, we  
-assume \\ $\neg$\texttt{canBeWinningLoop($\SCC$)} and show that $e' \notin \WESS 
-\setminus \WES$. For this, it suffices to see that if 
-$\neg$\texttt{canBeWinningLoop($\SCC$)} then to reach a marked state from $e'$ it must 
-exit $\SCC$ to a state $s \notin \SCC \cup \WES$ which implies  $s \notin \WESS$ 
-since $s$ has no none path to $e 
-\step{\l}{} e'$  (Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}).
-As $s$ has no supervisor in $\unexploredToBottom{\structure'}$, it is impossible 
-for 
-$e'$ to have one. 
+Para probar que $e' \in \WESS \setminus \WES$ implica \texttt{canBeWinningLoop($\SCC$)}, asumimos \\ $\neg$\texttt{canBeWinningLoop($\SCC$)} y mostramos que $e' \notin \WESS 
+\setminus \WES$. Para esto, basta con ver que si
+$\neg$\texttt{canBeWinningLoop($\SCC$)} entonces para alcanzar un estado marcado desde $e'$ debe salir de $\SCC$ a un estado $s \notin \SCC \cup \WES$ lo que implica $s \notin \WESS$ 
+ya que $s$ no tiene ningún camino de estados none que llegue a $e \step{\l}{} e'$  (Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}).
+Como $s$ no tiene supervisor en $\unexploredToBottom{\structure'}$, es imposible que $e'$ tenga uno. 
 
-
-To prove that \texttt{canBeWinningLoop($\SCC$)} implies $e' \notin \LESS$ we build a supervisor $\sigma'$ for $e'$ in $\unexploredToTop{\structure'}$ as 
-follows: 
-For a trace that stays within $\SCC$, we only choose controllable successors 
-that are not 
-in $\LES$. Note that there cannot be uncontrollable successors in $\LES$ because 
-$\SCC \cap \LES= \emptyset$.   As soon as a trace exits $\SCC$ at a state $s'$ we 
-use the supervisor for $s'$ in $\unexploredToTop{\structure'}$. 
-As $s'$ cannot reach $e \step{\l}{\structure'} 
-e'$ using $\NONE$ states, by 
-Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, $s'$ must have such a 
-supervisor. \hfill$\qed$
+Para probar que \texttt{canBeWinningLoop($\SCC$)} implica $e' \notin \LESS$ construimos un supervisor $\sigma'$ para $e'$ en $\unexploredToTop{\structure'}$ de la siguiente forma:
+Para una traza que se quede dentro de $\SCC$, solo elegimos sucesores controlables que no estén en $\LES$. Notar que no puede haber sucesores no controlables en $\LES$ ya que
+$\SCC \cap \LES= \emptyset$. Tan pronto como la traza sale de $\SCC$ a un estado $s'$ usamos el supervisor para $s'$ en $\unexploredToTop{\structure'}$. 
+Como $s'$ no puede alcanzar $e \step{\l}{\structure'} 
+e'$ usando estados $\NONE$, por el 
+Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, $s'$ debe tener el supervisor que necesitamos. \hfill$\qed$
 
 \end{Proof Sketch}
 
-If \texttt{canBeWinningLoop()} returns true, at line~\ref{line:lookingForWinner}, 
-we know that if $e'$ changes status it is because $e' \in \WESS$.  To check this, a standard 
-fixpoint computation can be 
-performed. 
+Si \texttt{canBeWinningLoop()} retorna true, en la  linea~\ref{line:lookingForWinner}, 
+sabemos que si $e'$ cambia su estado es porque $e' \in \WESS$. Para ver si este cambio se produce, se realiza una computación estándar de punto fijo. 
 %However, we introduce an optimization, namely that there must be new 
 %$\NONE$-loop (i.e., a loop over states that are  $\NONE$)
 %that includes the new transition that either reaches a marked state 
 %or 
 %can reach a winning state in one step. 
-However, method 
-\texttt{findNewGoalsIn} applies an optimisation based on  
-Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, only 
-considering states that are in a $\NONE$-loop via the new 
-transition ($\SCC$).
+Sin embargo, el método \texttt{findNewGoalsIn} aplica una optimización basada en Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, solo considera estados que están en un $\NONE$-loop a través de la nueva transición ($\SCC$).
 
-
-If \texttt{canBeWinningLoop()} returns false, then we must check if  $e' \in \LESS$.
+Si \texttt{canBeWinningLoop()} retorna false, entonces debemos chequear si $e' \in \LESS$.
 %  By Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}
   %, we only consider states that are in a $\NONE$-loop 
 %via the $e \step{\l}{} e'$ (i.e, the set $\SCC$). 
-This can be done more efficiently than a fix-point 
-computation using 
-Lemma~\ref{lem:findErrorsWorks} that shows that it suffices 
-to check if 
-it is not possible to exit $\SCC$ and reach in one step a state not in 
-$\LES$. 
+Esto puede hacerse de forma más eficiente que con un punto fijo usando el Lemma~\ref{lem:findErrorsWorks} que muestra que alcanza con chequear si no es posible escapar de $\SCC$ alcanzando en un paso un estado que no esté en $\LES$. 
 
 
 
 %Hack de titulo de lemma porque si no, no corta linea.
-\begin{lemma}\textbf{\emph{(findNewErrorsIn is correct and complete)}}
+\begin{lemma}\textbf{\emph{(findNewErrorsIn es correcto y completo)}}
 \label{lem:findErrorsWorks}
-If $\SCC =$ \emph{\texttt{getMaxLoop($e$, $e'$)}} $\wedge$\\ 
-$\neg$\emph{\texttt{canBeWinningLoop}}($\SCC$) and \\
-$P=\emph{\texttt{findNewErrorsIn}}(\SCC)$ then \\
+Si $\SCC =$ \emph{\texttt{getMaxLoop($e$, $e'$)}} $\wedge$\\ 
+$\neg$\emph{\texttt{canBeWinningLoop}}($\SCC$) y \\
+$P=\emph{\texttt{findNewErrorsIn}}(\SCC)$ entonces \\
 $(e' \in \LESS \Rightarrow e' \in P 
 \subseteq \LESS)$ $\wedge \, (e' \notin \LESS \Rightarrow P = 
 \emptyset)$
 \end{lemma}
 
 \begin{Proof Sketch}
-We split the proof based on the if/then/else structure of \texttt{findNewErrorsIn}. 
-In the case of \texttt{if} being true, it suffices to prove that $e' \notin \LESS$. For this, 
-we build a supervisor $\sigma'$ for $e'$ in $\unexploredToTop{\structure'}$ as 
-follows: For a trace that stays within $\SCC$, we only choose controllable successors 
-that are not 
-in $\LES$. Note that there cannot be uncontrollable successors in $\LES$ because 
-$\SCC \cap \LES= \emptyset$.   As soon as a trace exits $\SCC$ at a state $s'$ we 
-use the supervisor for $s'$ in $\unexploredToTop{\structure'}$. 
-As $s'$ cannot reach $e \step{\l}{\structure'} 
-e'$ using $\NONE$ states, by 
-Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, $s'$ must have such a 
-supervisor. 
+Dividimos la prueba según la estructura del  if/then/else de \texttt{findNewErrorsIn}. 
+En el caso de que el \texttt{if} sea true, es suficiente probar que $e' \notin \LESS$. Para esto, 
+construimos un supervisor $\sigma'$ para $e'$ en $\unexploredToTop{\structure'}$ de la siguiente forma: Para una traza que se queda dentro de $\SCC$, solo tomamos sucesores controlables que no estén en $\LES$. Notar que no puede haber sucesores no controlables en $\LES$ ya que
+$\SCC \cap \LES= \emptyset$. Tan pronto como la traza sale de $\SCC$ al estado $s'$ usamos el supervisor de $s'$ en $\unexploredToTop{\structure'}$. 
+Como $s'$ no puede alcanzar $e \step{\l}{\structure'} 
+e'$ usando estados $\NONE$, por el 
+Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, $s'$ debe tener tal supervisor. 
 
-When the \texttt{if} is false, it suffices to prove $P = \SCC \subseteq \LESS$. We 
-reach a contradiction  
- by assuming $s \in \SCC \setminus \LESS$: If $s 
-\notin \LESS$ it has a supervisor $\sigma$ which admits a trace $w$ to a marked 
-state. 
-As 
-there are no marked states in $\SCC$, $w$ reaches an  $s' \notin \SCC$. As 
-the 
-\texttt{if} was false, $s' \in \LESS$ meaning $\sigma$ is not a supervisor.
+Cuando el \texttt{if} es false, alcanza con probar que $P = \SCC \subseteq \LESS$. Alcanzamos una contradicción asumiendo que $s \in \SCC \setminus \LESS$: Si $s 
+\notin \LESS$ entonces tiene un supervisor $\sigma$ que acepta una traza $w$ alcanzando un estado marcado. Como no hay estados marcados en $\SCC$, $w$ alcanza un estado $s' \notin \SCC$. Como el
+\texttt{if} era false, $s' \in \LESS$ por lo que $\sigma$ no es un supervisor.
 \hfill$\qed$
 \end{Proof Sketch}
 
-For efficiency,  \texttt{findNewGoalsIn} and 
-\texttt{findNewErrorsIn} not only check if $e' \in \WESS$/$e' \in 
-\LESS$ but also add  winning/losing states when 
-possible. Complete detection of new winning and losing states is 
-then done by the propagation procedures. 
+Por motivos de eficiencia, \texttt{findNewGoalsIn} y
+\texttt{findNewErrorsIn} no solo chequean si $e' \in \WESS$/$e' \in 
+\LESS$ si no que también agregan estados ganadores/perdedores cuando pueden. La detección completa de nuevos estados ganadores y perdedores se hace finalmente con los procesos de propagación. 
 
-Having argued that Property~~\ref{def:invariant} holds, correctness 
-and completeness follow straightforwardly. 
+Habiendo argumentado que la propiedad~~\ref{def:invariant} es válida, la correctitud y completitud le siguen de forma natural. 
 
-First, note that the algorithm terminates when it has determined 
-that $\init{e}$ is in $\LESS$ or $\WESS$. In the later case, it is 
-straightforward to build a supervisor from the exploration structure 
+Primero, notar que el algoritmo termina cuando logró determinar que $\init{e}$ está en $\LESS$ o $\WESS$. En el segundo caso, es simple construir un supervisor basándose en la estructura de exploración
 $\structure$.\hfill$\qed$
 
-\begin{theorem}[Correctness and Completeness]
-Let $\E = (E,A_E^C)$ be a compositional supervisory control problem as per Definition~\ref{def:control-problem}. There exists a solution for $\E$ if and only if the DCS algorithm returns a supervisor for $\E$.
+\begin{theorem}[Correctitud y Completitud]
+Sea $\E = (E,A_E^C)$ un problema de control composicional según Definition~\ref{def:control-problem}. Existe una solución para $\E$ si y solo si el algoritmo DCS retorna un supervisor para $\E$.
 \end{theorem}
 
 \begin{proof}
-The theorem follows from the loop invariant of the algorithm 
-(Definition~\ref{def:invariant}),  
-Lemma~\ref{lem:WESandLesMonotonicity}, and 
-the fact that in the worst case all transitions are added to the 
-exploration structure. Thus,  $E = \structure = 
+El teorema se desprende del invariante de ciclo del algoritmo (Definition~\ref{def:invariant}), el
+Lemma~\ref{lem:WESandLesMonotonicity}, y el hecho de que en el peor caso todas las transiciones son agregadas a la estructura de exploración. Entonces,  $E = \structure = 
 \unexploredToBottom{\structure} = \unexploredToTop{\structure}$.
 \end{proof}
