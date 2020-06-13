@@ -81,25 +81,53 @@
 
 %%%% ACA VA EL CONTENIDO DE LA TESIS
 
-\section{Paper para traducir}
-\input{on-the-fly_directed_exploration.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\chapter{Introduccion}
-\section{Problema}
+\chapter{Introducción}
+\section{Control Supervisado}
 {\begin{small}%
 \begin{flushright}%
 \it
-Ejemplo
+Entiende el problema y tendrás la solución
 \end{flushright}%
 \end{small}%
 \vspace{.5cm}}
+El presente proyecto de tesis consistió en un estudio y extensión del método previamente propuesto por Daniel Ciolek en su tesis de doctorado[REF]. Más precisamente, se trató de estudiar problemas del algoritmo de exploración on-the-fly para problemas de Supervisory Control, cuya propiedad central era de tipo Non-blocking, y posteriormente analizados los problemas afrontarlos con una nueva especificación e implementación del algoritmo.
+\\
+Un problema de Control Supervisado consiste en un Sistema de Eventos Discreto (DES) con un subconjunto de sus estados marcados. Un factor clave de estos problemas es que el DES se presenta de forma compacta, de forma modular tal que la composición paralela de múltiples componentes den lugar a la DES de interés.
+\\
+
+EJEMPLO con historia y dibujo de 2 modulos y una planta resultante
+
+\\
+
+DESCRIPCION nonblocking
+
+\\
+
+Problema explosión exponencial: Componer todo vs BFS
+
+\\
 
 
-%% ...
-\chapter{Experimentacion}
-\chapter{Conclusiones}
+
+\chapter{Primeros experimentos y problemas encontrados}
+Ponemos que no marcaba errores y por eso no estaba seguro de donde habia explorado y donde no? Podriamos usarlo para motivar que nuestro invariante es saber siempre que cosas exploramos, que consideramos clave para un algoritmo de clasificacion on the fly.
+
+
+
+\chapter{Nuestro algoritmo de exploración}
+\input{on-the-fly_directed_exploration.tex}
+
+
+
+\chapter{Experimentos de performance}
+Poner que: comparamos con el benchmark de otros programas, comparar ese benchmark con dani, y que seguimos agrandando los tests de regresión para ir modificando con más confianza el código.
+
+
+
+\chapter{Conclusiones???}
 
 %%%% BIBLIOGRAFIA
 \backmatter
