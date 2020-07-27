@@ -63,9 +63,44 @@ Mostramos en la figura~\ref{fig:modelos} un LTS (Labeled transition system) para
 
 
 \subsection{Controlador objetivo}
-DESCRIPCION nonblocking
+El problema a tratar consiste en encontrar para la planta de entrada, un controlador, es decir, un autómata con las siguientes características:
+
+	-Es sub-autómata de la planta: todos los estados y transiciones del controlador existen en la planta compuesta.
+	-Es controlable: todas las transiciones no controlables de la planta se encuentran en el controlador.
+	-Es non-blocking: cada palabra válida para el controlador puede ser extendida por otra palabra no vacía para que su concatenación alcance un estado marcado.
+	
+Podemos pensar en un controlador non-blocking como un jugador optimista. Se encarga de no perder, y mientras tenga un futuro camino posible que lo lleva al destino buscado, considera que está ganando.
+
+Es clave entender que en el problema a tratar, la posición de "tablas" del ajedrez, en la que ambos jugadores repiten sus jugadas 50 veces, se considera ganadora si todavía hay opción de dar un jaque mate. Si repetimos nuestras jugadas y todavía tengo dos torres considero que gané el partido, porque eventualmente mi oponente podría cansarse y dejarme ganar. Si repetimos nuestras jugadas pero solo tengo mi rey, no hay forma de dar mate, no puedo extender esta "palabra", esta partida, de forma de dar mate, y considero que perdí.
+
+Es importante notar que como se busca que cualquier palabra sea extendible a otro estado marcado, lo que se busca es pasar por algún estado marcado infinitas veces. O sea, un estado "e" marcado que tenga un camino para que el jugador pueda volver controlablemente al mismo estado "e".
+
+Por esto, las estructuras claves que analizamos en nuestro algoritmo son los "loops", ya que los primeros estados ganadores son aquellos que están en un loop controlable con un estado marcado dentro. Luego señalizamos como ganadores también a cualquier estado que controlablemente alcanza un estado ganador.
+
+También los "loops" son esenciales para encontrar los estados perdedores, ya que la única forma de que un estado sea perdedor es que no pueda alcanzar un estado ganador. En otras palabras, los estados perdedores son aquellos que forman parte de un loop que no tiene estados marcados ni transiciones salientes.
+
+De forma más concreta, en nuestro algoritmo, un "loop" del cual el jugador no puede escapar, pero desde el cual existe un camino hacia un estado ganador, se considera ganador.
 \\
 
 \subsection{Exploración on-the-fly}
 Problema explosión exponencial: Componer todo vs BFS
 \\
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
