@@ -1,1 +1,30 @@
-Ponemos que no marcaba errores y por eso no estaba seguro de donde habia explorado y donde no? Podriamos usarlo para motivar que nuestro invariante es saber siempre que cosas exploramos, que consideramos clave para un algoritmo de clasificacion on the fly.
+%Ponemos que no marcaba errores y por eso no estaba seguro de donde habia explorado y donde no? Podriamos usarlo para motivar que nuestro invariante es saber siempre que cosas exploramos, que consideramos clave para un algoritmo de clasificacion on the fly.
+
+Como parte inicial de comprender el código y al notar una falta de batería de tests, decidimos crear los propios. Comenzaron siendo casos chicos, simples desde el punto de vista de alguien con grafos en mente, complicados e incluso inexistentes desde el de alguien que trabaja con non-blocking. Nuestra falta de experiencia en el tema nos jugó a favor y creamos casos que rompían el algoritmo de exploración. 
+
+EXPLICACION SOBRE TEST 1 Y QUE ES LO QUE QUERIAMOS VER?
+
+\begin{lstlisting}[language = mtsa, caption=Test 1]
+Ejemplo = A1,
+A1 = (u12 -> A2 |
+u14 ->A4),
+A2 = (u21 -> A1),
+A4 = (c45 ->A5),
+A5 = (u55 -> A5).
+
+||Plant = Ejemplo.
+
+controllerSpec Goal = {
+controllable = {c45}
+marking = {u55}
+nonblocking
+}
+
+heuristic ||DirectedController = Plant~{Goal}.
+\end{lstlisting}
+
+Notamos una razón común por la cuál no funcionaba y era la falta de reconocimiento de errores. Anteriormente el algoritmo de exploración solo veía como error a los estados señalados como tal (deadlocks), al encontrar un loop donde no podía ganar solo no lo caracterizaba como ganador y quedaba explorado pero sin conclusión sobre el mismo.
+
+Esto puede ser un problema en casos como el de la figura 1 //TODO (es el ej de facas), donde si exploramos la transición de abajo primero y no concluímos que el estado e es un error al mirar la de arriba vamos a pensar, erroneamente, que es un goal y propagaremos esa información.
+
+Cabe aclarar que sólo podemos concluír que un loop es error cuando este ha sido explorado en su completitud. Esto es así debido a la naturaleza optimista de los problemas non-blocking.
