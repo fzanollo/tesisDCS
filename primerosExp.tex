@@ -1,26 +1,30 @@
 %Ponemos que no marcaba errores y por eso no estaba seguro de donde habia explorado y donde no? Podriamos usarlo para motivar que nuestro invariante es saber siempre que cosas exploramos, que consideramos clave para un algoritmo de clasificacion on the fly.
 
-Como parte inicial de comprender el código y al notar una falta de batería de tests, decidimos crear los propios. Comenzaron siendo casos chicos, simples desde el punto de vista de alguien con grafos en mente, complicados e incluso inexistentes desde el de alguien que trabaja con non-blocking. Nuestra falta de experiencia en el tema nos jugó a favor y creamos casos que rompían el algoritmo de exploración. 
+Como parte inicial de comprender el código y al notar una falta de batería de tests, decidimos crear los propios. 
 
-EXPLICACION SOBRE TEST 1 Y QUE ES LO QUE QUERIAMOS VER?
+%Consiste de casos chicos, simples desde el punto de vista de alguien con grafos en mente, complicados e incluso inexistentes desde el de alguien que trabaja con non-blocking. Nuestra falta de experiencia en el tema nos jugó a favor y creamos casos que rompían el algoritmo de exploración. 
+
+Dada nuestra falta de experiencia en el tema, no estábamos sesgados por las formas típicas de los problemas en el campo. Eso nos llevó a generar casos de tests muy pequeños, muy simples analizados como un grafo, pero con formas poco usuales para un problema de síntesis de controlador non-blocking. Esto fue clave para encontrar los problemas en el algoritmo de exploración, ya que éstos no aparecían al sintetizar problemas típicos del área, si no forzando a la herramienta a casos borde.  
+
+EXPLICACION SOBRE TEST 6 Y QUE ES LO QUE QUERIAMOS VER? PONER EXPLICACION DE LA HERRAMIENTA Y COMO MARCA CON TRANSICIONES.
 
 \begin{lstlisting}[language = mtsa, caption=Test 1]
-Ejemplo = A1,
-A1 = (u12 -> A2 |
-u14 ->A4),
-A2 = (u21 -> A1),
-A4 = (c45 ->A5),
-A5 = (u55 -> A5).
+Ejemplo = A0,
+A0 = (c01 -> A1),
+A1 = (u12 -> A2 | u13 -> A3),
+A2 = (u23 -> A3),
+A3 = (u33 -> A3).
 
 ||Plant = Ejemplo.
 
 controllerSpec Goal = {
-controllable = {c45}
-marking = {u55}
+controllable = {c01}
+marking = {u33}
 nonblocking
 }
 
 heuristic ||DirectedController = Plant~{Goal}.
+
 \end{lstlisting}
 
 Notamos una razón común por la cuál no funcionaba y era la falta de reconocimiento de errores. Anteriormente el algoritmo de exploración solo veía como error a los estados señalados como tal (deadlocks), al encontrar un loop donde no podía ganar solo no lo caracterizaba como ganador y quedaba explorado pero sin conclusión sobre el mismo.
