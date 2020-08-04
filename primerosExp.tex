@@ -27,8 +27,17 @@ heuristic ||DirectedController = Plant~{Goal}.
 
 \end{lstlisting}
 
+Con la iteración de bugfixes y nuevos tests, vimos que en gran cantidad de casos, el algoritmo evitaba mostrar errores del código ya que la heurística elegía los caminos a explorar menos problemáticos. En consecuencia, creamos una heurística "dummy" que simplemente elija las transiciones en orden lexicográfico, permitiéndonos un control total del orden de exploración y pudiendo así encontrar más errores en el algoritmo.
+
 Notamos una razón común por la cuál no funcionaba y era la falta de reconocimiento de errores. Anteriormente el algoritmo de exploración solo veía como error a los estados señalados como tal (deadlocks), al encontrar un loop donde no podía ganar solo no lo caracterizaba como ganador y quedaba explorado pero sin conclusión sobre el mismo.
 
-Esto puede ser un problema en casos como el de la figura 1 //TODO (es el ej de facas), donde si exploramos la transición de abajo primero y no concluímos que el estado e es un error al mirar la de arriba vamos a pensar, erroneamente, que es un goal y propagaremos esa información.
+Esto puede ser un problema en casos como el de la figura 1 //TODO (es el ej de facas), donde si exploramos la transición de abajo primero y no concluimos que el estado `e` es un error al mirar la de arriba vamos a pensar, erróneamente, que es un goal y propagaremos esa información.
 
-Cabe aclarar que sólo podemos concluír que un loop es error cuando este ha sido explorado en su completitud. Esto es así debido a la naturaleza optimista de los problemas non-blocking.
+Cabe aclarar que sólo podemos concluir que un loop es error cuando este ha sido explorado en su completitud. Esto es así debido a la naturaleza optimista de los problemas non-blocking.
+
+Fue a causa de esta necesidad de marcar errores que decidimos finalmente dejar de buscar `fixes` y comenzar a diseñar un nuevo algoritmo con un invariante que consideramos clave para síntesis on-the-fly: Si con la información de lo explorado hasta el momento es posible concluir que un estado es ganador o perdedor en la planta totalmente explorada, debemos marcar ese estado antes de seguir explorando. Este nuevo enfoque se explica en mayor profundidad en la sección 3.
+
+
+
+
+
