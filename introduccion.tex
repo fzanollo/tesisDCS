@@ -7,11 +7,18 @@ Entiende el problema y tendrás la solución
 \end{small}%
 \vspace{.5cm}}
 El presente proyecto de tesis consistió en un estudio y extensión del método previamente propuesto por Daniel Ciolek en su tesis de doctorado[REF PAPER?]. Más precisamente, se trató de analizar carencias del algoritmo de exploración on-the-fly para problemas de Supervisory Control, cuya propiedad central era de tipo Non-blocking, y posteriormente analizados los problemas afrontarlos con una nueva especificación e implementación del algoritmo.
-\\
-Un problema de Control Supervisado consiste en un Sistema de Eventos Discreto (DES) con un subconjunto de sus estados marcados. Un factor clave de estos problemas es que el DES se presenta de forma compacta, de forma modular tal que la composición paralela de múltiples componentes den lugar a la DES de interés.
-\\
 
-\subsection{Caso de estudio}
+Un problema de Control Supervisado, dentro del área de AI Planning, consiste en un Sistema de Eventos Discreto (DES) con un subconjunto de sus estados marcados. Un factor clave de estos problemas es que el DES se presenta de forma compacta, de forma modular tal que la composición paralela de múltiples componentes den lugar a la DES de interés. Exploraremos en mayor detalle los aspectos técnicos del problema en el capítulo~\ref{chpt:background}
+
+La motivación para analizar dichos problemas surge de la necesidad de verificar software, hoy en día utilizado en prácticamente todo emprendimiento humano. Si bien puede irse ganando confianza sobre la correctitud de un algoritmo a través de una bateria de tests, éstos no proveen una garantía si no una seguridad cada vez mayor. 
+
+Un método alternativo es el de la verificación de la implementación del algoritmo con un modelo formal que cumpla los objetivos y requerimientos deseados del programa. Con esta visión en mente, el área de `Controller Synthesis` va un paso más allá y busca la generación automática de un controlador que dado un modelo (en forma de DES) cumpla siempre en toda ejecución posible los requisitos del problema.
+
+Podemos trazar una comparación con el método de "Machine Learning", en auge desde hace unos años. En este paradigma, el programa tiene como input una multitud de casos de ejemplo del comportamiento buscado, si ponemos como ejemplo ganar un juego de ajedrez, tomaría una biblioteca de partidas jugadas de las cuales aprender. Como resultado, presentaría un programa que sabe jugar al ajedrez "muy bien", es decir, es muy probable que dada una partida, la gane, pero no está garantizado. Pueden verse hoy en día muchas aplicaciones de este método con gran éxito, desde la dominación del juego del "go" hasta autos manejados por IA. Sin embargo, ya que no ofrece ninguna garantía, es un método poco apropiado para sistemas críticos.
+
+Como contraste, la Síntesis de controladores toma como input las reglas del juego de ajedrez, por ejemplo, varios componentes (autómatas) separados, siendo cada uno los movimientos posibles para una pieza. Como resultado, daría un controlador, que en cada momento de la partida solo habilita algunas de las transiciones de los autómatas y garantiza que si se le hace caso ganará la partida. Es esencial notar que la técnica de este trabajo busca obtener una garantía muy fuerte, y el problema lo encuentra en la escalabilidad del problema, ya que hoy en día es imposible aplicarla a un juego del tamaño del ajedrez.
+
+\section{Caso de estudio}
 A continuación se presenta un ejemplo sobre el cual aplicaremos nuestro algoritmo a lo largo de la presentación. 
 
 Imaginemos un negocio del cual modelamos 3 componentes: La cuenta de dinero, la estación de ventas de productos terminados, y la estación de compra de materia prima y ensamblaje de productos.
@@ -60,33 +67,6 @@ Mostramos en la figura~\ref{fig:modelos} un LTS (Labeled transition system) para
 	\end{center}
 \end{figure}
 
-
-
-\subsection{Controlador objetivo}
-El problema a tratar consiste en encontrar para la planta de entrada, un controlador, es decir, un autómata con las siguientes características:
-
-	-Es sub-autómata de la planta: todos los estados y transiciones del controlador existen en la planta compuesta.
-	
-	-Es controlable: todas las transiciones no controlables de la planta se encuentran en el controlador.
-	
-	-Es non-blocking: cada palabra válida para el controlador puede ser extendida por otra palabra no vacía para que su concatenación alcance un estado marcado.
-	
-Podemos pensar en un controlador non-blocking como un jugador optimista. Se encarga de no perder, y mientras tenga un futuro camino posible que lo lleva al destino buscado, considera que está ganando.
-
-Es clave entender que en el problema a tratar, la posición de "tablas" del ajedrez, en la que ambos jugadores repiten sus jugadas 50 veces, se considera ganadora si todavía hay opción de dar un jaque mate. Si repetimos nuestras jugadas y todavía tengo dos torres considero que gané el partido, porque eventualmente mi oponente podría cansarse y dejarme ganar. Si repetimos nuestras jugadas pero solo tengo mi rey, no hay forma de dar mate, no puedo extender esta "palabra", esta partida, de forma de dar mate, y considero que perdí.
-
-Es importante notar que como se busca que cualquier palabra sea extendible a otro estado marcado, lo que se busca es pasar por algún estado marcado infinitas veces. O sea, un estado 'e' marcado que tenga un camino para que el jugador pueda volver controlablemente al mismo estado 'e'.
-
-Por esto, las estructuras claves que analizamos en nuestro algoritmo son los "loops", ya que los primeros estados ganadores son aquellos que están en un loop controlable con un estado marcado dentro. Luego señalizamos como ganadores también a cualquier estado que controlablemente alcanza un estado ganador.
-
-También los "loops" son esenciales para encontrar los estados perdedores, ya que la única forma de que un estado sea perdedor es que no pueda alcanzar un estado ganador. En otras palabras, los estados perdedores son aquellos que forman parte de un loop que no tiene estados marcados ni transiciones salientes.
-
-De forma más concreta, en nuestro algoritmo, un "loop" del cual el jugador no puede escapar, pero desde el cual existe un camino hacia un estado ganador, se considera ganador.
-\\
-
-\subsection{Exploración on-the-fly}
-Problema explosión exponencial: Componer todo vs BFS
-\\
 
 
 
