@@ -1,16 +1,25 @@
-Performance evaluation
-Benchmark de Dani
-Robar algo de la tesis de Dani para comentar sobre el benchmark?
-Comparación con la versión previa
-Gráficos dcs vs dcs 2, dcs2 vs las otras herramientas
+% Performance evaluation
+% Benchmark de Dani
+% Robar algo de la tesis de Dani para comentar sobre el benchmark?
+% Comparación con la versión previa
+% Gráficos dcs vs dcs 2, dcs2 vs las otras herramientas
 
-Poner que: comparamos con el benchmark de otros programas, comparar ese benchmark con dani, y que seguimos agrandando los tests de regresión para ir modificando con más confianza el código.
+Para realizar las pruebas de performance decidimos utilizar el mismo conjunto de problemas creado y utilizado por Daniel Ciolek en su tesis; ya que nuestra intención era principalmente compararnos contra la versión anterior. En esta sección presentamos los resultados de comparación versus dicha versión y, además, contra diversos programas del estado del arte de resolución de problemas de síntesis.
 
-\section{Creimiento de los tests de regresión}
+Todos los casos de estudios fueron escritos de manera de poder modificar el número de componentes y estados, con la intención de probar escalabilidad dentro de cada tipo de problema.
+\begin{description}
+    \item [Transfer Line] Automatización de una fabrica, un dominio de mucho interés en el área de supervisory control. TL consiste de n máquinas conectadas por $n$ buffers cada uno con capacidad de $k$ unidades, termina en una máquina adicional llamada Test Unit.
+    
+    \item [Dinning Philosophers] Problema clásico de concurrencia. En DP hay $n$ filósofos sentados en una mesa redonda, cada uno comparte un tenedor con sus vecinos aledaños. El objetivo del sistema es controlar el acceso a los tenedores de manera que los filósofos puedan alternar entre comer y pensar; evitando \textit{deadlock} y \textit{starvation}. Adicionalmente, cada filósofo, luego de tomar un tenedor, debe cumpplir con $k$ pasos de etiqueta antes de comer.
 
-
-\section{Comparación con otros programas}
-
+    \item [Cat and Mouse] Juego de dos jugadores donde cada uno toma turnos para moverse a una casilla adjacente dentro de un mapa de la forma de un corredor dividido en $2k + 1$ áreas. En CM $n$ gatos y la misma cantidad de ratones son colocados en extremos opuestos del corredor. El objetivo es mover a los ratones de manera que no terminen en el mismo lugar que un gato. Los movimientos de los gatos no son controlables. En el centro del corredor hay un agujero que lleva a los ratones a un área segura.
+    
+    \item [Bidding Workflow] Modela el proceso de evaluación de proyectos de una empresa. El proyecto debe ser aprobado por $n$ equipos. El objetivo es sintetizar un flujo de trabajo que intente llegar a un concenso, es decir, aprobar/rechazar el proyecto cuando todos los equipos lo aceptan/rechazan. La propuesta puede ser reasignada para re-evaluación por un equipo hasta $k$ veces, no se puede reasignar si el equipo ya lo había aceptado. Cuando un equipo lo rechaza $k$ veces el proyecto puede ser rechazado sin concenso. Es un caso de estudio típico del dominio de Business Process Management.
+    
+    \item [Air-Traffic Management] Representa la torre de control de un aeropuerto, que recibe $n$ peticiones de aterrizaje simultáneas. La torre necesita avisar si tiene permiso para aterrizar o, en caso contrario, en cuál de los $k$ espacios aéreos debe realizar maniobras de espera. El objetivo es que todos los aviones puedan aterrizar de manera segura. El problema solo tiene solución si la cantidad de aviones es menor a la de espacios aéreos ($n<k$).
+    
+    \item [Travel Agency] Modela una página on-line de ventas de paquetes de viajes. El sistema depende de $n$ servicios de terceros para realizar las reservas (ej. alquiler de auto, compra de pasajes, etc). Los protocolos para utilizar los servicios pueden variar de manera no controlable; una variante es la selección de hasta $k$ atributos (ej. destino del vuelo, clase y fechas). El objetivo del sistema es osquestar los servicios de manera de obtener un paquete de vacaciones completo de ser posible, evitando pagar por paquetes incompletos.
+\end{description}
 
 \section{Comparación con versión previa de DCS}
 El principal foco del trabajo fue de brindar una mayor seguridad sobre la correctitud y completitud del approach novedoso de la exploración on the fly. Esto debía hacerse sin perder la buena performance que aportaba la técnica, con el foco de poder aplicarla a casos de mayor tamaño.
@@ -29,6 +38,7 @@ En la figura{REF} puede verse la comparación y que en la mayoría de los proble
 
 De estos resultados concluímos que las modificaciones al algoritmo no afectan de forma significativa su performance.
 
+\section{Comparación con otros programas}
 
 
 
