@@ -18,7 +18,9 @@ Podemos trazar una comparación con el método de "Machine Learning", en auge de
 
 Como contraste, la Síntesis de controladores toma como input las reglas del juego de ajedrez, por ejemplo, varios componentes (autómatas) separados, siendo cada uno los movimientos posibles para una pieza. Como resultado, daría un controlador, que en cada momento de la partida solo habilita algunas de las transiciones de los autómatas y garantiza que si se le hace caso ganará la partida. Es esencial notar que la técnica de este trabajo busca obtener una garantía muy fuerte, y el problema lo encuentra en la escalabilidad del problema, ya que hoy en día es imposible aplicarla a un juego del tamaño del ajedrez.
 
-\section{Caso de estudio}
+En particular, la técnica de exploración on-the-fly busca atacar el problema de la explosión exponencial de estados que is inherente a la composición de sistemas de eventos discretos. El algoritmo desarrollado a lo largo de este trabajo busca preservar la correctitud y completitud del método, salvaguardando las garantías del controlador resultante, sin por esto perder la mejora en escalabilidad de la exploración on-the-fly.
+
+\section{Caso de estudio?}
 A continuación se presenta un ejemplo sobre el cual aplicaremos nuestro algoritmo a lo largo de la presentación. 
 
 Imaginemos un negocio del cual modelamos 3 componentes: La cuenta de dinero, la estación de ventas de productos terminados, y la estación de compra de materia prima y ensamblaje de productos.

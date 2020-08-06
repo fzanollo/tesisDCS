@@ -1,14 +1,89 @@
 AI planning, control supervisado
 nonblocking
 
+
+\begin{definition}[Deterministic Automaton] \label{def:automaton}
+	A \k{deterministic automaton} is a tuple $T = (S_T, A_T, \D_T, \init{t}, M_T)$, where:
+	\begin{itemize*}[label=]
+		
+		\item $S_T$ is a \k{finite set of states};
+		
+		\item $A_T$ is the automaton \k{event set};
+		
+		\item $\D_T \C (S_T \x A_T \x S_T)$ is a \k{transition function};
+		
+		\item $\init{t} \in S_T$ is the \k{initial state}; and
+		
+		\item $M_T \C S_T$ is a set of \k{marked states}.
+		
+	\end{itemize*}
+	
+\end{definition}
+
+\begin{notation}[Steps and Runs] \label{not:step}
+	
+	$\!\!$We denote $(t,\l,t') {\in}\!\! \D_T$ by $t \step{\l}{T} t'$ and call it a \k{step}.
+	In turn, a \k{run} on a word $w = \l_0,\ldots,\l_k$ in $T$, is a sequence of steps such that $t_i \step{\l_i}{T} t_{i+1}$ for all $0 \leq i \leq k$, denoted by $t_0 \runw{w}{T} t_{k+1}$.
+	
+\end{notation}
+
+\begin{definition} [Parallel Composition] \label{def:parcomp}
+	The \k{parallel composition} $(\|)$ of two automata $T$ and $Q$ is an associative 
+	symmetric operator that yields an automaton $T \| Q = (S_T {\times} S_Q, A_T {\cup} 
+	A_Q, \D_{T\|Q}, \<\init{t},\init{q}\>, M_T {\times} M_Q)$, where $\D_{T\|Q}$ is the 
+	smallest relation that satisfies the following rules (we omit the symmetric version of 
+	the first rule):
+	
+	\begin{normalsize}
+		\centering
+		\vspace{-18pt}
+		\hspace{-50pt}
+		\begin{minipage}{0.30\linewidth}
+			\[ 
+			\frac{t \step{\l}{T} t'}{\<t,q\> {\step{\l}{T\|Q}} \<t'\!,\!q\> }{{\scriptstyle \l \in A_{T} {\setminus} A_{Q}}} 
+			\]
+		\end{minipage} 
+		\hspace{40pt}
+		%\begin{minipage}{0.30\linewidth}
+		%\[ 
+		%\frac{q \step{\l}{Q} q'}{\<t,q\> \step{\l}{T\|Q} \<t,q'\>}{{\scriptstyle \l \in A_{\!Q} 
+		%{\setminus} A_{T}}} 
+		%\]
+		%\end{minipage} \\[-6pt]
+		%\hspace{-20pt}
+		\begin{minipage}{0.30\linewidth}
+			\[ 
+			\frac{t \step{\l}{T} t' \quad q \step{\l}{Q} q'}{\<t,q\> \step{\l}{T\|Q} \<t',q'\>}{{\scriptstyle \l \in A_{T} {\cap} A_{Q}}}
+			\]
+		\end{minipage} \\[15pt]
+	\end{normalsize}
+\end{definition}
+
 \section{Controlador objetivo}
+
+\begin{definition}[Supervisory Control Problem] \label{def:control-problem}
+	A compositional \k{Supervisory Control Problem} is a tuple $\E = (E, A_E^C)$, where $E$ is a set of automata $\{E_0,\ldots,E_n\}$ (we may abuse notation and also use $E = (S_E,A_E,\D_E,\init{e},M_E)$ to refer to the composition $E_0\|\ldots\|E_n$), and $A_E^C \C A_E$ is the set of controllable events (i.e., $A_E^U = A_E \setminus A_E^C$ is the set of uncontrollable events).
+	A solution for $\E$ is a supervisor $\sigma : A_E^* \into 2^{A_E}$, such that $\sigma$ is:
+	\begin{itemize}[itemsep=4pt,topsep=-8pt]
+		
+		\item \k{Controllable}, namely $A_E^U \C \sigma(w)$ with $w \in A_E^*$; and
+		
+		\item \k{Nonblocking}, namely for every word $w \in \L^\sigma(E)$ there exists a non-empty word $w' \in A_E^*$ such that, the concatenation $ww' \in \L^\sigma(E)$ and $\init{e} \runw{\;ww'}{E} e_m$ with $e_m \in M_E$ (i.e., a marked state of $E$).
+		
+	\end{itemize}
+	
+\end{definition}
+
+
 El problema a tratar consiste en encontrar para la planta de entrada, un controlador, es decir, un autómata con las siguientes características:
 
--Es sub-autómata de la planta: todos los estados y transiciones del controlador existen en la planta compuesta.
-
--Es controlable: todas las transiciones no controlables de la planta se encuentran en el controlador.
-
--Es non-blocking: cada palabra válida para el controlador puede ser extendida por otra palabra no vacía para que su concatenación alcance un estado marcado.
+\begin{itemize}
+	\item sub-autómata de la planta: todos los estados y transiciones del controlador existen en la planta compuesta.
+	
+	\item controlable: todas las transiciones no controlables de la planta se encuentran en el controlador.
+	
+	\item non-blocking: cada palabra válida para el controlador puede ser extendida por otra palabra no vacía para que su concatenación alcance un estado marcado.
+\end{itemize}
 
 Podemos pensar en un controlador non-blocking como un jugador optimista. Se encarga de no perder, y mientras tenga un futuro camino posible que lo lleva al destino buscado, considera que está ganando.
 
@@ -24,5 +99,31 @@ De forma más concreta, en nuestro algoritmo, un "loop" del cual el jugador no p
 
 
 \subsection{Exploración on-the-fly}
-Problema explosión exponencial: Componer todo vs BFS
-\\
+
+El problema de síntesis de controlador ya tiene una solución clásica, por lo que la dificultad del trabajo no consistió en desarrollar un algoritmo que detectara estados ganadores y perdedores de un LTS totalmente explorado. 
+
+\textcolor{red}{Explicar pto fijo clásico}
+
+El conflicto reside en que al componer distintos DES, la cantidad de estados de la composición es exponencial respecto de los estados en los componentes. Esto es de suma relevancia ya que la solución clásica, que compone toda la planta para luego explorarla, tiene un límite de escalabilidad en el cual la composición de la planta llega al límite de tiempo o memoria, y nunca se llega a la exploración.
+
+Para combatir esto, la exploración on-the-fly clasifica estados como ganadores o perdedores durante la composición. Se espera que con esto sea posible, en primer lugar, cortar la exploración de una rama de la planta que ya se sabe que es perdedora o ganadora, reduciendo así la memoria y tiempo necesarios. Pero más aún, si el estado inicial fuera marcado como ganador o perdedor antes de la composición completa de la planta, ni siquiera sería necesario completar el proceso de composición.
+
+Para incrementar las ramas podadas se utiliza una heurística de exploración Best First Search \textcolor{red}{[REF Dani]} que busca ganar controlablemente o perder no controlablemente, para garantizar con la menor exploración posible que el estado actual es ganador o perdedor.
+
+En el peor caso, se perdió tiempo en los puntos fijos, intentando clasificar estados, y se realiza una última vez el algoritmo clásico con la planta totalmente explorada. Esto garantiza la completitud del algoritmo, como se detalla en mayor profundidad en el capítulo~\ref{chpt:paper}.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
