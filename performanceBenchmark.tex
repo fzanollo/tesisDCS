@@ -4,7 +4,7 @@
 % Comparación con la versión previa
 % Gráficos dcs vs dcs 2, dcs2 vs las otras herramientas
 
-Para realizar las pruebas de performance decidimos utilizar el mismo conjunto de problemas creado y utilizado por Daniel Ciolek en su tesis; ya que nuestra intención era principalmente compararnos contra la versión anterior. En esta sección presentamos los resultados de comparación versus dicha versión y, además, contra diversos programas del estado del arte de resolución de problemas de síntesis.
+Para realizar las pruebas de performance decidimos utilizar el mismo conjunto de problemas creado y utilizado en \textcolor{red}{REF DANI} para examinar el algoritmo original de $DCS$, ya que nuestra intención era principalmente compararnos contra la versión anterior. En esta sección presentamos los resultados de la comparación versus dicha versión y, además, contra diversos programas del estado del arte de resolución de problemas de síntesis.
 
 Todos los casos de estudios fueron escritos de manera de poder modificar el número de componentes y estados, con la intención de probar escalabilidad dentro de cada tipo de problema.
 \begin{description}
@@ -24,7 +24,9 @@ Todos los casos de estudios fueron escritos de manera de poder modificar el núm
 \section{Comparación con versión previa de DCS}
 El principal foco del trabajo fue de brindar una mayor seguridad sobre la correctitud y completitud del approach novedoso de la exploración on the fly. Esto debía hacerse sin perder la buena performance que aportaba la técnica, con el foco de poder aplicarla a casos de mayor tamaño.
 
-Para comparar la performance perdida por nuestros cambios al algoritmo, repetimos el benchmark diseñado por Daniel y lo comparamos con sus resultados. Aclaramos que el benchmark se corrió en un equipo de las mismas características que el usado en su momento por Daniel.
+Para comparar la performance perdida por nuestros cambios al algoritmo, repetimos el benchmark utilizado en \textcolor{red}{REF DANI} para la primera versión de DCS y lo comparamos con sus resultados. Aclaramos que el benchmark se corrió en un equipo de las mismas características para ambas versiones de DCS.
+
+La comparación se realizó para dos heurísticas distintas\textcolor{red}{REF DANI}, $Monotonic Abstraction$ y $Ready Abstraction$, para observar la diferencia de performance en distintas condiciones. Puede notarse que la segunda heurística supera ampliamente a la primera, pero que para ambas las diferencias entre los algoritmos de exploración es mínima.
 
 \begin{figure}[htb]
     \centering
@@ -34,7 +36,9 @@ Para comparar la performance perdida por nuestros cambios al algoritmo, repetimo
 \end{figure}
 
 
-En la figura{REF} puede verse la comparación y que en la mayoría de los problemas los resultados son similares. Se destacan el problema {NAME} y {NAME} por tener resultados peores y mejores respectivamente luego de la modificación.
+En la figura~\ref{fig:dcs_vs} puede verse la comparación y que en la mayoría de los problemas los resultados son similares. En los problemas $CM$ y $TA$, la nueva versión del algoritmo $DCS2$ no logra resolver algunas instancias antes del $timeout$ que previamente podían ser resueltas. No consideramos eso como una señal mayor de mala performance en el algorimtmo, ya que hay otros problemas como $AT$ y $BW$ donde los resultados para la heurística $Monotonic Abstraction$ no solo no empeoraron si no que mejoraron.
+
+Es esperable que en un proceso exploratorio guiado de forma heurística, cambios en la poda de ramas (por la clasificación o falta de la misma de ciertos estados) van a llevar a explorar caminos más o menos fructíferos según la estructura del problema. Lo relevante de la comparación es que no se observa una diferencia generalizada en los desempeños de las distintas versiones del algoritmo de exploración
 
 De estos resultados concluímos que las modificaciones al algoritmo no afectan de forma significativa su performance.
 

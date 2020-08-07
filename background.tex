@@ -1,4 +1,4 @@
-
+A continuación definimos formalmente el problema composicional de síntesis de controlador nonblocking.
 
 \begin{definition}[Automata Deterministico] \label{def:automata}
 	Un \k{automata deterministico} es una tupla $T = (S_T, A_T, \D_T, \init{t}, M_T)$, donde:
@@ -24,6 +24,9 @@
 	A su vez, una \k{corrida} de una palabra $w = \l_0,\ldots,\l_k$ en $T$, es una secuencia de pasos tal que $t_i \step{\l_i}{T} t_{i+1}$ para todo $0 \leq i \leq k$, notado como $t_0 \runw{w}{T} t_{k+1}$.
 	
 \end{notation}
+
+Los autómatas definen un lenguaje, un conjunto de palabras, que aceptan. Dado un conjunto de eventos $A$, notamos con $A^*$ al conjunto de palabras finitas de eventos de $A$. El lenguaje generado por un autómata $T$ es el conjunto de palabras formadas por sus eventos que cumplen $\D_T$. Formalmente, si $w \in A_T^*$, entonces $w \in \L(T)$ si y solo si existe una corrida para $w$ comenzando desde el estado inicial $\init{t}$ de $T$, que notamos $\init{t} \runw{w}{T} t_{k+1}$.
+
 
 \begin{definition} [Composición Paralela] \label{def:parcomp}
 	La \k{composición paralela} $(\|)$ de dos autómatas $T$ y $Q$ es un operador simétrico y asociativo que produce un autómata $T \| Q = (S_T {\times} S_Q, A_T {\cup} 
