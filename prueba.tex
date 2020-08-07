@@ -1,0 +1,260 @@
+\begin{notation}
+Decimos que un estado $s$ es ganador["winning"] (resp. perdedor["losing"]) en el problema $\E = 
+(E, A_E^C)$ siendo $s$ el estado inicial de $E$ si hay una (resp. no hay una) solución para $\E$. Nos referimos a los estados ganadores y perdedores de $E$ cuando $A_E^C$ es inferible del contexto, también usamos $W_E$ y $L_E$ para denotar el conjunto de estados ganadores y perdedores de $\E$.
+\end{notation}
+
+El algoritmo (ver Listing~\ref{lst:dcs}) explora incrementalmente el espacio de estados de $E$ utilizando una estructura de exploración parcial ($ES$), añadiéndole una transición por vez.
+
+
+\begin{definition}
+[Exploración Parcial] \label{def:unexploredTo}
+Sea $E = (S_E,$ $A_E, \D_E, \init{e}, M_E)$. Decimos que $ES$ es una exploración parcial de $E$ ($ES \subseteq E$) si $S_\structure \subseteq 
+S_E$ y $\structure = (S_\structure,A_E, \D_\structure,\init{e},M_E 
+\cap S_\structure)$, donde $ \D_\structure \subseteq (\D_E \cap 
+(S_\structure \times A_E \times S_\structure))$. Escribimos $ES \subset E$ cuando $S_\structure \subset S_E$.
+\end{definition}
+
+Para explicar el algoritmo y argumentar su correctitud y completitud introducimos dos nuevos problemas de control para exploraciones parciales. Uno toma una visión optimista de la región no explorada ($\top$) asumiendo que todas las transiciones no exploradas llevan a un estado ganador. El otro toma una visión pesimista ($\bot$) asumiendo que las transiciones no exploradas llevan a estados perdedores.
+
+\begin{definition}
+[Problemas de Control $\top$ y $\bot$] \label{def:unexploredTo}
+
+Sean $\E = (E, A_E^C)$, $E = (S_E,A_E,\D_E,\init{e},M_E)$ y $\structure = 
+(S_\structure,A_E, \D_\structure,\init{e},M_E \cap S_\structure)$, y $\structure 
+\subseteq E$.
+\\
+Definimos $\E_\top$ como $(\unexploredToTop{\structure}, A_E^C)$ donde 
+$\unexploredToTop{\structure} = (S_\structure \cup \, \{\top\},A_E,\D_\top, 
+\init{e}, 
+(M_E \cap S_\structure)\, \cup \, \{\top\})$ y $\, \D_\top \, = \, \D_\structure 
+\, 
+\cup\, \{(s,\l, \top) 
+\;$ $ | \; \exists s' \ldot (s, \l, s') \in (\D_E \setminus \D_\structure)\} \cup \{(\top, \l, \top) \, | \, \l \in A_E\}$ \\
+Definimos $\E_\bot$ como $(\unexploredToBottom{\structure}, A_E^C)$ donde 
+$\unexploredToBottom{\structure} = (S_\structure \, \cup \, 
+\{\bot\},A_E,\D_\bot, 
+\init{e}, M_E \cap S_\structure)$ y $\D_\bot = \D_\structure \, \cup \, \{(s,\l, 
+\bot) \, | \, $ $ \exists s' \ldot (s, \l, s') \in (\D_E \setminus \D_\structure)\}$ 
+\end{definition}
+
+Usamos estos problemas de control para decidir tempranamente si un estado $s$ es ganador o perdedor en $E$ basado en lo que exploramos previamente en $\structure$. Si $s$ es ganador en $\unexploredToBottom{\structure}$ esto significa que sin importar a dónde lleven las transiciones no exploradas, $s$ también va a ser ganador en $E$. Similarmente, $s$ es perdedor en $E$ si es perdedor en $\unexploredToTop{\structure}$.
+Lemma~\ref{lem:WESandLesMonotonicity} refuerza este razonamiento.
+
+
+\begin{lemma}[Monotonicidad de $\WES$ y $\LES$]
+\label{lem:WESandLesMonotonicity}
+Sean $\structure$ y $\structure'$ dos exploraciones parciales de $E$ tal que $\structure 
+\subset \structure'$ entonces $\WES \subseteq \WESS$ y $\LES \subseteq 
+\LESS$.
+\end{lemma}
+
+\begin{proof}
+Para probar $\WES \subseteq \WESS$ mostramos que un supervisor para un estado $s$ en $\WES$ 
+puede ser usado como un supervisor para $s$ en $\WESS$. Para $\LES \subseteq 
+\LESS$, asumimos que hay un estado $s \in \LES \setminus \LESS $. Llegamos a una contradicción mostrando que el supervisor que $s$ debe tener en
+$\unexploredToTop{\structure'}$ es también un supervisor para $s$ en $\unexploredToTop{\structure}$.\hfill$\qed$
+\end{proof}
+
+El algoritmo agrega iterativamente una transición de $E$ a $\structure$ a la vez y asegura que al final de cada iteración, los estados en $\structure$ están correcta y completamente clasificados en ganadores y perdedores si hay suficiente información de $E$ en $\structure$. Los conjuntos de estados $Errors$, 
+$Goals$ y $\NONE$ se usan para este propósito.
+
+\begin{property}[Invariante]
+\label{def:invariant}
+El loop principal del Algorithm~\ref{lst:dcs} tiene el siguiente invariante: 
+$\structure \subseteq E \ \wedge $ $\forall s \in \structure \ldot (s\in\Goals 
+\Leftrightarrow 
+s \in 
+\WES)$ $\wedge$  $(s\in\Errors 
+\Leftrightarrow s \in \LES)$ $\wedge$  
+$s\in\Errors\uplus\Goals\uplus\NONE$
+
+% \begin{tabbing}
+% ajfdlkadl\= \kill
+% \> \= 
+% \>$s\in\Goals \Leftrightarrow s \in \WES \wedge$ \\
+% \> $s\in\Errors \Leftrightarrow s \in \LES \wedge$ \\
+% \> $s\in\Errors\uplus\Goals\uplus\NONE$
+% \end{tabbing}
+\end{property}
+
+La explicación del Algorithm~\ref{lst:dcs} que detallamos a continuación sirve también como un esquema de demostración para Property~\ref{def:invariant}.   
+
+Para empezar, notar que la función \texttt{expandNext} 
+(line~\ref{line:expand}) retorna una nueva transición $e \step{\l}{E} e'$ 
+garantizando que $e$ ya se encontraba en $\structure$ y $e \in \NONE$. 
+Esto significa que en cada iteración, hay algo de información nueva disponible para un estado que actualmente no está clasificado en ganador ni perdedor.
+
+Si el estado $e'$ ya es clasificado como ganador en
+$\unexploredToBottom{\structure}$ (line~\ref{line:isWinning}) o
+perdedor en $\unexploredToTop{\structure}$ (line~\ref{line:isLosing}) 
+entonces esta información necesita ser propagada a los estados en $\NONE$ para ver si pueden convertirse en ganadores en 
+$\unexploredToBottom{\structure'}$ o perdedores en
+$\unexploredToTop{\structure'}$. Tanto \texttt{propagateGoal} como
+\texttt{propagateError} realizan un punto fijo estándar~\cite{Ramadge:1989:CDES} sobre
+$\unexploredToBottom{\structure}$ y
+$\unexploredToTop{\structure}$ pero solo sobre predecesores de $e'$ que están en $\NONE$. 
+Lemma~\ref{lem:newWinnersLosersAreNonePredecessors} asegura la completitud de esta propagación restringida.
+
+%Hack de titulo de lemma porque si no, no corta linea.
+\begin{lemma}\textbf{\emph{(Ganadores/Perdedores nuevos pueden alcanzar transiciones nuevas a traves de estados-\textit{None})}}
+\label{lem:newWinnersLosersAreNonePredecessors}
+Sea la transición $e \step{\l}{\structure} e'$ la única diferencia entre dos exploraciones parciales, $\structure$ y $\structure'$, de $E$. Si $s \notin (\WES \cup \LES)$ y $s \in (\WESS \cup \LESS)$, entonces hay $s_0, \ldots, s_n \notin (\WES \cup \LES)$ tal que $s = s_0 \wedge
+s_0 \step{\l_0}{\structure}\ldots s_{n} \step{\l}{\structure} e'$.
+\end{lemma}
+
+\begin{proof}
+%We first show there is a path from $s$ to $e'$ by assuming there is none. If $s 
+%\notin 
+%\WES \cup \LES$ then it has a supervisor $\sigma$ in 
+%$\unexploredToTop{\structure}$ but it does not have one in 
+%$\unexploredToBottom{\structure}$. This depends entirely on the descendants of 
+%$s$, since those are the only states that supervisors can reach in $\structure$. 
+Si $s$ 
+no es un predecesor de $e'$, como $e \step{l}{\structure'} e'$ es la única diferencia entre $\structure$ y $\structure'$, entonces los decendientes de $s$ son los mismos, 
+por lo tanto sus posibles supervisores en $\unexploredToTop{\structure'}$ y
+$\unexploredToBottom{\structure'}$ no cambiaron. Entonces, $s \notin \WESS \cup 
+\LESS$ lo cual es una contradicción.
+
+Como paso siguiente probamos que hay al menos un camino desde $s$ a $e'$ a través de estados $\NONE$ por contradicción asumiendo que todos los caminos a $e'$ en $\structure'$ atraviesan un estado $s' \in 
+(\WES \cup \LES)$. Un supervisor $\sigma$ de $s$ en 
+$\unexploredToTop{\structure}$ no va a alcanzar estados en $\LES$, 
+por lo tanto todo $s'$ que alcance va a tener un supervisor $\sigma_{s'}$ para 
+$\unexploredToBottom{\structure}$. Usamos $\sigma$ y $\sigma_{s'}$ para construir un supervisor para $s$ en $\unexploredToTop{\structure'}$ para mostrar que $s 
+\not\in \LESS$.
+Un supervisor para $s$ en $\unexploredToBottom{\structure'}$ no puede existir porque de otra forma podríamos usarlo para construir un supervisor para $s$ en 
+$\unexploredToBottom{\structure}$ usando un razonamiento similar al anterior. Esto significa que $s \in 
+\WES$ contradiciendo la hipótesis. \hfill$\qed$
+\end{proof}
+
+Ya en la linea~\ref{line:isLoop} sabemos que $e'$ no es ganador en $\unexploredToBottom{\structure}$ ni perdedor en $\unexploredToTop{\structure}$, chequeamos si $e 
+\step{\l}{\structure} e'$ cierra un nuevo loop. Si no es el caso, entonces no hay nada que hacer ya que $e'$ alcanza las mismas transiciones en $\structure'$ que en $\structure$. Entonces, $e' \notin 
+(\WESS \cup \LESS)$ ya que cualquier supervisor para $e'$ en $\unexploredToBottom{\structure'}$ (resp. $\unexploredToTop{\structure'}$) es también un supervisor en $\unexploredToBottom{\structure}$ (resp. 
+$\unexploredToTop{\structure}$) y vice versa.
+%Thus, there is no new information about whether it is winning or 
+%losing (Lemma~\ref{lem:noNewLoopImpliesNoNewInformation}). 
+%
+%%Hack de titulo de lemma porque si no, no corta linea.
+%\begin{lemma}\textbf{\emph{(No new reachable transitions from e' implies no new 
+%information)}}
+%\label{lem:noNewLoopImpliesNoNewInformation}
+%Let $e \step{\l}{} e'$ be the only difference between two partial explorations, 
+%$\structure$ and $\structure'$ and $e' \notin \WES \cup \LES$. 
+%If $\, \forall (s \step{\l'}{} s') \ldot e' \runw{w}{\structure} s  \step{\l'}{\structure} s' $ 
+%if and only if $e' \runw{w}{\structure'} s  \step{\l'}{\structure'} s' $ then 
+%$e' \notin \WESS \cup \LESS$
+%\end{lemma}
+%
+Más aún, que no haya nueva información para $e'$ implica que no hay nuevos ganadores o perdedores (Lemma~\ref{lem:E'isNoneThenAllIsNone})
+
+\begin{lemma}\textbf{\emph{(Nuevos ganadores/perdedores solo si $e'$ es un nuevo ganador/perdedor)}}
+\label{lem:E'isNoneThenAllIsNone}
+Sea $e \step{\l}{} e'$ la única diferencia entre dos exploraciones parciales, $\structure$ y $\structure'$. Si $\WESS \neq \WES \Rightarrow e' \in \WESS \setminus \WES$, y si $\LESS \neq \LES \Rightarrow e' \in \LESS \setminus \LES$. ENTONCES?
+%Then for all $s$ such that 
+%$\exists w \ldot s \runw{w}{\structure'} e'$, if $s \notin (\WES \cup \LES)$ then $s \notin (\WESS \cup \LESS)$.
+\end{lemma}
+
+\begin{proof}
+Asumiendo $e' \notin \WESS$, usamos un testigo $s$ de $\WESS \neq 
+\WES$ para llegar a una contradicción. El estado $s$ debe tener un supervisor en 
+$\WESS$ que evita $e \step{\l}{} e'$, la única diferencia entre $\unexploredToBottom{\structure}$ y $\unexploredToBottom{\structure'}$. Este supervisor entonces es también un supervisor para $s$ en $\WES$ llegando a un absurdo. 
+
+Si asumimos $e' \notin \LESS$.  usamos un testigo $s$ de $\LESS \neq \LES$ para llegar a una contradicción. Notar que como $e' \notin \LESS$, hay un supervisor $\sigma$ desde $e'$ en  
+$\unexploredToTop{\structure'}$. Como $s \notin \LES$ también debe haber un supervisor $\sigma'$ en $\unexploredToTop{\structure}$. Construimos un nuevo supervisor para $\unexploredToTop{\structure'}$ desde $s$ que funciona exactamente como $\sigma'$ pero cuando alcanza $e \step{\l}{} e'$ se comporta como $\sigma$. Este nuevo supervisor prueba que $s \in \LESS$ lo cual es una contradicción. \hfill$\qed$
+\end{proof}
+
+Si se cerró un nuevo loop(line~\ref{line:isLoop}), por Lemma~\ref{lem:E'isNoneThenAllIsNone} alcanza con analizar si $e' 
+\in \WESS \uplus \LESS$, y por Lemma~\ref{lem:newWinnersLosersAreNonePredecessors} propagar cualquier información nueva de $e'$ a sus predecesores. 
+
+En la linea~\ref{line:getMaxLoop} computamos $\SCC$, el conjunto de estados que pertenecen a un loop que pasa por $e \step{\l}{\structure'} e'$ y nunca por $\WES \cup \LES$. 
+Intuitivamente, cualquier supervisor para $e'$ va a depender de alguno de estos loops. O, en términos del Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, para que $e'$ cambie su estado, debe ser a través de un camino de estados $\NONE$. 
+
+En la linea~\ref{line:CanBeWinning} usamos \texttt{canBeWinningLoop}($\SCC$) para chequear si existe algún estado marcado en $\SCC$ o si es posible escapar de $\SCC$ y alcanzar un "goal" en un paso. Esto distingue entre dos posibles opciones: $e' \in \WESS$ o $e' \in \LESS$ (ver 
+Lemma~\ref{lem:canBeWinningLoopWorks}). 
+
+\begin{lemma}\textbf{\emph{(Condición necesaria/suficiente para ganar/perder)}}
+\label{lem:canBeWinningLoopWorks}
+Sea $e \step{\l}{} e'$ la única diferencia entre dos eploraciones parciales, 
+$\structure$ y $\structure'$. Sea $\SCC$ = \emph{\texttt{getMaxLoop($e$, 
+$e'$)}}.
+Si $e' \in \WESS \setminus \WES$ 
+entonces \emph{\texttt{canBeWinningLoop}($\SCC$)}. Además, si \\ 
+\emph{\texttt{canBeWinningLoop}($\SCC$)} entonces $e' \notin \LESS$ 
+\end{lemma}
+
+\begin{proof}
+Para probar que $e' \in \WESS \setminus \WES$ implica \texttt{canBeWinningLoop($\SCC$)}, asumimos \\ $\neg$\texttt{canBeWinningLoop($\SCC$)} y mostramos que $e' \notin \WESS 
+\setminus \WES$. Para esto, basta con ver que si
+$\neg$\texttt{canBeWinningLoop($\SCC$)} entonces para alcanzar un estado marcado desde $e'$ se debe salir de $\SCC$ a un estado $s \notin \SCC \cup \WES$ lo que implica $s \notin \WESS$ 
+ya que $s$ no tiene ningún camino de estados none que llegue a $e \step{\l}{} e'$  (Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}).
+Como $s$ no tiene supervisor en $\unexploredToBottom{\structure'}$, es imposible que $e'$ tenga uno. 
+
+Para probar que \texttt{canBeWinningLoop($\SCC$)} implica $e' \notin \LESS$ construimos un supervisor $\sigma'$ para $e'$ en $\unexploredToTop{\structure'}$ de la siguiente forma:
+Para una traza que se quede dentro de $\SCC$, solo elegimos sucesores controlables que no estén en $\LES$. Notar que no puede haber sucesores no controlables en $\LES$ ya que
+$\SCC \cap \LES= \emptyset$. Tan pronto como la traza sale de $\SCC$ a un estado $s'$ usamos el supervisor para $s'$ en $\unexploredToTop{\structure'}$. 
+Como $s'$ no puede alcanzar $e \step{\l}{\structure'} 
+e'$ usando estados $\NONE$, por el 
+Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, $s'$ debe tener el supervisor que necesitamos. \hfill$\qed$
+
+\end{proof}
+
+Si \texttt{canBeWinningLoop()} retorna true, en la  linea~\ref{line:lookingForWinner}, 
+sabemos que si $e'$ cambia su estado es porque $e' \in \WESS$. Para ver si este cambio se produce, se realiza una computación estándar de punto fijo. 
+%However, we introduce an optimization, namely that there must be new 
+%$\NONE$-loop (i.e., a loop over states that are  $\NONE$)
+%that includes the new transition that either reaches a marked state 
+%or 
+%can reach a winning state in one step. 
+Sin embargo, el método \texttt{findNewGoalsIn} aplica una optimización basada en Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}; solo considera estados que están en un $\NONE$-loop a través de la nueva transición ($\SCC$).
+
+Si \texttt{canBeWinningLoop()} retorna false, entonces debemos comprobar si $e' \in \LESS$.
+%  By Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}
+  %, we only consider states that are in a $\NONE$-loop 
+%via the $e \step{\l}{} e'$ (i.e, the set $\SCC$). 
+Esto puede hacerse de forma más eficiente que con un punto fijo usando el Lemma~\ref{lem:findErrorsWorks} que muestra que alcanza con observar si no es posible escapar de $\SCC$ alcanzando en un paso un estado que no esté en $\LES$. 
+
+
+
+%Hack de titulo de lemma porque si no, no corta linea.
+\begin{lemma}\textbf{\emph{(findNewErrorsIn es correcto y completo)}}
+\label{lem:findErrorsWorks}
+Si $\SCC =$ \emph{\texttt{getMaxLoop($e$, $e'$)}} $\wedge$\\ 
+$\neg$\emph{\texttt{canBeWinningLoop}}($\SCC$) y \\
+$P=\emph{\texttt{findNewErrorsIn}}(\SCC)$ entonces \\
+$(e' \in \LESS \Rightarrow e' \in P 
+\subseteq \LESS)$ $\wedge \, (e' \notin \LESS \Rightarrow P = 
+\emptyset)$
+\end{lemma}
+
+\begin{proof}
+Dividimos la prueba según la estructura del  if/then/else de \texttt{findNewErrorsIn}. 
+En el caso de que el \texttt{if} sea true, es suficiente probar que $e' \notin \LESS$. Para esto, 
+construimos un supervisor $\sigma'$ para $e'$ en $\unexploredToTop{\structure'}$ de la siguiente forma: Para una traza que se queda dentro de $\SCC$, solo tomamos sucesores controlables que no estén en $\LES$. Notar que no puede haber sucesores no controlables en $\LES$ ya que
+$\SCC \cap \LES= \emptyset$. Tan pronto como la traza sale de $\SCC$ al estado $s'$ usamos el supervisor de $s'$ en $\unexploredToTop{\structure'}$. 
+Como $s'$ no puede alcanzar $e \step{\l}{\structure'} 
+e'$ usando estados $\NONE$, por el 
+Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, $s'$ debe tener tal supervisor. 
+
+Cuando el \texttt{if} es false, alcanza con probar que $P = \SCC \subseteq \LESS$. Alcanzamos una contradicción asumiendo que $s \in \SCC \setminus \LESS$: Si $s 
+\notin \LESS$ entonces tiene un supervisor $\sigma$ que acepta una traza $w$ alcanzando un estado marcado. Como no hay estados marcados en $\SCC$, $w$ alcanza un estado $s' \notin \SCC$. Como el
+\texttt{if} era false, $s' \in \LESS$ por lo que $\sigma$ no es un supervisor.
+\hfill$\qed$
+\end{proof}
+
+Por motivos de eficiencia, \texttt{findNewGoalsIn} y
+\texttt{findNewErrorsIn} no solo verifican si $e' \in \WESS$/$e' \in 
+\LESS$ sino que también agregan estados ganadores/perdedores cuando pueden. La detección completa de nuevos estados ganadores y perdedores se hace finalmente con los procesos de propagación. 
+
+Habiendo argumentado que la propiedad~~\ref{def:invariant} es válida, la correctitud y completitud le siguen de forma natural. 
+
+Primero, notar que el algoritmo termina cuando logra determinar que $\init{e}$ está en $\LESS$ o $\WESS$. En el segundo caso, es simple construir un supervisor basándose en la estructura de exploración
+$\structure$.\hfill$\qed$
+
+\begin{theorem}[Correctitud y Completitud]
+Sea $\E = (E,A_E^C)$ un problema de control composicional según Definition~\ref{def:control-problem}. Existe una solución para $\E$ si y solo si el algoritmo DCS retorna un supervisor para $\E$.
+\end{theorem}
+
+\begin{proof}
+El teorema se desprende del invariante de ciclo del algoritmo (Definition~\ref{def:invariant}), el
+Lemma~\ref{lem:WESandLesMonotonicity}, y el hecho de que en el peor caso todas las transiciones son agregadas a la estructura de exploración. Entonces,  $E = \structure = 
+\unexploredToBottom{\structure} = \unexploredToTop{\structure}$.
+\end{proof}

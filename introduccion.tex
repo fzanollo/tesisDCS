@@ -8,7 +8,7 @@ Entiende el problema y tendrás la solución
 \vspace{.5cm}}
 El presente proyecto de tesis consistió en un estudio y extensión del método previamente propuesto por Daniel Ciolek en su tesis de doctorado[REF PAPER?]. Más precisamente, se trató de analizar carencias del algoritmo de exploración on-the-fly para problemas de Supervisory Control, cuya propiedad central era de tipo Non-blocking, y posteriormente analizados los problemas afrontarlos con una nueva especificación e implementación del algoritmo.
 
-Un problema de Control Supervisado, dentro del área de AI Planning, consiste en un Sistema de Eventos Discreto (DES) con un subconjunto de sus estados marcados. Un factor clave de estos problemas es que el DES se presenta de forma compacta, de forma modular tal que la composición paralela de múltiples componentes den lugar a la DES de interés. Exploraremos en mayor detalle los aspectos técnicos del problema en el capítulo~\ref{chpt:background}
+Un problema de Control Supervisado, dentro del área de AI Planning, consiste en un Sistema de Eventos Discreto (DES) con un subconjunto de sus estados marcados. Un factor clave de estos problemas es que el DES se presenta de forma modular tal que la composición paralela de múltiples componentes den lugar a la DES de interés. Desarrollaremos en mayor detalle las definiciones del problema en el capítulo~\ref{chpt:background}.
 
 La motivación para analizar dichos problemas surge de la necesidad de verificar software, hoy en día utilizado en prácticamente todo emprendimiento humano. Si bien puede irse ganando confianza sobre la correctitud de un algoritmo a través de una bateria de tests, éstos no proveen una garantía si no una seguridad cada vez mayor. 
 
@@ -18,9 +18,7 @@ Podemos trazar una comparación con el método de "Machine Learning", en auge de
 
 Como contraste, la Síntesis de controladores toma como input las reglas del juego de ajedrez, por ejemplo, varios componentes (autómatas) separados, siendo cada uno los movimientos posibles para una pieza. Como resultado, daría un controlador, que en cada momento de la partida solo habilita algunas de las transiciones de los autómatas y garantiza que si se le hace caso ganará la partida. Es esencial notar que la técnica de este trabajo busca obtener una garantía muy fuerte, y el problema lo encuentra en la escalabilidad del problema, ya que hoy en día es imposible aplicarla a un juego del tamaño del ajedrez.
 
-En particular, la técnica de exploración on-the-fly busca atacar el problema de la explosión exponencial de estados que is inherente a la composición de sistemas de eventos discretos. El algoritmo desarrollado a lo largo de este trabajo busca preservar la correctitud y completitud del método, salvaguardando las garantías del controlador resultante, sin por esto perder la mejora en escalabilidad de la exploración on-the-fly.
-
-\section{Caso de estudio?}
+\section{Caso de estudio}
 A continuación se presenta un ejemplo sobre el cual aplicaremos nuestro algoritmo a lo largo de la presentación. 
 
 Imaginemos un negocio del cual modelamos 3 componentes: La cuenta de dinero, la estación de ventas de productos terminados, y la estación de compra de materia prima y ensamblaje de productos.
