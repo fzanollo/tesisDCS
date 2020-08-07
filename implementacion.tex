@@ -1,6 +1,50 @@
-- MTSA
-    Herramienta, sintaxis
-- Challenges 
-    Trabajar con código ajeno, poco entendimiento del problema, proyecto enorme, ese tipo de challenges o más del estilo algorítmico? 
-- Tests 
-    Qué tests desarrollamos, quizás mostrar un par interesantes y explicarlos
+% - MTSA
+%     Herramienta, sintaxis
+% - Challenges 
+%     Trabajar con código ajeno, poco entendimiento del problema, proyecto enorme, ese tipo de challenges o más del estilo algorítmico? 
+% - Tests 
+%     Qué tests desarrollamos, quizás mostrar un par interesantes y explicarlos
+
+El algoritmo fue implementado en el lenguaje Java, agregando a la funcionalidad del programa Modal Transition System Analyser (MTSA\footnote{Para más información, código y programa: http://mtsa.dc.uba.ar/}).
+
+\section{MTSA}
+El programa utilizado viene con una gran cantidad de funcionalidad. Principalmente nos interesa la forma de escribir Labelled Transition Systems (LTS), esto se puede hacer mediante Finite State Process (FSP). En la figura (agregar ref) podemos ver un ejemplo donde declaramos un LTS llamado $MiLTS$, el mismo tiene como estado inicial $A0$. Este estado puede ir por $c01$ a $A1$, $A1$ se declara en la linea siguiente. Tenemos la información entonces de cada estado y sus transiciones. Además se pueden componer las distintas LTSs con el comando \texttt{||}.
+
+\begin{lstlisting}[language = mtsa, caption=Ejemplo de LTS y composición]
+MiLTS = A0,
+A0 = (c01 -> A1),
+A1 = (u12 -> A2 | u13 -> A3),
+A2 = (u23 -> A3),
+A3 = (u33 -> A3).
+
+OtroLTS = B0,
+B0 = (c01 -> A1),
+B1 = (u12 -> A2 | u13 -> A3),
+B2 = (u23 -> A3 | inicial -> A1).
+
+|| Compuesto = (MiLTS || OtroLTS).
+\end{lstlisting}
+QUIZAS CAMBIAR EL EJEMPLO POR UNO MENOS HORRIBLE
+
+AGREGAR DEFINICION DEL CONTROLLER, QUÉ COSAS SE LE PUEDEN PASAR Y CÓMO LLAMAR A DCS.
+
+\section{Testing}
+Luego de haber presentado la sintaxis con la cuál desarrollamos nuestros tests vamos a hablar un poco de ellos y qué es lo que se esperaba en cada uno. CREO O NO?
+
+\begin{lstlisting}[language = mtsa, caption=Ejemplo de test]
+Ejemplo = A0,
+A0 = (c01 -> A1),
+A1 = (u12 -> A2 | u13 -> A3),
+A2 = (u23 -> A3),
+A3 = (u33 -> A3).
+
+||Plant = Ejemplo.
+
+controllerSpec Goal = {
+controllable = {c01}
+marking = {u33}
+nonblocking
+}
+
+heuristic ||DirectedController = Plant~{Goal}.
+\end{lstlisting}
