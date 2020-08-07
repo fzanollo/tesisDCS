@@ -1,38 +1,33 @@
-AI planning, control supervisado
-nonblocking
 
 
-\begin{definition}[Deterministic Automaton] \label{def:automaton}
-	A \k{deterministic automaton} is a tuple $T = (S_T, A_T, \D_T, \init{t}, M_T)$, where:
+\begin{definition}[Automata Deterministico] \label{def:automata}
+	Un \k{automata deterministico} es una tupla $T = (S_T, A_T, \D_T, \init{t}, M_T)$, donde:
 	\begin{itemize*}[label=]
 		
-		\item $S_T$ is a \k{finite set of states};
+		\item $S_T$ es un \k{conjunto finito de estados};
 		
-		\item $A_T$ is the automaton \k{event set};
+		\item $A_T$ es el \k{conjunto de eventos} del autómata;
 		
-		\item $\D_T \C (S_T \x A_T \x S_T)$ is a \k{transition function};
+		\item $\D_T \C (S_T \x A_T \x S_T)$ es una \k{función de transición};
 		
-		\item $\init{t} \in S_T$ is the \k{initial state}; and
+		\item $\init{t} \in S_T$ es el \k{estado inicial}; y
 		
-		\item $M_T \C S_T$ is a set of \k{marked states}.
+		\item $M_T \C S_T$ es un conjunto de \k{estados marcados}.
 		
 	\end{itemize*}
 	
 \end{definition}
 
-\begin{notation}[Steps and Runs] \label{not:step}
+\begin{notation}[Pasos y corridas] \label{not:paso}
 	
-	$\!\!$We denote $(t,\l,t') {\in}\!\! \D_T$ by $t \step{\l}{T} t'$ and call it a \k{step}.
-	In turn, a \k{run} on a word $w = \l_0,\ldots,\l_k$ in $T$, is a sequence of steps such that $t_i \step{\l_i}{T} t_{i+1}$ for all $0 \leq i \leq k$, denoted by $t_0 \runw{w}{T} t_{k+1}$.
+	$\!\!$Notamos $(t,\l,t') {\in}\!\! \D_T$ como $t \step{\l}{T} t'$ y lo llamamos \k{paso}.
+	A su vez, una \k{corrida} de una palabra $w = \l_0,\ldots,\l_k$ en $T$, es una secuencia de pasos tal que $t_i \step{\l_i}{T} t_{i+1}$ para todo $0 \leq i \leq k$, notado como $t_0 \runw{w}{T} t_{k+1}$.
 	
 \end{notation}
 
-\begin{definition} [Parallel Composition] \label{def:parcomp}
-	The \k{parallel composition} $(\|)$ of two automata $T$ and $Q$ is an associative 
-	symmetric operator that yields an automaton $T \| Q = (S_T {\times} S_Q, A_T {\cup} 
-	A_Q, \D_{T\|Q}, \<\init{t},\init{q}\>, M_T {\times} M_Q)$, where $\D_{T\|Q}$ is the 
-	smallest relation that satisfies the following rules (we omit the symmetric version of 
-	the first rule):
+\begin{definition} [Composición Paralela] \label{def:parcomp}
+	La \k{composición paralela} $(\|)$ de dos autómatas $T$ y $Q$ es un operador simétrico y asociativo que produce un autómata $T \| Q = (S_T {\times} S_Q, A_T {\cup} 
+	A_Q, \D_{T\|Q}, \<\init{t},\init{q}\>, M_T {\times} M_Q)$, donde $\D_{T\|Q}$ es la menor relación que satisface las siguientes reglas (omitimos la versión simétrica de la primera regla):
 	
 	\begin{normalsize}
 		\centering
@@ -61,14 +56,14 @@ nonblocking
 
 \section{Controlador objetivo}
 
-\begin{definition}[Supervisory Control Problem] \label{def:control-problem}
-	A compositional \k{Supervisory Control Problem} is a tuple $\E = (E, A_E^C)$, where $E$ is a set of automata $\{E_0,\ldots,E_n\}$ (we may abuse notation and also use $E = (S_E,A_E,\D_E,\init{e},M_E)$ to refer to the composition $E_0\|\ldots\|E_n$), and $A_E^C \C A_E$ is the set of controllable events (i.e., $A_E^U = A_E \setminus A_E^C$ is the set of uncontrollable events).
-	A solution for $\E$ is a supervisor $\sigma : A_E^* \into 2^{A_E}$, such that $\sigma$ is:
+\begin{definition}[Problema de Control Supervisado] \label{def:control-problem}
+	Un \k{Problema de Control Supervisado} composicional es una tupla $\E = (E, A_E^C)$, donde $E$ es un conjunto de autómatas $\{E_0,\ldots,E_n\}$ (podemos abusar la notación y usar $E = (S_E,A_E,\D_E,\init{e},M_E)$ para referirnos a la composición $E_0\|\ldots\|E_n$), y $A_E^C \C A_E$ es el conjunto de eventos controlables (i.e., $A_E^U = A_E \setminus A_E^C$ es el conjunto de eventos no controlables).
+	Una solución para $\E$ es un supervisor $\sigma : A_E^* \into 2^{A_E}$, tal que $\sigma$ es:
 	\begin{itemize}[itemsep=4pt,topsep=-8pt]
 		
-		\item \k{Controllable}, namely $A_E^U \C \sigma(w)$ with $w \in A_E^*$; and
+		\item \k{Controlable}: $A_E^U \C \sigma(w)$ con $w \in A_E^*$; y
 		
-		\item \k{Nonblocking}, namely for every word $w \in \L^\sigma(E)$ there exists a non-empty word $w' \in A_E^*$ such that, the concatenation $ww' \in \L^\sigma(E)$ and $\init{e} \runw{\;ww'}{E} e_m$ with $e_m \in M_E$ (i.e., a marked state of $E$).
+		\item \k{Nonblocking}: para cada palabra $w \in \L^\sigma(E)$ existe una palabra no vacía $w' \in A_E^*$ tal que, la concatenación $ww' \in \L^\sigma(E)$ y $\init{e} \runw{\;ww'}{E} e_m$ con $e_m \in M_E$ (i.e., un estado marcado de $E$).
 		
 	\end{itemize}
 	
