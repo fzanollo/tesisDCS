@@ -95,8 +95,10 @@ También los "loops" son esenciales para encontrar los estados perdedores, ya qu
 
 De forma más concreta, en nuestro algoritmo, un "loop" del cual el jugador no puede escapar, pero desde el cual existe un camino hacia un estado ganador, se considera ganador.
 
+\section{Algoritmo monolítico}
+AGREGAR EXPLICACIÓN Y PSEUDO TMB?
 
-\subsection{Exploración on-the-fly}
+\section{Exploración on-the-fly}
 
 El problema de síntesis de controlador ya tiene una solución clásica, por lo que la dificultad del trabajo no consistió en desarrollar un algoritmo que detectara estados ganadores y perdedores de un LTS totalmente explorado. 
 
@@ -110,6 +112,9 @@ Para incrementar las ramas podadas se utiliza una heurística de exploración Be
 
 En el peor caso, se perdió tiempo en los puntos fijos, intentando clasificar estados, y se realiza una última vez el algoritmo clásico con la planta totalmente explorada. Esto garantiza la completitud del algoritmo, como se detalla en mayor profundidad en el capítulo~\ref{chpt:paper}.
 
+\subsection{BFS}
+
+\subsection{Heurística}
 
 
 
