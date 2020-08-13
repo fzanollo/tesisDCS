@@ -1,0 +1,10 @@
+\section{Problemas encontrados}
+%En problema con solución actual plantearía entre otras cosas que el best first search tiene que ser correcto para cualquier heuristica y que eso no se cumpía. Plantearía el suite de regresión que armaron y com tuvieron que harnesear el tema de la heuristica para mostrar algunos bugs
+
+ADEMAS EL PROPAGATE NO PODIA SER LOCAL, EXPLICAR.
+
+El anterior algoritmo de exploración tenía falencias en cuanto a agregar estados al conjunto $\Errors$. Esto se debía a que no sacaba conclusión alguna al haber explorado todo un subgrafo, por ende al propagar información desde otra rama se podría llegar a un resultado erroneo. Para comprender mejor observar la figura (INGRESE FIGURA) donde desde el estado e tenemos dos sub-ramas a explorar. Si se mira primero la de abajo y no lo marcamos como error entonces al mirar la de arriba diremos que es goal y propagaremos dicha información, equivocadamente, más allá de e.
+
+EXPLICAR QUE NUESTRO ALGORITMO ES AGNÓSTICO A LA HEURÍSICA (COMO DEBERÍA)
+
+%Subiría de nivel el “Nuevo algoritmo”. Trataría de explicar tempranamente la idea de construcción de núcleos de posibles zonas perdedoras o ganadoras optimistas y pesimistas y la propagación. Incluso con la formalización primero.
