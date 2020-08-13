@@ -11,6 +11,17 @@
 % 3) Prueba
 % 4) Experimentación mostrando que no hay perdida significativa de performance.
 
-Al empezar con el proyecto y leer sobre control supervisado descubrimos que hay todo un mundo detrás. Primero debimos aprender sobre los algoritmos composicionales y no composicionales. Luego entender el algoritmo estándar y parte de su implementación para finalmente poder arrancar con el algoritmo on-the-fly. Éste último lo debimos entendera la perfección, para poder descubrir y solucionar los diversos problemas. 
+Al empezar con el proyecto y leer sobre control supervisado descubrimos que hay todo un mundo detrás. Primero debimos aprender sobre los algoritmos composicionales y no composicionales. Luego entender el algoritmo estándar y parte de su implementación para finalmente poder arrancar con el algoritmo on-the-fly. Éste último lo debimos entender a la perfección, para poder descubrir y solucionar los diversos problemas. 
 
-MTSA es un proyecto con gran trayectoria y muchos avances en diversos frentes hechos por diferentes personas y grupos de investigación; como tal su código puede ser muy complejo, teniendo partes escritas incluso en versiones antiguas de java.
+MTSA es un proyecto con gran trayectoria y muchos avances en diversos frentes hechos por diferentes personas y grupos de investigación; como tal su código puede ser muy complejo, teniendo partes escritas incluso en versiones antiguas de java.\\
+
+Pese a estos desafíos, logramos las siguientes contribuciones: 
+\begin{itemize}
+	\item Una batería de tests de regresión como una adición permanente al proyecto de MTSA para garantizar la continua correctitud de su feature de síntesis de controladores con exploración heurística.
+	
+	\item Un nuevo algoritmo de exploración, cuya correctitud es agnóstica a la heurística utilizada.
+	
+	\item Una prueba de la correctitud y completitud del algoritmo presentado.
+	
+	\item Resultados experimentales para comprobar que las modificaciones a la exploración siguen manteniendo la buena performance de la técnica.
+\end{itemize}
