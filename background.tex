@@ -112,13 +112,13 @@ Para incrementar las ramas podadas se utiliza una heurística de exploración Be
 
 En el peor caso, se perdió tiempo en los puntos fijos, intentando clasificar estados, y se realiza una última vez el algoritmo clásico con la planta totalmente explorada. Esto garantiza la completitud del algoritmo, como se detalla en mayor profundidad en el capítulo~\ref{chpt:paper}.
 
-\subsection{Best First Search vs Heurística}
+\subsection{Agnosticismo a la heurística}
 
-Una distinción clave de la exploración \textit{on-the-fly} es que por un lado se tiene un algoritmo de exploración, al que una heurística le da la próxima transición a explorar, y el algoritmo es responsable de que al final de la exploración se llegue al resultado correcto. Ese algoritmo de exploración no puede depender de la heurística, ya que la misma, por su nombre, no garantiza siempre elegir el mejor camino posible, si no solo la mejor aproximación que encuentre. Es en esa correctitud independiente de la heurística donde nuestro trabajo hizo foco.
+Una distinción clave del algoritmo \textit{on-the-fly} es que está dividido en dos partes. Por un lado se tiene el algoritmo de exploración responsable de que al final se llegue al resultado correcto, por el otro tenemos una heurística que le brinda la próxima transición a explorar. Ese algoritmo de exploración no puede depender de la heurística, ya que la misma, por su nombre, no garantiza siempre elegir el mejor camino posible, sino solo la mejor aproximación que encuentre. Es en esa correctitud independiente de la heurística donde nuestro trabajo hizo foco.
 
-El proyecto \texttt{MTSA} por el momento cuenta con dos heurísticas para exploración \texttt{BFS}, \textit{Monotonic Abstraction} y \textit{Ready Abstraction}. Ambas son muy buenas y logran que en síntesis de controlador con exploración parcial sea muy eficiente, pero presentaban un problema.
+El proyecto \texttt{MTSA} por el momento cuenta con dos heurísticas \texttt{BFS} para exploración, \textit{Monotonic Abstraction} y \textit{Ready Abstraction}. Ambas son muy buenas y logran gran eficiencia en síntesis de controlador con exploración parcial, pero presentaban un problema.
 
-El algoritmo de exploración había sido desarrollado en conjunto con las heurísticas en mente, si bien esto ayudaba a la eficiencia del mismo, no era correcto frente a cambios en la heurística. El nuevo enfoque, al ser agnóstico a qué camino es el elegido para explorar, da una mayor libertad de explorar a futuro nuevos criterios de evaluación para mejorar la eficiencia de la técnica.
+El algoritmo de exploración había sido desarrollado en conjunto con las heurísticas y si bien esto ayudaba a la eficiencia del mismo, no resultaba agnóstico a las mismas. El nuevo enfoque no depende de la forma de explorar, por ende, da una mayor libertad de investigar a futuro nuevos criterios de evaluación para mejorar la eficiencia de la técnica sin comprometer correctitud ni completitud.
 
 
 
