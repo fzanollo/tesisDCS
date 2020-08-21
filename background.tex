@@ -96,15 +96,29 @@ También los "loops" son esenciales para encontrar los estados perdedores, ya qu
 De forma más concreta, en nuestro algoritmo, un "loop" del cual el jugador no puede escapar, pero desde el cual existe un camino hacia un estado ganador, se considera ganador.
 
 \section{Algoritmo monolítico}
-AGREGAR EXPLICACIÓN Y PSEUDO TMB?
 
-\textbf{Aca va REF a paper fundacional que nos mostro dipi y a tesis dipi}
+Una solución a este problema (o problemas similares), ampliamente estudiada[refs paper funcional, tesis dipi, buchiGames] se basa en un doble punto fijo. Ya que en la solución clásica se conoce toda la planta compuesta, se parte de la base de todos los estados marcados como objetivos, y a partir de ellos se desde que estados un controlador puede forzar a llegar a los estados marcados al menos una vez.
+
+De los estados que no pueden forzar a los marcados, ya sabiendo que son estados donde gana el ambiente, se pueden retirar del punto fijo, y también a cualquier estado 
+
+\textbf{Falta la descripción y el pseudo pero me maree}
+\begin{lstlisting}[language={pseudocode},label={lst:classical},caption={Status confirmation.},float=ht]
+Algorithm classicalSolver($E, A_E^C$):
+	$C = E$
+	$C' = \emptyset$
+	while $C' \neq  C:$
+		$C' = C$
+		$R = playerCanForce(C,C \cap M_E)$
+		$Tr = C \setminus R$
+		$W = ambientCanForce(C, Tr \cup (S_E \setminus (C \cup \Goals)))$
+		$C=C \setminus W$
+	return C
+\end{lstlisting}
+
 
 \section{Exploración on-the-fly}
 
 El problema de síntesis de controlador ya tiene una solución clásica, por lo que la dificultad del trabajo no consistió en desarrollar un algoritmo que detectara estados ganadores y perdedores de un LTS totalmente explorado. 
-
-\textcolor{red}{Explicar pto fijo clásico}
 
 El conflicto reside en que al componer distintos DES, la cantidad de estados de la composición es exponencial respecto de los estados en los componentes. Esto es de suma relevancia ya que la solución clásica, que compone toda la planta para luego explorarla, tiene un límite de escalabilidad en el cual la composición de la planta llega al límite de tiempo o memoria, y nunca se llega a la exploración.
 
