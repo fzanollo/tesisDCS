@@ -49,13 +49,14 @@ As  $w$ is also in $L^\sigma(\unexploredToBottom{\structure})$ then, as
 $\sigma$ is a supervisor for $\unexploredToBottom{\structure}$, there is a $w'$ such that 
 $w.w' \in L^\sigma(\unexploredToBottom{\structure}) = L^\sigma(\unexploredToBottom{Z})$ 
 and hits a marked state. Note that the run for $w.w'$ is always in $\structure$, which means 
-that the run is also in $\unexploredToBottom{Z}$. Thus we reach a contradiction.
+that the run is also in $\unexploredToBottom{Z}$. Thus we reach a contradiction.\\
 
-\textcolor{red}{FALTA BIEN LA PARTE DE $\LES$}
+To see that $\LES \subseteq \LESS$, assume there is a state $s \in \LES \setminus \LESS$. Since $s \notin \LESS$, it has a supervisor $\sigma$ in $\unexploredToTop{\structure'}$, but $s \in \LES$ so there can't exists a valid supervisor $\sigma'$ for $s$ in $\unexploredToTop{\structure}$. This is false, even more, we show that if $\sigma$ is a supervisor for $s$ in $\unexploredToTop{\structure'}$, then there is a supervisor $\sigma'$ for $s$ in any $\unexploredToTop{Z}$ such that $Z \subseteq \structure$.
 
- $s \in \LES \Rightarrow s$ can't controllably reach any of the transitions that differ between $\structure$ and $\unexploredToTop{\structure}$ since they lead directly to a marked state with a self-loop. If it could, then $s$ would be winning instead of losing. Also, $s$ can be forced by the environment to losing states within $\structure$, and this will still be true for any $Z \mid \structure \subseteq Z \subseteq E$.
-Then, since this works for any $\structure \subseteq Z \subseteq E$, in particular it is valid $Z = E$. 
-Finally, if $s \in \LE$ then $s$ is loser in $\unexploredToTop{E}$, and $\unexploredToTop{E} = E$ because there are no transitions in $E \setminus E$, so $s$ is loser in $E$.
+$\sigma$ is a valid supervisor in $\unexploredToTop{\structure'}$, so every word in $\L^\sigma(\unexploredToTop{\structure'})$ can be extended to reach a marked state, and there are only finite states in $\unexploredToTop{\structure'}$, there must be a $w'$ and $w''$ such that $w.w'.w'' \in \L^\sigma(\unexploredToTop{\structure'})$, $w.w'$ reaches a marked state, and $w.w'.w''$ reaches the same state as $w.w'$.
+
+If $w.w'.w''$ is in $\L^\sigma(Z)$, then there is nothing to be done, it is clear that $\sigma$ still has a way to extend $w$ in $\unexploredToTop{Z}$. Otherwise, we note that $w.w'.w'' = w_0.l.w_1$ such that $w_0$ is the longest prefix of $w.w'.w''$ in $\L^\sigma(Z)$, this means that $w_0.l$ reaches the marked winning state $\top$, and from there every extension of the word can only remain in this state, thus, $\sigma$ is also a valid controller for $\unexploredToTop{Z}$.
+ 
 \begin{flushright}
 $\square$
 \end{flushright}
@@ -109,7 +110,7 @@ that $s \in
 
 If a state $s$ is not in $\WES \cup \LES$ it is because it has a  supervisor $\sigma$ in $\unexploredToTop{\structure}$ but it doesn't have one in $\unexploredToBottom{\structure}$. This depends entirely on the descendants of $s$, since those are the only states that $\sigma$ can reach. If $s$ is not a predecessor of $e'$, and $e \step{l}{\structure'} e'$ is the only difference between $\structure$ and $\structure'$ then the descendants of $s$ are the same, thus its possible supervisors haven't changed, and $s$ is still NONE.
 
-What is not so clear, is that $s$ has no new possible supervisors if it has a path to reach $e'$ but only passing through states in $\WES \cup \LES$. Assuming it must pass through states in $\WES \cup \LES$ we show that:
+What is not so clear, is that $s$ has no new possible supervisors if it has a path to reach $e'$ but only by passing through at least one state in $\WES \cup \LES$. Assuming it must pass through states in $\WES \cup \LES$ we show that:
 
 \begin{itemize}
 	\item knowing $s$ had a supervisor $\sigma$ in $\unexploredToTop{\structure}$, we show $s$ has a valid supervisor $\sigma'$ in $\unexploredToTop{\structure'}$:
@@ -256,83 +257,67 @@ Since $s \notin \WESS$, $s$ doesn't have a supervisor in $\unexploredToBottom{\s
 
 
 
-Assuming \texttt{canBeWinningLoop($\SCC$)} we simply build a supervisor $\sigma'$ (MISMO SUPERVISOR QUE EN PROXIMA DEMO) for $e'$ in $\unexploredToTop{\structure'}$ to prove that $e' \notin \LESS$
+Assuming \texttt{canBeWinningLoop($\SCC$)} we simply build a supervisor $\sigma^4$ for $e'$ in $\unexploredToTop{\structure'}$ to prove that $e' \notin \LESS$
 
 
-We define $\sigma'$ so that it enables all uncontrollable transitions (to be $controllable$).
+We define $\sigma^4$ so that it enables all uncontrollable transitions (to be $controllable$).
 
-$\sigma'(w_0.w_1) = \sigma_{s'}(w_1)$ if $w_0$ is the shortest word such that there is an $s' \notin \SCC \wedge s'\notin \LES$ and $e' \runw{w_0}{\unexploredToTop{\structure'}} s'$.
-Else if $e' \runw{w}{\unexploredToTop{\structure'}} p \wedge p \in \SCC$ then for all controllable $\l'$, $\l' \in\sigma'(w)$ iff $\exists  p' \ldot p \step{l'}{} p' \wedge p' \notin \LES$.
+$\sigma^4(w_0.w_1) = \sigma_{s'}(w_1)$ if $w_0$ is the shortest word such that there is an $s' \notin \SCC \wedge s'\notin \LES$ and $e' \runw{w_0}{\unexploredToTop{\structure'}} s'$.
+Else if $e' \runw{w}{\unexploredToTop{\structure'}} p \wedge p \in \SCC$ then for all controllable $\l'$, $\l' \in\sigma^4(w)$ iff $\exists  p' \ldot p \step{l'}{} p' \wedge p' \notin \LES$.
 %todas las transiciones que van al loop mas todas las transiciones que salen a un estado NONE (o TOP), i.e. no error. 
 
-We use the supervisors $\sigma_{s'}$ where $s'$ is such that exists $s \in \SCC$ and $s\step{\l'}{\unexploredToTop{\structure'}} s'\wedge s' \notin \SCC \wedge s'\notin \LES$. If none such $s'$ exists, we know there is a marked state in $\SCC$ and $\sigma'$ never leaves $\SCC$ since all reachable states from $\SCC$ are in $\LES$.
+We use the supervisors $\sigma_{s'}$ where $s'$ is such that exists $s \in \SCC$ and $s\step{\l'}{\unexploredToTop{\structure'}} s'\wedge s' \notin \SCC \wedge s'\notin \LES$. If none such $s'$ exists, we know there is a marked state in $\SCC$ and $\sigma^4$ never leaves $\SCC$ since all reachable states from $\SCC$ are in $\LES$.
 
 
 
-We will prove that $\sigma'$ is $controllable$ and $non-blocking$.
+We will prove that $\sigma^4$ is $controllable$ and $non-blocking$.
 
-Since we enabled all uncontrollable transitions, $\sigma'$ is trivially $controllable$.
+Since we enabled all uncontrollable transitions, $\sigma^4$ is trivially $controllable$.
 
-For $non-blocking$, assume $w$ compatible with $\sigma'$, we will show that it can be extended. If $w = w_0.w_1$ where $w_0$ is the shortest word such that there is an $s' \notin \SCC \wedge s' \notin \LES$ and $e' \runw{w_0}{\unexploredToTop{\structure'}} s'$. Then by definition of $\sigma'$ we have that $\sigma'(w_0.w_1.w_2) = \sigma_{s'}(w_1.w_2)$ for all $w_2$. As $\sigma_{s'}$ is $non-blocking$, there is a $w_2$ such that $\sigma_{s'}(w_1.w_2)$ hits a marked state. So $\sigma'(w_0.w_1)$ can be extended to hit the marked state. 
+For $non-blocking$, assume $w$ compatible with $\sigma^4$, we will show that it can be extended. If $w = w_0.w_1$ where $w_0$ is the shortest word such that there is an $s' \notin \SCC \wedge s' \notin \LES$ and $e' \runw{w_0}{\unexploredToTop{\structure'}} s'$. Then by definition of $\sigma^4$ we have that $\sigma^4(w_0.w_1.w_2) = \sigma_{s'}(w_1.w_2)$ for all $w_2$. As $\sigma_{s'}$ is $non-blocking$, there is a $w_2$ such that $\sigma_{s'}(w_1.w_2)$ hits a marked state. So $\sigma^4(w_0.w_1)$ can be extended to hit the marked state. 
 
-Otherwise, $w$ never exits $\SCC$. We want to prove that for every $\l'$ such that $w.\l'$ is consistent with $\sigma'$, $w.\l'$ is extendable with a $w'$ to reach a marked state. Let $p'$ be such that $e' \runw{w.\l'}{} p'$. If $p' \notin \SCC$ then $\sigma'(w.\l') = \sigma_{p'}(\lambda)$ and, as before, we know $\sigma_{p'}$ is $non-blocking$ so $w.l'$ is extendable to reach a marked state.\\
-If $p' \in \SCC$, then  $w.l'$ can be extended to reach any state $s$ in the $\SCC$. We know that either there is a marked state in $\SCC$ or a state in $\WES$ reachable in one step from $\SCC$, either way we can extend $w.l'$ to reach a marked state.
+Otherwise, $w$ never exits $\SCC$. We want to prove that for every $\l'$ such that $w.\l'$ is consistent with $\sigma^4$, $w.\l'$ is extendable with a $w'$ to reach a marked state. Let $p'$ be such that $e' \runw{w.\l'}{} p'$. If $p' \notin \SCC$ then $\sigma^4(w.\l') = \sigma_{p'}(\lambda)$ and, as before, we know $\sigma_{p'}$ is $non-blocking$ so $w.l'$ is extendable to reach a marked state.\\
+If $p' \in \SCC$, then  $w.l'$ can be extended to reach any state $s$ in the $\SCC$. We know that either there is a marked state in $\SCC$ or a state in $\WES$ reachable in one step from $\SCC$, either way we can extend $w.l'$ to reach a marked state.\\
 
 
 
- 
-
+\textcolor{red}{El findNewErrors cambio}
 \paragraph*{Proof Lemma \ref{lem:findErrorsWorks}}
-\textbf{{Begin Proof Sketch}}
-We split the proof based on the if/then/else structure of \texttt{findSomeNewErrors}. 
-In the case of \texttt{if} being true, it suffices to prove that $e' \notin \LESS$. For this, 
-we build a supervisor $\sigma'$ for $e'$ in $\unexploredToTop{\structure'}$ as 
-follows: For a trace that stays within $\SCC$, we only choose controllable successors 
-that are not 
-in $\LES$. Note that there cannot be uncontrollable successors in $\LES$ because 
-$\SCC \cap \LES= \emptyset$.   As soon as a trace exits $\SCC$ at a state $s'$ we 
-use the supervisor for $s'$ in $\unexploredToTop{\structure'}$. 
-As $s'$ cannot reach $e \step{\l}{\structure'} 
-e'$ using $\NONE$ states, by 
-Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, $s'$ must have such a 
-supervisor. 
+%\textbf{{Begin Proof Sketch}}
+%We split the proof based on the if/then/else structure of \texttt{findSomeNewErrors}. 
+%In the case of \texttt{if} being true, it suffices to prove that $e' \notin \LESS$. For this, 
+%we build a supervisor $\sigma'$ for $e'$ in $\unexploredToTop{\structure'}$ as 
+%follows: For a trace that stays within $\SCC$, we only choose controllable successors 
+%that are not 
+%in $\LES$. Note that there cannot be uncontrollable successors in $\LES$ because 
+%$\SCC \cap \LES= \emptyset$.   As soon as a trace exits $\SCC$ at a state $s'$ we 
+%use the supervisor for $s'$ in $\unexploredToTop{\structure'}$. 
+%As $s'$ cannot reach $e \step{\l}{\structure'} 
+%e'$ using $\NONE$ states, by 
+%Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, $s'$ must have such a 
+%supervisor. 
  
-When the \texttt{if} is false, it suffices to prove $P = \SCC \subseteq \LESS$. We do 
-this by assuming $s \in \SCC \setminus \LESS$ and reaching a contradiction. If $s 
-\notin LESS$ it has a supervisor $\sigma$ which admits a trace to a marked state. As 
-there are no marked states in $\SCC$, the trace reaches a state $s' \not \SCC$ As the 
-\texttt{if} was false, $s' \in \LESS$ which means $\sigma$ is not a supervisor.
-\textbf{{End Proof Sketch}}
+%When the \texttt{if} is false, it suffices to prove $P = \SCC \subseteq \LESS$. We do 
+%this by assuming $s \in \SCC \setminus \LESS$ and reaching a contradiction. If $s 
+%\notin LESS$ it has a supervisor $\sigma$ which admits a trace to a marked state. As 
+%there are no marked states in $\SCC$, the trace reaches a state $s' \not \SCC$ As the 
+%\texttt{if} was false, $s' \in \LESS$ which means $\sigma$ is not a supervisor.
+%\textbf{{End Proof Sketch}}
 
 
-First, we know that every state $s' \notin \SCC$ such that $\exists s \in \SCC \ldot s 
-\step{l}{} s'$, either is and will be a losing state ($s' \in LES \wedge s' \in LESS$) or is 
-and will be $\NONE$ (because $s$ isn't a $NONE-$Predecessor of any state in 
-$\SCC$, otherwise $s$ would be in $\SCC$). \\
-This means that any state $s' \notin \SCC \wedge s' \notin \LES$ can not be forced to a state in $\LESS$. Thus, if we reach a $\NONE$ state we know it has a supervisor $\sigma_{s'}$ in $\unexploredToTop{\structure'}$.
+%First, we know that every state $s' \notin \SCC$ such that $\exists s \in \SCC \ldot s 
+%\step{l}{} s'$, either is and will be a losing state ($s' \in LES \wedge s' \in LESS$) or is 
+%and will be $\NONE$ (because $s$ isn't a $NONE-$Predecessor of any state in 
+%$\SCC$, otherwise $s$ would be in $\SCC$). \\
+%This means that any state $s' \notin \SCC \wedge s' \notin \LES$ can not be forced to a state in $\LESS$. Thus, if we reach a $\NONE$ state we know it has a supervisor $\sigma_{s'}$ in $\unexploredToTop{\structure'}$.
 
-In the case that the $\texttt{if}$ statement is true, we prove that $e' \notin \LESS$:
+%In the case that the $\texttt{if}$ statement is true, we prove that $e' \notin \LESS$:
 
-We will build a supervisor for $e'$ in $\unexploredToTop{\structure'}$ using the supervisors $\sigma_{s'}$ where $s'$ is such that exists $s \in \SCC$ and $s\step{\l'}{\unexploredToTop{\structure'}} s'\wedge s' \notin \SCC \wedge s'\notin \LES$. 
+%We use the same $\sigma^4$ as in Proof Lemma \ref{lem:canBeWinningLoopWorks}. We already know $\sigma^4$ is both $controllable$ and $non-blocking$ in this situation because of the previos Lemma.\\
 
-We define $\sigma'$ so that it enables all uncontrollable transitions (to be $controllable$).
+%Otherwise we enter the $\texttt{else}$ block:
 
-$\sigma'(w_0.w_1) = \sigma_{s'}(w_1)$ if $w_0$ is the shortest word such that there is an $s' \notin \SCC \wedge s'\notin \LES$ and $e' \runw{w_0}{\unexploredToTop{\structure'}} s'$. \\ 
-Else if $e' \runw{w}{\unexploredToTop{\structure'}} p \wedge p \in \SCC$ then for all controllable $\l'$, $\l' \in\sigma'(w)$ iff $\exists  p' \ldot p \step{l'}{} p' \wedge p' \notin \LES$.
-%todas las transiciones que van al loop mas todas las transiciones que salen a un estado NONE (o TOP), i.e. no error. 
+%If $\nexists s \in \SCC \ldot \trimlst{s \step{\l'}{\unexploredToTop{\structure'}}  s'} \wedge (s' \notin \SCC \wedge s' \notin \Errors)$ we prove that $\forall s \in \SCC$, $s \in \LESS$
 
-We will prove that $\sigma'$ is $controllable$ and $non-blocking$.
-
-Since we enabled all uncontrollable transitions, $\sigma'$ is trivially $controllable$.
-
-For $non-blocking$, assume $w$ compatible with $\sigma'$, we will show that it can be extended. If $w = w_0.w_1$ where $w_0$ is the shortest word such that there is an $s' \notin \SCC \wedge s' \notin \LES$ and $e' \runw{w_0}{\unexploredToTop{\structure'}} s'$. Then by definition of $\sigma'$ we have that $\sigma'(w_0.w_1.w_2) = \sigma_{s'}(w_1.w_2)$ for all $w_2$. As $\sigma_{s'}$ is $non-blocking$, there is a $w_2$ such that $\sigma_{s'}(w_1.w_2)$ hits a marked state. So $\sigma'(w_0.w_1)$ can be extended to hit the marked state. 
-
-Otherwise, $w$ never exits $\SCC$. We want to prove that for every $\l'$ such that $w.\l'$ is consistent with $\sigma'$, $w.\l'$ is extendable with a $w'$ to reach a marked state. Let $p'$ be such that $e' \runw{w.\l'}{} p'$. If $p' \notin \SCC$ then $\sigma'(w.\l') = \sigma_{p'}(\lambda)$ and, as before, we know $\sigma_{p'}$ is $non-blocking$ so $w.l'$ is extendable to reach a marked state.\\
-If $p' \in \SCC$, then  $w.l'$ can be extended to reach any state $s$ in the $\SCC$. The if statement guarantees that there exists an $s$ such that $s \in \SCC \ldot \trimlst{s \step{\l'}{\unexploredToTop{\structure'}}  s'} \wedge (s' \notin \SCC \wedge s' \notin \Errors)$, thus we can extend $w.l'$ to reach that $s'$ and use, as before, $\sigma_{s'}$, to prove that $w.l'$ can be extended to hit a marked state. 
-
-Otherwise we enter the $\texttt{else}$ block:
-
-If $\nexists s \in \SCC \ldot \trimlst{s \step{\l'}{\unexploredToTop{\structure'}}  s'} \wedge (s' \notin \SCC \wedge s' \notin \Errors)$ we prove that $\forall s \in \SCC$, $s \in \LESS$
-
-Suppose there is a supervisor $\sigma'$ for $s$ in $\unexploredToTop{\structure'}$ then $\exists w'$ such that $s \runw{\lambda.w'}{\unexploredToTop{\structure'}} e_m \wedge e_m \in M_{\unexploredToTop{\structure'}}$. Since there's no marked state in $\SCC$ then eventually $s$ following $w'$ leaves $\SCC$. \\
-Let $w' = w_0.w_1$ such that $w_0$ is the shortest word so that $s \runw{w_0}{\unexploredToTop{\structure'}} s' \wedge s' \notin \SCC$. But since $s'\in \Errors \Rightarrow s' \in \LES$ then it is not possible for a valid supervisor $\sigma'$ to allow reaching that state. ABS! Then there's no supervisor for $s$ in $\unexploredToTop{\structure'}$ implying $\forall s \in \SCC$, $s \in \LESS$.
+%Suppose there is a supervisor $\sigma'$ for $s$ in $\unexploredToTop{\structure'}$ then $\exists w'$ such that $s \runw{\lambda.w'}{\unexploredToTop{\structure'}} e_m \wedge e_m \in M_{\unexploredToTop{\structure'}}$. Since there's no marked state in $\SCC$ then eventually $s$ following $w'$ leaves $\SCC$. \\
+%Let $w' = w_0.w_1$ such that $w_0$ is the shortest word so that $s \runw{w_0}{\unexploredToTop{\structure'}} s' \wedge s' \notin \SCC$. But since $s'\in \Errors \Rightarrow s' \in \LES$ then it is not possible for a valid supervisor $\sigma'$ to allow reaching that state. ABS! Then there's no supervisor for $s$ in $\unexploredToTop{\structure'}$ implying $\forall s \in \SCC$, $s \in \LESS$.
