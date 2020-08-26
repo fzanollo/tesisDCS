@@ -1,17 +1,10 @@
-\paragraph*{Proof Lemma \ref{lem:WESandLesMonotonicity}}
+\begin{proof}
+	
+(Idea:	Para probar $\WES \subseteq \WESS$ mostramos que un supervisor para un estado $s$ en $\WES$ 
+	puede ser usado como un supervisor para $s$ en $\WESS$. Para $\LES \subseteq 
+	\LESS$, asumimos que hay un estado $s \in \LES \setminus \LESS $. Llegamos a una contradicción mostrando que el supervisor que $s$ debe tener en
+	$\unexploredToTop{\structure'}$ es también un supervisor para $s$ en $\unexploredToTop{\structure}$.)
 
-
-\textbf{Proof Sketch}
-To prove $\WES \subseteq \WESS$ we show that a supervisor for a 
-state $s$ in $\WES$ 
-can be used as a supervisor from $s$ in $\WESS$. For $\LES \subseteq 
-\LESS$, we assume 
-there is a state $s \in \LES \setminus \LESS $. We reach a 
-contradiction by showing that the 
-supervisor that $s$ must have in 
-$\unexploredToTop{\structure'}$ is also a 
-supervisor for $s$ in $\unexploredToTop{\structure}$.
-\textbf{End Proof Sketch}
 
 
 If $s \in \WES $ then there exists a supervisor $\sigma$ for the control problem 
@@ -61,52 +54,25 @@ If $w.w'.w''$ is in $\L^\sigma(Z)$, then there is nothing to be done, it is clea
 $\square$
 \end{flushright}
 
-
-\paragraph*{Proof Lemma 
-\ref{lem:newWinnersLosersAreNonePredecessors}}
-\textbf{{Begin Proof Sketch}}
-
-We first show there is a path from $s$ to $e'$ by assuming there is none. If $s \notin 
-\WES \cup \LES$ then it has a supervisor $\sigma$ in 
-$\unexploredToTop{\structure}$ but it does not have one in 
-$\unexploredToBottom{\structure}$. This depends entirely on the descendants of 
-$s$, since those are the only states that supervisors can reach in $\structure$. If $s$ 
-is not a predecessor of $e'$, as $e \step{l}{\structure'} e'$ is the only difference 
-between $\structure$ and $\structure'$, then the descendants of $s$ are the same, 
-thus its possible supervisors in $\unexploredToTop{\structure'}$ and 
-$\unexploredToBottom{\structure'}$ are unchanged. Thus, $s \notin \WESS \cup 
-\LESS$ which is a contradiction.
-
-We then prove that there is at least one path from $s$ to $e'$ via $\NONE$ states by 
-contradiction assuming that all paths to $e'$ in $\structure'$ cross a state $s' \in 
-(\WES \cup \LES)$. A supervisor $\sigma$ from $s$ in 
-$\unexploredToTop{\structure}$ will not reach states in $\LES$, 
-thus for all $s'$ it crosses they will have a supervisors $\sigma_{s'}$ for 
-$\unexploredToBottom{\structure}$. We use $\sigma$ and $\sigma_{s'}$  to 
-build a supervisor for $s$ in $\unexploredToTop{\structure'}$ to show that $s 
-\not\in \LESS$.
-A supervisor for $s$ in $\unexploredToBottom{\structure'}$ cannot exist because 
-otherwise we can use it to build a supervisor for $s$ in 
-$\unexploredToBottom{\structure}$ using a similar reasoning as before. This means 
-that $s \in 
-\WES$ which contradicts the hypothesis. 
+\end{proof}
 
 
+\begin{proof}
+	(Idea: Si $s$ no es un predecesor de $e'$, como $e \step{l}{\structure'} e'$ es la única diferencia entre $\structure$ y $\structure'$, entonces los decendientes de $s$ son los mismos, 
+	por lo tanto sus posibles supervisores en $\unexploredToTop{\structure'}$ y
+	$\unexploredToBottom{\structure'}$ no cambiaron. Entonces, $s \notin \WESS \cup 
+	\LESS$ lo cual es una contradicción.
+	
+	Como paso siguiente probamos que hay al menos un camino desde $s$ a $e'$ a través de estados $\NONE$ por contradicción asumiendo que todos los caminos a $e'$ en $\structure'$ atraviesan un estado $s' \in 
+	(\WES \cup \LES)$. Un supervisor $\sigma$ de $s$ en 
+	$\unexploredToTop{\structure}$ no va a alcanzar estados en $\LES$, 
+	por lo tanto todo $s'$ que alcance va a tener un supervisor $\sigma_{s'}$ para 
+	$\unexploredToBottom{\structure}$. Usamos $\sigma$ y $\sigma_{s'}$ para construir un supervisor para $s$ en $\unexploredToTop{\structure'}$ para mostrar que $s 
+	\not\in \LESS$.
+	Un supervisor para $s$ en $\unexploredToBottom{\structure'}$ no puede existir porque de otra forma podríamos usarlo para construir un supervisor para $s$ en 
+	$\unexploredToBottom{\structure}$ usando un razonamiento similar al anterior. Esto significa que $s \in 
+	\WES$ contradiciendo la hipótesis. )
 
-
-
-
-%Possible supervisors for a state $s$ depend only on its descendants, thus if the descendants of $s$ haven't changed between to partial explorations $s$ has no new options for supervisors and it's status can't change.
-%
-%What is not so clear, is that $s$ has no new possible supervisors if it has a path to reach $e'$ but only passing through states in $\WES \cup \LES$. Let $s'$ be the first state of the path between $s$ and $e'$ that is not $\NONE$.
-%
-%We can see that if $s' \in \WES$ then once we reach it, we can simply follow $\sigma_{s'}$, its supervisor on $\unexploredToBottom{\structure}$. Note that $\sigma_{s'}$ does not use $e \step{l}{\structure'} e'$. 
-%
-%If $s' \in \LES$, no valid supervisor should reach $s'$ and thus won't reach $e \step{l}{\structure'} e'$. 
-%
-%Then, whether $s$ has a supervisor in $\unexploredToTop{\structure'}$ or it doesn't have one in $\unexploredToBottom{\structure'}$ does not depend on $e \step{l}{\structure'} e'$. Finally $s$ is not in $\WESS \cup \LESS$.
-
-\textbf{{End Proof Sketch}}
 
 If a state $s$ is not in $\WES \cup \LES$ it is because it has a  supervisor $\sigma$ in $\unexploredToTop{\structure}$ but it doesn't have one in $\unexploredToBottom{\structure}$. This depends entirely on the descendants of $s$, since those are the only states that $\sigma$ can reach. If $s$ is not a predecessor of $e'$, and $e \step{l}{\structure'} e'$ is the only difference between $\structure$ and $\structure'$ then the descendants of $s$ are the same, thus its possible supervisors haven't changed, and $s$ is still NONE.
 
@@ -141,30 +107,19 @@ What is not so clear, is that $s$ has no new possible supervisors if it has a pa
 	We see then that assuming there is a valid supervisor $\sigma'$ for $s$ in $\unexploredToBottom{\structure'}$ implies that there is a valid supervisor $\sigma$ for $s$ in $\unexploredToBottom{\structure}$. ABS! \\
 	
 \end{itemize}
+\begin{flushright}
+	$\square$
+\end{flushright}
+\end{proof}
 
+\begin{proof}
+	(Idea: Asumiendo $e' \notin \WESS$, usamos un testigo $s$ de $\WESS \neq 
+	\WES$ para llegar a una contradicción. El estado $s$ debe tener un supervisor en 
+	$\WESS$ que evita $e \step{\l}{} e'$, la única diferencia entre $\unexploredToBottom{\structure}$ y $\unexploredToBottom{\structure'}$. Este supervisor entonces es también un supervisor para $s$ en $\WES$ llegando a un absurdo. 
+	
+	Si asumimos $e' \notin \LESS$.  usamos un testigo $s$ de $\LESS \neq \LES$ para llegar a una contradicción. Notar que como $e' \notin \LESS$, hay un supervisor $\sigma$ desde $e'$ en  
+	$\unexploredToTop{\structure'}$. Como $s \notin \LES$ también debe haber un supervisor $\sigma'$ en $\unexploredToTop{\structure}$. Construimos un nuevo supervisor para $\unexploredToTop{\structure'}$ desde $s$ que funciona exactamente como $\sigma'$ pero cuando alcanza $e \step{\l}{} e'$ se comporta como $\sigma$. Este nuevo supervisor prueba que $s \in \LESS$ lo cual es una contradicción.)
 
-\paragraph*{Proof Lemma \ref{lem:E'isNoneThenAllIsNone}}
-\textbf{Begin Sketch}
-Assuming $e' \notin \WESS$, we use a witness $s$ to $\WESS \neq 
-\WES$ to reach a contradiction. State $s$ must have a supervisor in 
-$\WESS$  that avoids $e \step{\l}{} e'$ which is the only difference 
-between $\unexploredToBottom{\structure}$ and 
-$\unexploredToBottom{\structure'}$. This supervisor is then also a 
-supervisor for $s$ in $\WES$ reaching a contradiction. 
-
-If we assume $e' \notin \LESS$.  We use a witness $s$ to $\LESS 
-\neq 
-\LES$ to reach a contradiction. Note that as $e' \notin \LESS$, there 
-is a supervisor $\sigma$ from $e'$ in  
-$\unexploredToTop{\structure'}$.  As $s \notin \LES$ it also must 
-have a 
-supervisor $\sigma'$ in  $\unexploredToTop{\structure}$. We build 
-a 
-new supervisor for $\unexploredToTop{\structure'}$ from $s$ that 
-works just like $\sigma'$ but when it reaches $e \step{\l}{} e'$ it 
-behaves as $\sigma$. This new supervisor proves that $s \in \LESS$ 
-which is a contradiction. 
-\textbf{End Sketch}
 
 We prove both implications by contradiction. 
 
@@ -187,20 +142,6 @@ supervisor for $s$ in $\unexploredToBottom{\structure}$ (i.e.,  $s
 \in 
 \WES$) reaching a contradiction.
 
-
-%
-%There must be a 
-%supervisor from $s$ that avoids 
-%transition $e \step{\l}{} e'$ (which is the only difference between 
-%$\structure$ and $\structure'$). We know this because there is no 
-%supervisor for $e'$ in $\unexploredToBottom{\structure'}$, 
-%otherwise $e'$ would be in $\WESS$. 
-%Thus, if $e$ is reachable using that supervisor, the state is 
-%controllable and the transition can be avoided. But this means that 
-%there is a supervisor for $s$ in 
-%$\unexploredToBottom{\structure}$ 
-%and finally $s \in \WES$, a contradiction.
-
 Now we assume $e' \not\in 
 \LESS \setminus \LES$. Note that as $e' \notin \LES$ then $e' 
 \notin 
@@ -221,33 +162,25 @@ Now we assume $e' \not\in
  supervisor $\sigma''$ that includes both $\sigma'$ and the 
  supervisor for $e'$. Finally, $\sigma''$ is a supervisor for $s$ in 
  $\unexploredToTop{\structure'}$, but $s \notin \LESS$, ABS!	
+\begin{flushright}
+	$\square$
+\end{flushright}
+\end{proof}
 
+\begin{proof}
+	(Idea: Para probar que $e' \in \WESS \setminus \WES$ implica \texttt{canBeWinningLoop($\SCC$)}, asumimos \\ $\neg$\texttt{canBeWinningLoop($\SCC$)} y mostramos que $e' \notin \WESS 
+	\setminus \WES$. Para esto, basta con ver que si
+	$\neg$\texttt{canBeWinningLoop($\SCC$)} entonces para alcanzar un estado marcado desde $e'$ se debe salir de $\SCC$ a un estado $s \notin \SCC \cup \WES$ lo que implica $s \notin \WESS$ 
+	ya que $s$ no tiene ningún camino de estados none que llegue a $e \step{\l}{} e'$  (Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}).
+	Como $s$ no tiene supervisor en $\unexploredToBottom{\structure'}$, es imposible que $e'$ tenga uno. 
+	
+	Para probar que \texttt{canBeWinningLoop($\SCC$)} implica $e' \notin \LESS$ construimos un supervisor $\sigma'$ para $e'$ en $\unexploredToTop{\structure'}$ de la siguiente forma:
+	Para una traza que se quede dentro de $\SCC$, solo elegimos sucesores controlables que no estén en $\LES$. Notar que no puede haber sucesores no controlables en $\LES$ ya que
+	$\SCC \cap \LES= \emptyset$. Tan pronto como la traza sale de $\SCC$ a un estado $s'$ usamos el supervisor para $s'$ en $\unexploredToTop{\structure'}$. 
+	Como $s'$ no puede alcanzar $e \step{\l}{\structure'} 
+	e'$ usando estados $\NONE$, por el 
+	Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, $s'$ debe tener el supervisor que necesitamos.)	
 
-
-\paragraph*{Proof Lemma \ref{lem:canBeWinningLoopWorks}}
-\textbf{{Begin Proof Sketch}}
-To prove $e' \in \WESS \setminus \WES$ implies  \texttt{canBeWinningLoop($\SCC$)}, we  
-assume $\neg$\texttt{canBeWinningLoop($\SCC$)} and show that $e' \notin \WESS 
-\setminus \WES$. For this, it suffices to see that if 
-$\neg$\texttt{canBeWinningLoop($\SCC$)} then to reach a marked state from $e'$ it must 
-exit $\SCC$ to a state $s \notin \SCC$. This state must be such that $s \notin \WESS$. As 
-$s$ has no 
-supervisor in $\unexploredToBottom{\structure'}$, it is impossible for $e'$ to have one. 
-
-
-To prove that \texttt{canBeWinningLoop($\SCC$)} implies $e' \notin \LESS$ we build a supervisor $\sigma'$ for $e'$ in $\unexploredToTop{\structure'}$ as 
-follows: 
-For a trace that stays within $\SCC$, we only choose controllable successors 
-that are not 
-in $\LES$. Note that there cannot be uncontrollable successors in $\LES$ because 
-$\SCC \cap \LES= \emptyset$.   As soon as a trace exits $\SCC$ at a state $s'$ we 
-use the supervisor for $s'$ in $\unexploredToTop{\structure'}$. 
-As $s'$ cannot reach $e \step{\l}{\structure'} 
-e'$ using $\NONE$ states, by 
-Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, $s'$ must have such a 
-supervisor. 
-
-\textbf{{End Proof Sketch}}
 
 Supose $e' \in \WESS \setminus \WES$ but $\neg$\texttt{canBeWinningLoop($\SCC$)}.
 There exists a supervisor $\sigma$ for $e'$ in $\unexploredToBottom{\structure'}$, this means there must be a path $w$ from $e'$ to a marked state $m$. 
@@ -278,30 +211,24 @@ For $non-blocking$, assume $w$ compatible with $\sigma^4$, we will show that it 
 
 Otherwise, $w$ never exits $\SCC$. We want to prove that for every $\l'$ such that $w.\l'$ is consistent with $\sigma^4$, $w.\l'$ is extendable with a $w'$ to reach a marked state. Let $p'$ be such that $e' \runw{w.\l'}{} p'$. If $p' \notin \SCC$ then $\sigma^4(w.\l') = \sigma_{p'}(\lambda)$ and, as before, we know $\sigma_{p'}$ is $non-blocking$ so $w.l'$ is extendable to reach a marked state.\\
 If $p' \in \SCC$, then  $w.l'$ can be extended to reach any state $s$ in the $\SCC$. We know that either there is a marked state in $\SCC$ or a state in $\WES$ reachable in one step from $\SCC$, either way we can extend $w.l'$ to reach a marked state.\\
+\begin{flushright}
+	$\square$
+\end{flushright}
+\end{proof}
 
 
-
-\paragraph*{Proof Lemma \ref{lem:findErrorsWorks}}
-\textbf{{Begin Proof Sketch}}
-We split the proof based on the if/then/else structure of \texttt{findSomeNewErrors}. 
-In the case of \texttt{if} being true, it suffices to prove that $e' \notin \LESS$. For this, 
-we build a supervisor $\sigma'$ for $e'$ in $\unexploredToTop{\structure'}$ as 
-follows: For a trace that stays within $\SCC$, we only choose controllable successors 
-that are not 
-in $\LES$. Note that there cannot be uncontrollable successors in $\LES$ because 
-$\SCC \cap \LES= \emptyset$.   As soon as a trace exits $\SCC$ at a state $s'$ we 
-use the supervisor for $s'$ in $\unexploredToTop{\structure'}$. 
-As $s'$ cannot reach $e \step{\l}{\structure'} 
-e'$ using $\NONE$ states, by 
-Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, $s'$ must have such a 
-supervisor. 
- 
-When the \texttt{if} is false, it suffices to prove $P = \SCC \subseteq \LESS$. We do 
-this by assuming $s \in \SCC \setminus \LESS$ and reaching a contradiction. If $s 
-\notin LESS$ it has a supervisor $\sigma$ which admits a trace to a marked state. As 
-there are no marked states in $\SCC$, the trace reaches a state $s' \not \SCC$ As the 
-\texttt{if} was false, $s' \in \LESS$ which means $\sigma$ is not a supervisor.
-\textbf{{End Proof Sketch}}
+\begin{proof}
+	(Idea: Dividimos la prueba según la estructura del  if/then/else de \texttt{findNewErrorsIn}. 
+	En el caso de que el \texttt{if} sea true, es suficiente probar que $e' \notin \LESS$. Para esto, 
+	construimos un supervisor $\sigma'$ para $e'$ en $\unexploredToTop{\structure'}$ de la siguiente forma: Para una traza que se queda dentro de $\SCC$, solo tomamos sucesores controlables que no estén en $\LES$. Notar que no puede haber sucesores no controlables en $\LES$ ya que
+	$\SCC \cap \LES= \emptyset$. Tan pronto como la traza sale de $\SCC$ al estado $s'$ usamos el supervisor de $s'$ en $\unexploredToTop{\structure'}$. 
+	Como $s'$ no puede alcanzar $e \step{\l}{\structure'} 
+	e'$ usando estados $\NONE$, por el 
+	Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, $s'$ debe tener tal supervisor. 
+	
+	Cuando el \texttt{if} es false, alcanza con probar que $P = \SCC \subseteq \LESS$. Alcanzamos una contradicción asumiendo que $s \in \SCC \setminus \LESS$: Si $s 
+	\notin \LESS$ entonces tiene un supervisor $\sigma$ que acepta una traza $w$ alcanzando un estado marcado. Como no hay estados marcados en $\SCC$, $w$ alcanza un estado $s' \notin \SCC$. Como el
+	\texttt{if} era false, $s' \in \LESS$ por lo que $\sigma$ no es un supervisor.)
 
 
 First, we know that every state $s' \notin \SCC$ such that $\exists s \in \SCC \ldot s 
@@ -320,3 +247,7 @@ If $\nexists s \in \SCC \ldot \trimlst{s \step{\l'}{\unexploredToTop{\structure'
 
 Suppose there is a supervisor $\sigma'$ for $s$ in $\unexploredToTop{\structure'}$ then $\exists w'$ such that $s \runw{\lambda.w'}{\unexploredToTop{\structure'}} e_m \wedge e_m \in M_{\unexploredToTop{\structure'}}$. Since there's no marked state in $\SCC$ then eventually $s$ following $w'$ leaves $\SCC$. \\
 Let $w' = w_0.w_1$ such that $w_0$ is the shortest word so that $s \runw{w_0}{\unexploredToTop{\structure'}} s' \wedge s' \notin \SCC$. But since $s'\in \Errors \Rightarrow s' \in \LES$ then it is not possible for a valid supervisor $\sigma'$ to allow reaching that state. ABS! Then there's no supervisor for $s$ in $\unexploredToTop{\structure'}$ implying $\forall s \in \SCC$, $s \in \LESS$.
+\begin{flushright}
+	$\square$
+\end{flushright}
+\end{proof}
