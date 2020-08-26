@@ -281,43 +281,42 @@ If $p' \in \SCC$, then  $w.l'$ can be extended to reach any state $s$ in the $\S
 
 
 
-\textcolor{red}{El findNewErrors cambio}
 \paragraph*{Proof Lemma \ref{lem:findErrorsWorks}}
-%\textbf{{Begin Proof Sketch}}
-%We split the proof based on the if/then/else structure of \texttt{findSomeNewErrors}. 
-%In the case of \texttt{if} being true, it suffices to prove that $e' \notin \LESS$. For this, 
-%we build a supervisor $\sigma'$ for $e'$ in $\unexploredToTop{\structure'}$ as 
-%follows: For a trace that stays within $\SCC$, we only choose controllable successors 
-%that are not 
-%in $\LES$. Note that there cannot be uncontrollable successors in $\LES$ because 
-%$\SCC \cap \LES= \emptyset$.   As soon as a trace exits $\SCC$ at a state $s'$ we 
-%use the supervisor for $s'$ in $\unexploredToTop{\structure'}$. 
-%As $s'$ cannot reach $e \step{\l}{\structure'} 
-%e'$ using $\NONE$ states, by 
-%Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, $s'$ must have such a 
-%supervisor. 
+\textbf{{Begin Proof Sketch}}
+We split the proof based on the if/then/else structure of \texttt{findSomeNewErrors}. 
+In the case of \texttt{if} being true, it suffices to prove that $e' \notin \LESS$. For this, 
+we build a supervisor $\sigma'$ for $e'$ in $\unexploredToTop{\structure'}$ as 
+follows: For a trace that stays within $\SCC$, we only choose controllable successors 
+that are not 
+in $\LES$. Note that there cannot be uncontrollable successors in $\LES$ because 
+$\SCC \cap \LES= \emptyset$.   As soon as a trace exits $\SCC$ at a state $s'$ we 
+use the supervisor for $s'$ in $\unexploredToTop{\structure'}$. 
+As $s'$ cannot reach $e \step{\l}{\structure'} 
+e'$ using $\NONE$ states, by 
+Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, $s'$ must have such a 
+supervisor. 
  
-%When the \texttt{if} is false, it suffices to prove $P = \SCC \subseteq \LESS$. We do 
-%this by assuming $s \in \SCC \setminus \LESS$ and reaching a contradiction. If $s 
-%\notin LESS$ it has a supervisor $\sigma$ which admits a trace to a marked state. As 
-%there are no marked states in $\SCC$, the trace reaches a state $s' \not \SCC$ As the 
-%\texttt{if} was false, $s' \in \LESS$ which means $\sigma$ is not a supervisor.
-%\textbf{{End Proof Sketch}}
+When the \texttt{if} is false, it suffices to prove $P = \SCC \subseteq \LESS$. We do 
+this by assuming $s \in \SCC \setminus \LESS$ and reaching a contradiction. If $s 
+\notin LESS$ it has a supervisor $\sigma$ which admits a trace to a marked state. As 
+there are no marked states in $\SCC$, the trace reaches a state $s' \not \SCC$ As the 
+\texttt{if} was false, $s' \in \LESS$ which means $\sigma$ is not a supervisor.
+\textbf{{End Proof Sketch}}
 
 
-%First, we know that every state $s' \notin \SCC$ such that $\exists s \in \SCC \ldot s 
-%\step{l}{} s'$, either is and will be a losing state ($s' \in LES \wedge s' \in LESS$) or is 
-%and will be $\NONE$ (because $s$ isn't a $NONE-$Predecessor of any state in 
-%$\SCC$, otherwise $s$ would be in $\SCC$). \\
-%This means that any state $s' \notin \SCC \wedge s' \notin \LES$ can not be forced to a state in $\LESS$. Thus, if we reach a $\NONE$ state we know it has a supervisor $\sigma_{s'}$ in $\unexploredToTop{\structure'}$.
+First, we know that every state $s' \notin \SCC$ such that $\exists s \in \SCC \ldot s 
+\step{l}{} s'$, either is and will be a losing state ($s' \in LES \wedge s' \in LESS$) or is 
+and will be $\NONE$ (because $s$ isn't a $NONE-$Predecessor of any state in 
+$\SCC$, otherwise $s$ would be in $\SCC$). \\
+This means that any state $s' \notin \SCC \wedge s' \notin \LES$ can not be forced to a state in $\LESS$. Thus, if we reach a $\NONE$ state we know it has a supervisor $\sigma_{s'}$ in $\unexploredToTop{\structure'}$.
 
-%In the case that the $\texttt{if}$ statement is true, we prove that $e' \notin \LESS$:
+In the case that the $\texttt{if}$ statement is true, we prove that $e' \notin \LESS$:
 
-%We use the same $\sigma^4$ as in Proof Lemma \ref{lem:canBeWinningLoopWorks}. We already know $\sigma^4$ is both $controllable$ and $non-blocking$ in this situation because of the previos Lemma.\\
+We use the same $\sigma^4$ as in Proof Lemma \ref{lem:canBeWinningLoopWorks}. We already know $\sigma^4$ is both $controllable$ and $non-blocking$ in this situation because of the previos Lemma.\\
 
-%Otherwise we enter the $\texttt{else}$ block:
+Otherwise we enter the $\texttt{else}$ block:
 
-%If $\nexists s \in \SCC \ldot \trimlst{s \step{\l'}{\unexploredToTop{\structure'}}  s'} \wedge (s' \notin \SCC \wedge s' \notin \Errors)$ we prove that $\forall s \in \SCC$, $s \in \LESS$
+If $\nexists s \in \SCC \ldot \trimlst{s \step{\l'}{\unexploredToTop{\structure'}}  s'} \wedge (s' \notin \SCC \wedge s' \notin \Errors)$ we prove that $\forall s \in \SCC$, $s \in \LESS$
 
-%Suppose there is a supervisor $\sigma'$ for $s$ in $\unexploredToTop{\structure'}$ then $\exists w'$ such that $s \runw{\lambda.w'}{\unexploredToTop{\structure'}} e_m \wedge e_m \in M_{\unexploredToTop{\structure'}}$. Since there's no marked state in $\SCC$ then eventually $s$ following $w'$ leaves $\SCC$. \\
-%Let $w' = w_0.w_1$ such that $w_0$ is the shortest word so that $s \runw{w_0}{\unexploredToTop{\structure'}} s' \wedge s' \notin \SCC$. But since $s'\in \Errors \Rightarrow s' \in \LES$ then it is not possible for a valid supervisor $\sigma'$ to allow reaching that state. ABS! Then there's no supervisor for $s$ in $\unexploredToTop{\structure'}$ implying $\forall s \in \SCC$, $s \in \LESS$.
+Suppose there is a supervisor $\sigma'$ for $s$ in $\unexploredToTop{\structure'}$ then $\exists w'$ such that $s \runw{\lambda.w'}{\unexploredToTop{\structure'}} e_m \wedge e_m \in M_{\unexploredToTop{\structure'}}$. Since there's no marked state in $\SCC$ then eventually $s$ following $w'$ leaves $\SCC$. \\
+Let $w' = w_0.w_1$ such that $w_0$ is the shortest word so that $s \runw{w_0}{\unexploredToTop{\structure'}} s' \wedge s' \notin \SCC$. But since $s'\in \Errors \Rightarrow s' \in \LES$ then it is not possible for a valid supervisor $\sigma'$ to allow reaching that state. ABS! Then there's no supervisor for $s$ in $\unexploredToTop{\structure'}$ implying $\forall s \in \SCC$, $s \in \LESS$.
