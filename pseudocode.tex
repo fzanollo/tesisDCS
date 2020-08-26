@@ -1,6 +1,6 @@
 \lstset{escapeinside={(*@}{@*)}}
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt}
-\begin{lstlisting}[language={pseudocode},label={lst:dcs},caption={On-the-fly Directed Exploration Procedure.},float=ht]
+\begin{lstlisting}[language={pseudocode},label={lst:dcs},caption={On-the-fly Directed Exploration Procedure.},float=ht, frame=single]
  function DCS($\E {=} (E, A_E^C)$,$\:\heuristic$):
    $\initial$ = $\<\init{e}^0,\ldots,\init{e}^n\>$
    $\structure = \trimlst{(\{ \initial \}, A_E, \emptyset, \initial, M_E \cap \{\initial\})}$
@@ -17,11 +17,12 @@
        propagateGoal($\{e'\}$)
      else if canReach($e, e', \structure$): (*@\label{line:isLoop}@*)
        $\SCC$ = getMaxLoop($e$,$e'$) (*@\label{line:getMaxLoop}@*)
-       C = findNewGoalsIn($\SCC$) (*@\label{line:lookingForWinner}@*)
-       $\Goals = \Goals \cup C$
-       $\NONE = \NONE \setminus C$
-       propagateGoal(C)   (*@\label{line:propagateGoal2}@*)
-       if $C = \emptyset$:
+       if canBeWinningLoop($\SCC$): (*@\label{line:CanBeWinning}@*)
+         C = findNewGoalsIn($\SCC$) (*@\label{line:lookingForWinner}@*)
+         $\Goals = \Goals \cup C$
+         $\NONE = \NONE \setminus C$
+         propagateGoal(C)   (*@\label{line:propagateGoal2}@*)
+       else:    (*@\label{line:CanBeLosing}@*)
          P = findNewErrorsIn($\SCC$)
          $\Errors = \Errors \cup \SCC$
          $\NONE = \NONE \setminus \SCC$
@@ -36,71 +37,64 @@
 %invariante del ciclo:  Inv($states(\structure), \structure)$
 
 \lstset{numbers=none, numberstyle=\tiny, stepnumber=1, numbersep=5pt}
-\begin{lstlisting}[language={pseudocode},label={lst:dcs.propagate},caption={Status propagation procedures.},float=ht]
+\begin{lstlisting}[language={pseudocode},label={lst:dcs.propagate},caption={Status propagation procedures.},float=ht, frame=single]
  function propagateGoal($newGoals$):
-   $A$ = ancestorsNone($newGoals$)
-   $C$ = playerCanForce($A,\Goals$)
+   $C$ = ancestorsNone($newGoals$)
+   $C' = \emptyset$
+   while $C_{Viejo} \neq C$:
+     $C' = C$
+     $C=C \setminus \{ s \in C \mid$ 
+       isForcedToLose($s,C$) $\vee$
+       cannotReachGoalIn($s, C$)$\}$
    $\Goals = \Goals \cup C$
    $\NONE = \NONE \setminus C$
 
  procedure propagateError($newErrors$):
-   $A$ = ancestorsNone($newErrors$)
-   $P$ = ambientCanForce($A,\Errors$)
+   $P$ = ancestorsNone($newErrors$)
+   $C$ = $P$
+   $C' = \emptyset$
+   while $C' \neq C$:
+     $C' = C$
+     $C=C \setminus \{ s \in C \mid$ 
+     	$(\exists e\ldot $forcedTo($s,e,\unexploredToTop{\structure'}$)$ \wedge e \in \Errors)\ \vee$
+     	cannotReachGoalIn($s, C$)$\}$
+   $P = P \setminus C$
    $\Errors = \Errors\ \cup P$
    $\NONE = \NONE \setminus P$
 \end{lstlisting}
 
 
-\begin{lstlisting}[language={pseudocode},label={lst:dcs.gather},caption={Status confirmation.},float=ht]
+\begin{lstlisting}[language={pseudocode},label={lst:dcs.gather},caption={Status confirmation.},float=ht, frame=single]
  function findNewGoalsIn($\SCC$):
    $C = \SCC$
    $C' = \emptyset$
    while $C' \neq  C:$
      $C' = C$
-     $R = playerCanForce(C,(C \cap M_E)\cup \Goals)$
-     $Tr = C \setminus R$
-     $W = ambientCanForce(C, Tr \cup (S_E \setminus (C \cup \Goals)))$
-     $C=C \setminus W$
+     $C=C \setminus \{ s \in C \mid$ 
+        isForcedToLose($s,C$) $\vee$
+     	cannotBeReached($s,C$) $\vee$
+     	cannotReachGoalOrMarkedIn($s, C$)$\}$
    return C
   
- function playerCanForce(C,Target): //Attr1
-   $K_0 = \emptyset$
-   $K_1$ = Target
-   $i = 1$
-   while $K_i \neq K_{i-1}$:
-     $K_{i+1} = K_i$
-     for each k in $K_i \setminus K_{i-1}$:
-       for each v in (In(k) $\cap \ C$):
-         if $\nexists \l_u \ldot v \step{\l_u}{} h \wedge h \notin K_i \ then \ K_{i+1} = K_{i+1} \cup \{v\}$
- return $K_i$
-
- function ambientCanForce(C,Target): //Attr2
-   $K_0 = \emptyset$
-   $K_1$ = Target
-   $i = 1$
-   while $K_i \neq K_{i-1}$:
-     $K_{i+1} = K_i$
-     for each k in $K_i \setminus K_{i-1}$:
-       for each v in (In(k) $\cap \ C$):
-         if $(\exists \l_u \ldot v \step{\l_u}{} h \wedge h \in K_i)\ \vee (\forall \l_c \ldot v \step{\l_c}{} h \then h \in K_i) $
-         then $K_{i+1} = K_{i+1} \cup \{v\}$
- return $K_i$
-  
  function findNewErrorsIn($\SCC$):
-   $C = \SCC$
-   $C' = \emptyset$
-   while $C' \neq  C:$
-     $C' = C$
-     $R = playerCanForce(C,(C \cap M_E)\cup (S_E \setminus (C \cup \Errors)))$
-     $Tr = C \setminus R$
-     $W = ambientCanForce(C,Tr \cup \Errors)$
-     $C=C \setminus W$
-   $P = \SCC \setminus C$
-   return P
+   if ($\exists s \in \SCC \ldot \trimlst{s \step{\l'}{\unexploredToTop{\structure'}}  s'} 
+   \wedge (s' \notin \SCC \wedge s' \in \NONE)$):
+     $P = \emptyset$
+   else: 
+     $P = \SCC$
+   return $P$
 \end{lstlisting}
 
+
+
+%VErsion anterior
+%   let $(e,\l,e')\in (\D_{E}\setminus\D_{\structure})$ such that $e\in S_\structure\ 
+%   \wedge$
+%     ($\forall (s,\l',s')\in (\D_{E}\setminus\D_{\structure})\, s\in S_\structure \ldot$ 
+%        $\heuristic$($e, \l, e'$) $>=$ $\heuristic$($s, \l', s'$))
+
 % AUX FUNCTIONS
-\begin{lstlisting}[language={pseudocode},label={lst:dcs.aux},caption={auxiliary procedures.},float=ht]
+\begin{lstlisting}[language={pseudocode},label={lst:dcs.aux},caption={auxiliary procedures.},float=ht, frame=single]
  procedure expandNext($\heuristic$):
    let $\trimlst{(e,\l,e') \ldot e\in S_\structure \wedge e\step{\l}{E} e' \wedge   
   \neg e\step{\l}{\structure} e' \wedge }$ 
@@ -145,3 +139,13 @@
     return $\trimlst{\nexists w \ldot s \runw{w}{C} s' \wedge s'\in C\ \wedge}$ 
            canReachInOneStep$(s', \structure, \Goals)$
 \end{lstlisting}
+
+%
+% function isDeadlock($e$):
+%   return $\neg\exists \l \! \ldot \trimlst{e \step{\l}{E} e'}$
+%
+% function canReach($e, e', Z$):
+%   return $\exists w \ldot \trimlst{e' \runw{w}{Z} e}$
+%   
+% function canReachInOneStep($s, Z, \S$):
+%   return $\trimlst{\exists l \ldot s \step{\l}{Z} s' \wedge s' \in \S}$
