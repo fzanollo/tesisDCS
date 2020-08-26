@@ -7,48 +7,32 @@
 
 
 
-If $s \in \WES $ then there exists a supervisor $\sigma$ for the control problem 
-$\unexploredToBottom{\structure}$. Let $Z$ such that $\structure \subseteq Z$. we will 
-show that $\sigma$ is a supervisor for $\unexploredToBottom{Z}$.  This requires showing two 
-conditions as per Definition~\ref{def:control-problem}. The first, that $\sigma$ is 
-controllable, is trivial as the set of controllable and uncontrollable events have not changed. 
+Si $s \in \WES $ entonces existe un supervisor $\sigma$ para el problema de control $\unexploredToBottom{\structure}$. Sea $Z$ tal que $\structure \subseteq Z$. Demostraremos que $\sigma$ es un supervisor para $\unexploredToBottom{Z}$. Esto requiere dos condiciones según la Definición~\ref{def:control-problem}. La primera, que $\sigma$ es controlable, es trivial ya que los conjuntos de eventos controlables y no controlables no fueron cambiados. 
 
-For the second, nonblocking, we first prove that $\L^\sigma(\unexploredToBottom{Z}) = 
+Para la segunda, nonblocking, primero mostramos que $\L^\sigma(\unexploredToBottom{Z}) = 
 \L^\sigma(\unexploredToBottom{\structure})$. 
 
-Assume that $\L^\sigma(\unexploredToBottom{Z}) \not\subseteq \L^\sigma(\unexploredToBottom{\structure})$.
-If $w \in 
-\L^\sigma(\unexploredToBottom{Z}) \setminus \L^\sigma(\unexploredToBottom{\structure})$. 
-The run that witnesses $w$ must either always be in $Z$ or eventually reach a deadlock state 
-in $\unexploredToBottom{Z}$. In either case, let $w_0$ be the longest prefix in $\structure$. 
-We know $w_0$ is a proper prefix of $w$. Let $\ell$ such that $w_0.\ell$ is a prefix of $w$. 
-By definition of $\unexploredToBottom{\structure}$, $w_0.\ell$ reaches a deadlock state in  
-$\unexploredToBottom{\structure}$. This is a contradiction as $\sigma$ is a supervisor for 
+Si asumimos que $\L^\sigma(\unexploredToBottom{Z}) \not\subseteq \L^\sigma(\unexploredToBottom{\structure})$ y $w \in 
+\L^\sigma(\unexploredToBottom{Z}) \setminus \L^\sigma(\unexploredToBottom{\structure})$, la corrida que verifica $w$ debe permanecer siempre en $Z$ o alcanzar eventualmente un estado $deadlock$ en $\unexploredToBottom{Z}$. En cualquier caso, sea $w_0$ el prefijo más largo en $\structure$. 
+Sabemos que $w_0$ es un prefijo no vacío de $w$. Sea $\ell$ tal que $w_0.\ell$ es un prefijo de $w$. 
+Por la definición de $\unexploredToBottom{\structure}$, $w_0.\ell$ alcanza un estado $deadlock$ en $\unexploredToBottom{\structure}$. Esto es una contradicción, ya que $\sigma$ es un supervisor para
 $\unexploredToBottom{\structure}$. 
 
-To show that $\L^\sigma(\unexploredToBottom{Z}) \supseteq \L^\sigma(\unexploredToBottom{\structure})$, assume $w \in \L^\sigma(\unexploredToBottom{\structure})$. If $w$ is also in $\L^\sigma(\structure)$ it is also in $\L^\sigma(Z)$ and $\L^\sigma(\unexploredToBottom{Z})$. Otherwise, $w = w_0.\ell$ hits a 
-deadlock state in $\unexploredToBottom{\structure}$. As $w_0$ in $\L^\sigma(\structure)$, 
-it is also in $\L^\sigma(Z)$. Consider the state $s$ reached by $w_0$ in $E$, it must have a 
-transition labelled $\ell$ to justify its addition to $\unexploredToBottom{\structure}$. In, $Z$ 
-state $s$ either has the transition and thus  $w_0.\ell \in \L^\sigma(Z) \subseteq 
-\L^\sigma(\unexploredToBottom{Z})$, or it does not have the transition but then the state in 
-$\unexploredToBottom{Z})$ has an $\ell$ transition to a deadlock state, hence $w_0.\ell \in 
+Para mostrar que $\L^\sigma(\unexploredToBottom{Z}) \supseteq \L^\sigma(\unexploredToBottom{\structure})$, asumimos que $w \in \L^\sigma(\unexploredToBottom{\structure})$. Si $w$ también está en $\L^\sigma(\structure)$ entonces debe pertenecer a $\L^\sigma(Z)$ y $\L^\sigma(\unexploredToBottom{Z})$. De otra forma, $w = w_0.\ell$ alcanza un estado $deadlock$ en $\unexploredToBottom{\structure}$. Como $w_0$ pertenece a $\L^\sigma(\structure)$, pertenecer también a $\L^\sigma(Z)$. Consideramos el estado $s$ alcanzado por  $w_0$ en $E$, debe tener una transición etiquetada como $\ell$ para justificar su inclusión en $\unexploredToBottom{\structure}$. En $Z$, el estado $s$ o tiene la transición y por lo tanto $w_0.\ell \in \L^\sigma(Z) \subseteq 
+\L^\sigma(\unexploredToBottom{Z})$, o no tiene la transición, pero el estado en $\unexploredToBottom{Z})$ tiene una transición $\ell$ a un estado $deadlock$, por lo tanto $w_0.\ell \in 
 L^\sigma(\unexploredToBottom{Z})$.
 
-Now, assume a word $w \in 
-\L^\sigma(\unexploredToBottom{Z})$ that cannot be extended with $w'$ such that $w.w'$ is 
-in $L^\sigma(\unexploredToBottom{Z})$ and reaches a marked state of $\unexploredToBottom{Z}$. 
-As  $w$ is also in $L^\sigma(\unexploredToBottom{\structure})$ then, as
-$\sigma$ is a supervisor for $\unexploredToBottom{\structure}$, there is a $w'$ such that 
-$w.w' \in L^\sigma(\unexploredToBottom{\structure}) = L^\sigma(\unexploredToBottom{Z})$ 
-and hits a marked state. Note that the run for $w.w'$ is always in $\structure$, which means 
-that the run is also in $\unexploredToBottom{Z}$. Thus we reach a contradiction.\\
+Ahora, sabiendo que $\L^\sigma(\unexploredToBottom{Z}) = 
+\L^\sigma(\unexploredToBottom{\structure})$, procedemos a $nonblocking$. Sea una palabra $w \in 
+\L^\sigma(\unexploredToBottom{Z})$ que no puede ser extendida con $w'$ tal que $w.w'$ se encuentra en $L^\sigma(\unexploredToBottom{Z})$ y alcanza un estado marcado de $\unexploredToBottom{Z}$. 
+Como $w$ también se encuentra en $L^\sigma(\unexploredToBottom{\structure})$ entonces, como $\sigma$ es un supervisor para $\unexploredToBottom{\structure}$, existe un $w'$ tal que
+$w.w' \in L^\sigma(\unexploredToBottom{\structure}) = L^\sigma(\unexploredToBottom{Z})$ y alcanza un estado marcado. Notar que la corrida para $w.w'$ siempre se encuentra en $\structure$, lo que significa que la corrida también está en $\unexploredToBottom{Z}$. Finalmente llegamos a una contradicción.\\
 
-To see that $\LES \subseteq \LESS$, assume there is a state $s \in \LES \setminus \LESS$. Since $s \notin \LESS$, it has a supervisor $\sigma$ in $\unexploredToTop{\structure'}$, but $s \in \LES$ so there can't exists a valid supervisor $\sigma'$ for $s$ in $\unexploredToTop{\structure}$. This is false, even more, we show that if $\sigma$ is a supervisor for $s$ in $\unexploredToTop{\structure'}$, then there is a supervisor $\sigma'$ for $s$ in any $\unexploredToTop{Z}$ such that $Z \subseteq \structure$.
+Para demostrar que $\LES \subseteq \LESS$, asumimos que existe un estado $s \in \LES \setminus \LESS$. Como $s \notin \LESS$, tiene un supervisor $\sigma$ en $\unexploredToTop{\structure'}$, pero $s \in \LES$ por lo que no puede existitr un supervisor válido $\sigma'$ para $s$ en $\unexploredToTop{\structure}$. Esto es falso, más aún, mostraremos que si $\sigma$ es un supervisor para $s$ en $\unexploredToTop{\structure'}$, entonces hay un supervisor válido $\sigma'$ para $s$ en cualquier $\unexploredToTop{Z}$ si $Z \subseteq \structure$.
 
-$\sigma$ is a valid supervisor in $\unexploredToTop{\structure'}$, so every word in $\L^\sigma(\unexploredToTop{\structure'})$ can be extended to reach a marked state, and there are only finite states in $\unexploredToTop{\structure'}$, there must be a $w'$ and $w''$ such that $w.w'.w'' \in \L^\sigma(\unexploredToTop{\structure'})$, $w.w'$ reaches a marked state, and $w.w'.w''$ reaches the same state as $w.w'$.
+$\sigma$ es un supervisor valido en $\unexploredToTop{\structure'}$, por lo que cualquier palabra en $\L^\sigma(\unexploredToTop{\structure'})$ puede ser extendida para alcanzar un estado marcado. Solo hay una cantidad finita de estados en  $\unexploredToTop{\structure'}$, por lo que deben existir $w'$ y $w''$ tal que $w.w'.w'' \in \L^\sigma(\unexploredToTop{\structure'})$, $w.w'$ llega a un estado marcado, y $w.w'.w''$ llega al mismo estado que $w.w'$.
 
-If $w.w'.w''$ is in $\L^\sigma(Z)$, then there is nothing to be done, it is clear that $\sigma$ still has a way to extend $w$ in $\unexploredToTop{Z}$. Otherwise, we note that $w.w'.w'' = w_0.l.w_1$ such that $w_0$ is the longest prefix of $w.w'.w''$ in $\L^\sigma(Z)$, this means that $w_0.l$ reaches the marked winning state $\top$, and from there every extension of the word can only remain in this state, thus, $\sigma$ is also a valid controller for $\unexploredToTop{Z}$.
+Si $w.w'.w''$ está en $\L^\sigma(Z)$, entonces no hay nada que hacer, es claro que $\sigma$ tiene la misma forma de extender $w$ en $\unexploredToTop{Z}$. Si no, notemos que $w.w'.w'' = w_0.l.w_1$ tal que $w_0$ es el prefijo más largo de $w.w'.w''$ en $\L^\sigma(Z)$, esto significa que $w_0.l$ alcanza el estado marcado ganador $\top$, y desde ahí toda extensión de la palabra solo puede permanecer en ese mismo estado, por lo tanto, $\sigma$ también es un controlador válido en  $\unexploredToTop{Z}$.
  
 \begin{flushright}
 $\square$
