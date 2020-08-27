@@ -58,37 +58,37 @@ $\square$
 	\WES$ contradiciendo la hipótesis. )
 
 
-If a state $s$ is not in $\WES \cup \LES$ it is because it has a  supervisor $\sigma$ in $\unexploredToTop{\structure}$ but it doesn't have one in $\unexploredToBottom{\structure}$. This depends entirely on the descendants of $s$, since those are the only states that $\sigma$ can reach. If $s$ is not a predecessor of $e'$, and $e \step{l}{\structure'} e'$ is the only difference between $\structure$ and $\structure'$ then the descendants of $s$ are the same, thus its possible supervisors haven't changed, and $s$ is still NONE.
+Si un estado $s$ no se encuentra en $\WES \cup \LES$ es porque tiene un supervisor $\sigma$ en $\unexploredToTop{\structure}$ pero no tiene uno para $\unexploredToBottom{\structure}$. Esto depende únicamente de los descendientes de $s$, dado que éstos son los únicos estados que $\sigma$ puede alcanzar. Si $s$ no es un predecesor de $e'$, y $e \step{l}{\structure'} e'$ es la única diferencia entre $\structure$ y $\structure'$ entonces los decendientes de $s$ son los mismos, por lo que los posibles supervisores no tuvieron ningún cambio, y $s$ sigue siendo NONE.
 
-What is not so clear, is that $s$ has no new possible supervisors if it has a path to reach $e'$ but only by passing through at least one state in $\WES \cup \LES$. Assuming it must pass through states in $\WES \cup \LES$ we show that:
+Lo que no es tan claro, es que $s$ no tiene nuevos supervisores posibles si tiene un camino que puede alcanzar $e'$ pero solo pasando por al menos un estado de $\WES \cup \LES$. Asumiendo que debe pasar por estados en $\WES \cup \LES$ mostramos que:
 
 \begin{itemize}
-	\item knowing $s$ had a supervisor $\sigma$ in $\unexploredToTop{\structure}$, we show $s$ has a valid supervisor $\sigma'$ in $\unexploredToTop{\structure'}$:
+	\item Sabiendo que $s$ tenía un supervisor $\sigma$ en $\unexploredToTop{\structure}$, mostramos que $s$ tiene un supervisor válido $\sigma'$ en $\unexploredToTop{\structure'}$:
 	
-	$\sigma'(w) = \sigma(w)$ if there is no $w_0$ suffix of $w$ such that $ s \runw{w_0}{\structure'} s_i \wedge s_i \in \LES \cup \WES$. 
+	$\sigma'(w) = \sigma(w)$ si no existe un $w_0$ sufijo de $w$ tal que $ s \runw{w_0}{\structure'} s_i \wedge s_i \in \LES \cup \WES$. 
 	
-	$\sigma'(w) = \sigma_{s_i}(w_1)$ where $w_0$ is the shortest suffix of $w = w_0.w_1$ such that $ s \runw{w_0}{\structure'} s_i \wedge s_i \in \WES$. $\sigma_{s_i}$ is the supervisor we know $s_i$ had in $\unexploredToBottom{\structure}$ because $s_i \in \WES$, and every supervisor valid in $\unexploredToBottom{\structure}$ is also valid in $\unexploredToTop{\structure}$.
+	$\sigma'(w) = \sigma_{s_i}(w_1)$ donde $w_0$ es el sufijo más corto de $w = w_0.w_1$ tal que $ s \runw{w_0}{\structure'} s_i \wedge s_i \in \WES$. $\sigma_{s_i}$ es el supervisor que sabemos que  $s_i$ tiene en $\unexploredToBottom{\structure}$ ya que $s_i \in \WES$, y que cada supervisor válido en $\unexploredToBottom{\structure}$ es también válido en $\unexploredToTop{\structure}$.
 	
-	Since $\sigma$ is a valid supervisor, we know it will not reach states in $\LES$.
+	Como $\sigma$ es un supervisor válido, sabemos que no puede alcanzar estados en $\LES$.
 	
-	Finally it is clear that $\sigma'$ is a valid supervisor for $s$ in $\unexploredToTop{\structure'}$. Note that $\sigma'$ does not depend of the new transition.
-	
-	
+	Finalmente, es claro que $\sigma'$ es un supervisor válido para $s$ en $\unexploredToTop{\structure'}$. Notar que $\sigma'$ no depende de la nueva transición.
 	
 	
-	\item Knowing $s$ had no supervisor in $\unexploredToBottom{\structure}$, we show that $s$ has no supervisor in $\unexploredToBottom{\structure'}$ by assuming there is one and reaching a contradiction:
 	
-	Suppose there is a supervisor $\sigma'$ for $s$ in $\unexploredToBottom{\structure'}$, and that $e \step{l}{\structure'} e'$ is the only difference between $\structure$ and $\structure'$.
 	
-	With $\sigma'$ we will build $\sigma$, a supervisor for $s$ in $\unexploredToBottom{\structure}$.
+	\item Sabiendo que $s$ no tiene supervisor en $\unexploredToBottom{\structure}$, mostramos que $s$ no tiene supervisor en $\unexploredToBottom{\structure'}$ asumiendo que tiene uno y llegando a una contradicción:
 	
-	$\sigma(w) = \sigma'(w)$ if there is no $w_0$ which is a prefix of $w$ and $s \runw{w_0}{\structure} s_i \wedge s_i \in \WES \cup \LES$. Since $\sigma'$ is a valid supervisor, we know it will not reach states in $\LESS$. Note that $w$ can't reach $e \step{\l}{\structure'} e'$ because $s$ has no path of $\NONE$ states to $e'$.
+	Suponemos que existe un supervisor $\sigma'$ para $s$ en $\unexploredToBottom{\structure'}$, y que $e \step{l}{\structure'} e'$ es la única diferencia entre $\structure$ y $\structure'$.
 	
-	If $w=w_0.w_1$ and $s \runw{w_0}{\structure} s' \wedge s' \in \WES$ then $\sigma(w_0.w_1) = \sigma_{s'}(w_1)$ where $\sigma_{s'}$ is the supervisor for $s'$ in $\unexploredToBottom{\structure}$. Note that once we reach $s'$ we always follow $\sigma_{s'}$.
+	Con $\sigma'$ construimos $\sigma$, un supervisor para $s$ en $\unexploredToBottom{\structure}$.
 	
-	Since $\sigma$ never reaches the new transition we know that $\sigma$ is valid in $\unexploredToBottom{\structure}$.
+	$\sigma(w) = \sigma'(w)$ si no existe un $w_0$ que sea prefijo de $w$ y que $s \runw{w_0}{\structure} s_i \wedge s_i \in \WES \cup \LES$. Como $\sigma'$ es un supervisor válido, sabemos que no puede alcanzar estados en $\LESS$. Notar que $w$ no puede alcanzar $e \step{\l}{\structure'} e'$ porque $s$ no tiene un camino de estados $\NONE$ a $e'$.
+	
+	Si $w=w_0.w_1$ y $s \runw{w_0}{\structure} s' \wedge s' \in \WES$ entonces $\sigma(w_0.w_1) = \sigma_{s'}(w_1)$ donde $\sigma_{s'}$ es el supervisor para $s'$ en $\unexploredToBottom{\structure}$. Notar que una vez que se alcanza $s'$ siempre seguimos $\sigma_{s'}$.
+	
+	Como $\sigma$ nunca alcanza la nueva transición sabemos que $\sigma$ es válido en $\unexploredToBottom{\structure}$.
 		
-	We see then that assuming there is a valid supervisor $\sigma'$ for $s$ in $\unexploredToBottom{\structure'}$ implies that there is a valid supervisor $\sigma$ for $s$ in $\unexploredToBottom{\structure}$. ABS! \\
+	Vemos entonces que asumiendo que existe un supervisor válido $\sigma'$ para $s$ en $\unexploredToBottom{\structure'}$ estamos implicando la existencia de un supervisor $\sigma$ para $s$ en $\unexploredToBottom{\structure}$. ABS! \\
 	
 \end{itemize}
 \begin{flushright}
