@@ -1,7 +1,5 @@
 % - MTSA
 %     Herramienta, sintaxis
-% - Challenges 
-%     Trabajar con código ajeno, poco entendimiento del problema, proyecto enorme, ese tipo de challenges o más del estilo algorítmico? 
 % - Tests 
 %     Qué tests desarrollamos, quizás mostrar un par interesantes y explicarlos
 
@@ -27,9 +25,9 @@ B2 = (u23 -> A3 | inicial -> A1).
 \end{lstlisting}
 QUIZAS CAMBIAR LOS EJEMPLOS POR UNOS MENOS HORRIBLES
 
-En el listing~\ref{ejController} vemos un ejemplo de cómo definir un controlador, en este caso lo llamamos $Goal$. En el área de \textit{Automated planning} el objetivo es alcanzar algún estado ``final'', es decir, los estados son los marcados; sin embargo en el contexto MTSA y al representar el problema con LTSs solo podemos marcar transiciones. La interpretación final es que las transiciones señaladas como ``marcadas`` llevan a estados marcados y estos serán nuestros objetivos. En el ejemplo se declara la transición $u12$ como marcada, por ende el estado $A2$ estará marcado. Luego definimos el conjunto de transiciones controlables, en este caso solo $c01$. Luego debemos agregar la palabra clave \texttt{nonblocking}, en caso contrario se intentará, por defecto, resolver \textit{blocking}.
+En el listing~\ref{ejController} vemos un ejemplo de cómo definir un controlador, en este caso lo llamamos $Goal$. En el área de \textit{Automated planning} el objetivo es alcanzar algún estado \textit{final}, es decir, los estados son los marcados; sin embargo en el contexto MTSA y al representar el problema con LTSs solo podemos marcar transiciones. La interpretación final es que las transiciones señaladas como \textit{marcadas} llevan a estados marcados y estos serán nuestros objetivos. En el ejemplo se declara la transición $u12$ como marcada, por ende el estado $A2$ estará marcado. Luego definimos el conjunto de transiciones controlables, en este caso solo $c01$. Luego debemos agregar la palabra clave \texttt{nonblocking}, en caso contrario se intentará, por defecto, resolver \textit{blocking}.
 
-En la linea \ref{line:controller} utilizamos la palabra clave \texttt{heuristic} para aclarar que queremos utilizar el algoritmo de DCS, luego le damos el nombre de $DirectedController$ y lo definimos como el LTS $Compuesto$ dirigido bajo el controller $Goal$.
+En la última línea utilizamos la palabra clave \texttt{heuristic} para aclarar que queremos utilizar el algoritmo de DCS, luego le damos el nombre de $DirectedController$ y lo definimos como el LTS $Compuesto$ dirigido bajo el controller $Goal$.
 
 \begin{lstlisting}[language = mtsa, caption=Ejemplo de Controller y DCS, label=ejController]
 ...
@@ -39,12 +37,28 @@ controllerSpec Goal = {
     nonblocking
 }
 
-heuristic ||DirectedController = Compuesto~{Goal}. (*@\label{line:controller}@*)
+heuristic ||DirectedController = Compuesto~{Goal}.
 \end{lstlisting}
 
 
 \section{Testing}
-Luego de haber presentado la sintaxis con la cuál desarrollamos nuestros tests vamos a hablar un poco de ellos y qué es lo que se esperaba en cada uno. AGREGAR SOBRETODO LOS TESTS QUE NOS HICIERON DAR CUENTA QUE EL PROPAGATE NO PODIA SER LOCAL Y HABIA QUE MARCAR ERRORES AL TERMINAR DE EXPLORAR ALGO
+Luego de haber presentado la sintaxis con la cuál desarrollamos nuestros tests vamos a hablar un poco de ellos y qué es lo que se esperaba en cada uno. 
+
+%TODO AGREGAR LOS TESTS QUE NOS HICIERON DAR CUENTA QUE EL PROPAGATE NO PODIA SER LOCAL Y HABIA QUE MARCAR ERRORES AL TERMINAR DE EXPLORAR ALGO
+
+TO ADD\\
+
+%TODO correr todos los tests de nuevo con la version de la tesis de dani y ver cuales fallan
+
+- TEST 1, Cuando encuentra el primer loop no controlable, propaga mal WEAK, cuando vuelve a ver el nodo inicial. El problema es que no vuelve a poner al nodo inicial en open, entonces no ve el otro camino, que lleva al goal.\\
+
+- TEST 7, caso donde encontraba un loop que pensaba era goal pero luego, recién al querer crear controloador, fallaba porque tenía cosas por explorar. Esto era doblemente malo porque se puede tener una conclusión erronea y no se sigue explorando.\\
+
+- TEST 19, 22, daban que no habia controlador y son controlables
+
+- TEST 26? este puede ser interesante porque son dos loops no controlables pero ganas en ambos\\
+
+- TEST 35 El tema es que arma un CCC y no chequea que sea valido bien, porque ya no hay loop con marcado. Entonces el build Controller se queja y da que no hay controlador. Pero si revisaba para el otro lado había un CCC válido
 
 \begin{lstlisting}[language = mtsa, caption=Ejemplo de test]
 Ejemplo = A0,
