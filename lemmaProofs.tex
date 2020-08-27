@@ -105,47 +105,14 @@ Lo que no es tan claro, es que $s$ no tiene nuevos supervisores posibles si tien
 	$\unexploredToTop{\structure'}$. Como $s \notin \LES$ también debe haber un supervisor $\sigma'$ en $\unexploredToTop{\structure}$. Construimos un nuevo supervisor para $\unexploredToTop{\structure'}$ desde $s$ que funciona exactamente como $\sigma'$ pero cuando alcanza $e \step{\l}{} e'$ se comporta como $\sigma$. Este nuevo supervisor prueba que $s \in \LESS$ lo cual es una contradicción.)
 
 
-We prove both implications by contradiction. 
+Probamos ambas implicaciones por contradicción. 
 
-First we assume $e' \not\in 
-\WESS \setminus \WES$. Note that as $e' \notin \WES$ then $e' 
-\notin 
-\WESS$.  As $\WESS \neq \WES$ by monotonicity 
-(Lemma\ref{lem:WESandLesMonotonicity}) there must be a state $s$ 
-such that $s \in \WESS \setminus 
-\WES$, so $s$ must have a supervisor in $\WESS $. This supervisor 
-cannot reach $e'$ because if it did, 
-then there would be a supervisor for $e'$ and we had assumed $e' 
-\notin \WESS$. Furthermore, if the supervisor reaches $e$, then 
-$\l$ 
-must be controllable (it if were uncontrollable, the supervisor would 
-reach $e'$ which we established is not possible). Thus, the 
-supervisor 
-avoids $e \step{\l}{} e'$ altogether which means that it is also a 
-supervisor for $s$ in $\unexploredToBottom{\structure}$ (i.e.,  $s 
-\in 
-\WES$) reaching a contradiction.
+Primero asumimos que $e' \not \in 
+\WESS \setminus \WES$. Notar que como $e' \notin \WES$ entonces $e' \notin \WESS$. Como $\WESS \neq \WES$ y por la monotonicidad del (Lemma\ref{lem:WESandLesMonotonicity}) debe existir un estado $s$ tal que $s \in \WESS \setminus 
+\WES$, entonces $s$ debe tener un supervisor en $\WESS $. Este supervisor no puede alcanzar $e'$ porque si lo hiciera, debería haber un supervisor para $e'$ y comenzamos asumiendo que $e' 
+\notin \WESS$. Más aún, si el supervisor alcanzara $e$, entonces $\l$ debe ser controlable (si fuera no controlable, el supervisor alcanzaría $e'$ lo cual ya establecimos no es posible). Entonces, el supervisor evita $e \step{\l}{} e'$ lo que significa que debe ser también un supervisor para $s$ en $\unexploredToBottom{\structure}$ (i.e.,  $s \in \WES$) y alcanzamos una contradicción.
 
-Now we assume $e' \not\in 
-\LESS \setminus \LES$. Note that as $e' \notin \LES$ then $e' 
-\notin 
-\LESS$.  
- Let $s \in \LESS$ and $s \not\in \LES$. We know that from $s$ 
- there is a supervisor $\sigma'$ for 
- $\unexploredToTop{\structure}$. This supervisor either is also a 
- supervisor for $\structure$ or reaches the $\top$ state in 
- $\unexploredToTop{\structure}$. In the first case, it is also a 
- supervisor $\structure'$ and in $\unexploredToTop{\structure'}$, 
- reaching a contradiction. In the second case, it either uses a 
- transition that is neither in $\structure'$ nor $\structure$, which 
- means that in $\unexploredToTop{\structure'}$ it will lead to a 
- winning $\top$ state; or it uses the transition that is in 
- $\structure'$ but not $\structure$ which leads to $e'$. Since we 
- know $e'$ is not in $\LESS$, then it has a supervisor for it in 
- $\unexploredToTop{\structure'}$, then we know that there exists a 
- supervisor $\sigma''$ that includes both $\sigma'$ and the 
- supervisor for $e'$. Finally, $\sigma''$ is a supervisor for $s$ in 
- $\unexploredToTop{\structure'}$, but $s \notin \LESS$, ABS!	
+Ahora asumimos $e' \not\in \LESS \setminus \LES$. Notar que como $e' \notin \LES$ entonces $e' \notin \LESS$. Sea $s \in \LESS$ y $s \not\in \LES$. Sabemos que desde $s$ debe haber un supervisor $\sigma'$ para  $\unexploredToTop{\structure}$. Este supervisor puede o ser también un supervisor para $\structure$ o alcanzar el estado $\top$ en $\unexploredToTop{\structure}$. En el primer caso, es también un supervisor en $\structure'$ y en $\unexploredToTop{\structure'}$, una contradicción. En el segundo caso, o usa una transición que no se encuentra ni en $\structure'$ ni en $\structure$, lo que significa que en $\unexploredToTop{\structure'}$ va a alcanzar un estado ganador $\top$; o usa una transición que se encuentra en $\structure'$ pero no en $\structure$ lo que lleva a $e'$. Como sabemos que $e'$ no se encuentra en $\LESS$, entonces cuenta con un supervisor en  $\unexploredToTop{\structure'}$, entonces sabemos que existe un supervisor $\sigma''$ que incluye tanto a  $\sigma'$ como al supervisor para $e'$. Finalmente, $\sigma''$ es un supervisor para $s$ en  $\unexploredToTop{\structure'}$, pero $s \notin \LESS$, ABS!	
 \begin{flushright}
 	$\square$
 \end{flushright}
