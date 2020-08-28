@@ -1,16 +1,18 @@
 const N = 2
 range Servicio = 0..(N-1)
 
-Agencia = (
-    {cancelacion,compra} -> Agencia |
-    query[Servicio] -> Agencia ).
+Agencia = Principal,
+Principal = (cancelacion -> Principal |
+	compra -> Objetivo |
+    query[Servicio] -> Principal ),
+Objetivo = (reinicio -> Principal).
 
 SubService(Id=0) = Unqueried,
 Unqueried = (cancelacion -> Unqueried |
 	query[Id] -> Queried),
 Queried = (valido[Id] -> Disponible | noValido[Id] -> Imposible),
 Disponible = ({compra,cancelacion} -> Unqueried),
-Imposible = (canelacion -> Unqueried).
+Imposible = (cancelacion -> Unqueried).
 
 ||Plant = (Agencia || forall [s:Servicio] SubService(s)).
 
