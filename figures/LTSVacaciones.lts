@@ -1,0 +1,23 @@
+const N = 2
+range Servicio = 0..(N-1)
+
+Agencia = (
+    {cancelacion,compra} -> Agencia |
+    query[Servicio] -> Agencia ).
+
+SubService(Id=0) = Unqueried,
+Unqueried = (cancelacion -> Unqueried |
+	query[Id] -> Queried),
+Queried = (valido[Id] -> Disponible | noValido[Id] -> Imposible),
+Disponible = ({compra,cancelacion} -> Unqueried),
+Imposible = (canelacion -> Unqueried).
+
+||Plant = (Agencia || forall [s:Servicio] SubService(s)).
+
+controllerSpec Goal = {
+	marking = {compra}
+	controllable = {cancelacion, compra, query[Servicio]}
+	nonblocking
+}
+
+heuristic ||DirectedController = Plant~{Goal}.
