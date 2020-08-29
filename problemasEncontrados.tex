@@ -1,10 +1,37 @@
-\section{Problemas encontrados}
 %En problema con solución actual plantearía entre otras cosas que el best first search tiene que ser correcto para cualquier heuristica y que eso no se cumpía. Plantearía el suite de regresión que armaron y com tuvieron que harnesear el tema de la heuristica para mostrar algunos bugs
 
-ADEMAS EL PROPAGATE NO PODIA SER LOCAL, EXPLICAR.
+\section{Heurística de debugging}
+Como dijimos en el capítulo anterior, el algoritmo de DCS debe ser agnóstico a la heurística. Al comenzar nuestro trabajo en el proyecto y una vez que pudimos generar un conocimiento sobre el pseudocódigo nos percatamos de ciertos casos borde que no iban a ser bien resueltos, o esto suponíamos. Sin embargo, al correr dichos casos el resultado era correcto, esto se debía a que la heurística era muy buena y llevaba al error directamente; entonces no caía en nuestra ``trampa''.
 
-El anterior algoritmo de exploración tenía falencias en cuanto a agregar estados al conjunto $\Errors$. Esto se debía a que no sacaba conclusión alguna al haber explorado todo un subgrafo, por ende al propagar información desde otra rama se podría llegar a un resultado erroneo. Para comprender mejor observar la figura (INGRESE FIGURA) donde desde el estado e tenemos dos sub-ramas a explorar. Si se mira primero la de abajo y no lo marcamos como error entonces al mirar la de arriba diremos que es goal y propagaremos dicha información, equivocadamente, más allá de e.
+En función de poner a prueba sólo el algoritmo de exploración desarrollamos una heurística de debugging o \textit{Dummy}. La misma ordena las transiciones a explorar alfabéticamente, dejando primero las no controlables pero no mira ninguna información sobre distancia a marcados o error. Decidimos dejar el ordenamiento de no controlables primero ya que esto no es heurístico, se sabe perfectamente qué transiciones son controlables y cuáles no.
 
-EXPLICAR QUE NUESTRO ALGORITMO ES AGNÓSTICO A LA HEURÍSICA (COMO DEBERÍA)
+A partir de entonces usamos los nombres de las transiciones para explorar nuestros casos de test de la forma que nos interesaba. En la figura AGREGAR REF vemos un gráfico a modo de resúmen sobre cantidad de tests fallados con/sin heurística \textit{Dummy} y en cuántos dan diferentes resultados. 
+Nuestro suite de regresión cuenta con 50 tests, todos de casos sumamente especiales o variaciones pequeñas de los mismos que son interesantes desde un punto de vista implementativo.
+%TODO grafico de cosas que se rompen/no con y sin dummy
 
-%Subiría de nivel el “Nuevo algoritmo”. Trataría de explicar tempranamente la idea de construcción de núcleos de posibles zonas perdedoras o ganadoras optimistas y pesimistas y la propagación. Incluso con la formalización primero.
+
+\section{Suite de regresión}
+%TODO tests que desarrollamos y un poco de info de alguno
+A continuación mostraremos algunos tests dignos de mención y explicaremos qué problemática ataca. En el capítulo \ref{chpt:implementation} se puede encontrar más información sobre ellos, junto con el código del modelo.
+
+
+\section{Puntos a resolver}
+Gracias a esta suite de tests pudimos encontrar que la exploración fallaba en tres puntos importantes:
+\begin{itemize}
+ \item Falencias al encontrar errores
+ \item Propagación local
+ \item Falta de completitud en la exploración en casos donde era necesario seguir.
+\end{itemize}
+
+En cuanto a agregar estados al conjunto $\Errors$ la inadvertencia se debía a que no sacaba conclusión alguna al haber explorado todo un sub-autómata, por ende al propagar información desde otra rama se podría llegar a un resultado erroneo. Para comprender mejor observar la figura (INGRESE FIGURA) donde desde el estado e tenemos dos sub-ramas a explorar. Si se mira primero la de abajo y no lo marcamos como error entonces al mirar la de arriba diremos que es goal y propagaremos dicha información, equivocadamente, más allá de e. Hay que tener en cuenta que esto podía pasar debido a que no se requería que un estado hijo tenga conclusión para seguir propagando, es decir, bastaba con que haya sido explorado alguna vez y se asumía lo mejor.
+%TODO figura como la que presentamos en facas
+
+Por otro lado, al propagar tenía una mirada local, perdiendo información sobre lo que sucede dentro del conjunto. Es así que no podía reconocer casos donde, por ejemplo, hay un loop no controlable entre dos estados y uno de ellos va no controlablemente a un error. En este caso es obvio que ambos deben ser errores pero según la mirada local tienen \textit{una forma de escapar del error}, el otro estado del conjunto. Para una aclaración visual ver la fugura INGRESE OTRA FIGURA.
+%TODO figura de dos estados loop uncontr, uno va a error e inicial llega al loop.
+
+Respecto a la falta de completitud, queda claro que teniendo una conclusión para cada uno de los estados hijos del inicial podemos definir si el problema es o no controlable. Lo que sucedía era que al tener conclusiones erroneas y problemas de propagación había ciertos casos donde según el algoritmo de exploración el problema era controlable; pero que al llegar al constructor del controlador se daba cuenta que había estados a los cuáles les faltaba exploración y que de hecho tenían transiciones no controlables a estados sin mirar. Llegado ese punto devolvía que no había controlador, cuando de seguir explorando hubiese visto que lo que faltaba era algo ganador.
+%TODO figura con parte explorada y por explorar ganadora, que se note bien cada una
+
+%TODO EXPLICAR QUE NUESTRO ALGORITMO ES AGNÓSTICO A LA HEURÍSICA (COMO DEBERÍA), y algo que enganche este final con el comienzo del prox capitulo
+    
+
