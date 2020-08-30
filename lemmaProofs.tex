@@ -3,14 +3,13 @@
 (Idea:	Para probar $\WES \subseteq \WESS$ mostramos que un supervisor para un estado $s$ en $\WES$ 
 	puede ser usado como un supervisor para $s$ en $\WESS$. Para $\LES \subseteq 
 	\LESS$, asumimos que hay un estado $s \in \LES \setminus \LESS $. Llegamos a una contradicción mostrando que el supervisor que $s$ debe tener en
-	$\unexploredToTop{\structure'}$ es también un supervisor para $s$ en $\unexploredToTop{\structure}$.)
-
-
+	$\unexploredToTop{\structure'}$ es también un supervisor para $s$ en $\unexploredToTop{\structure}$.)\\
+	
 
 Si $s \in \WES $ entonces existe un supervisor $\sigma$ para el problema de control $\unexploredToBottom{\structure}$. Sea $Z$ tal que $\structure \subseteq Z$. Demostraremos que $\sigma$ es un supervisor para $\unexploredToBottom{Z}$. Esto requiere dos condiciones según la Definición~\ref{def:control-problem}. La primera, que $\sigma$ es controlable, es trivial ya que los conjuntos de eventos controlables y no controlables no fueron cambiados. 
 
 Para la segunda, nonblocking, primero mostramos que $\L^\sigma(\unexploredToBottom{Z}) = 
-\L^\sigma(\unexploredToBottom{\structure})$. 
+\L^\sigma(\unexploredToBottom{\structure})$. \\
 
 Si asumimos que $\L^\sigma(\unexploredToBottom{Z}) \not\subseteq \L^\sigma(\unexploredToBottom{\structure})$ y $w \in 
 \L^\sigma(\unexploredToBottom{Z}) \setminus \L^\sigma(\unexploredToBottom{\structure})$, la corrida que verifica $w$ debe permanecer siempre en $Z$ o alcanzar eventualmente un estado $deadlock$ en $\unexploredToBottom{Z}$. En cualquier caso, sea $w_0$ el prefijo más largo en $\structure$. 
@@ -55,7 +54,7 @@ $\square$
 	\not\in \LESS$.
 	Un supervisor para $s$ en $\unexploredToBottom{\structure'}$ no puede existir porque de otra forma podríamos usarlo para construir un supervisor para $s$ en 
 	$\unexploredToBottom{\structure}$ usando un razonamiento similar al anterior. Esto significa que $s \in 
-	\WES$ contradiciendo la hipótesis. )
+	\WES$ contradiciendo la hipótesis. )\\
 
 
 Si un estado $s$ no se encuentra en $\WES \cup \LES$ es porque tiene un supervisor $\sigma$ en $\unexploredToTop{\structure}$ pero no tiene uno para $\unexploredToBottom{\structure}$. Esto depende únicamente de los descendientes de $s$, dado que éstos son los únicos estados que $\sigma$ puede alcanzar. Si $s$ no es un predecesor de $e'$, y $e \step{l}{\structure'} e'$ es la única diferencia entre $\structure$ y $\structure'$ entonces los decendientes de $s$ son los mismos, por lo que los posibles supervisores no tuvieron ningún cambio, y $s$ sigue siendo NONE.
@@ -102,7 +101,7 @@ Lo que no es tan claro, es que $s$ no tiene nuevos supervisores posibles si tien
 	$\WESS$ que evita $e \step{\l}{} e'$, la única diferencia entre $\unexploredToBottom{\structure}$ y $\unexploredToBottom{\structure'}$. Este supervisor entonces es también un supervisor para $s$ en $\WES$ llegando a un absurdo. 
 	
 	Si asumimos $e' \notin \LESS$.  usamos un testigo $s$ de $\LESS \neq \LES$ para llegar a una contradicción. Notar que como $e' \notin \LESS$, hay un supervisor $\sigma$ desde $e'$ en  
-	$\unexploredToTop{\structure'}$. Como $s \notin \LES$ también debe haber un supervisor $\sigma'$ en $\unexploredToTop{\structure}$. Construimos un nuevo supervisor para $\unexploredToTop{\structure'}$ desde $s$ que funciona exactamente como $\sigma'$ pero cuando alcanza $e \step{\l}{} e'$ se comporta como $\sigma$. Este nuevo supervisor prueba que $s \in \LESS$ lo cual es una contradicción.)
+	$\unexploredToTop{\structure'}$. Como $s \notin \LES$ también debe haber un supervisor $\sigma'$ en $\unexploredToTop{\structure}$. Construimos un nuevo supervisor para $\unexploredToTop{\structure'}$ desde $s$ que funciona exactamente como $\sigma'$ pero cuando alcanza $e \step{\l}{} e'$ se comporta como $\sigma$. Este nuevo supervisor prueba que $s \in \LESS$ lo cual es una contradicción.)\\
 
 
 Probamos ambas implicaciones por contradicción. 
@@ -130,38 +129,34 @@ Ahora asumimos $e' \not\in \LESS \setminus \LES$. Notar que como $e' \notin \LES
 	$\SCC \cap \LES= \emptyset$. Tan pronto como la traza sale de $\SCC$ a un estado $s'$ usamos el supervisor para $s'$ en $\unexploredToTop{\structure'}$. 
 	Como $s'$ no puede alcanzar $e \step{\l}{\structure'} 
 	e'$ usando estados $\NONE$, por el 
-	Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, $s'$ debe tener el supervisor que necesitamos.)	
+	Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, $s'$ debe tener el supervisor que necesitamos.)	\\
 
 
-Supose $e' \in \WESS \setminus \WES$ but $\neg$\texttt{canBeWinningLoop($\SCC$)}.
-There exists a supervisor $\sigma$ for $e'$ in $\unexploredToBottom{\structure'}$, this means there must be a path $w$ from $e'$ to a marked state $m$. 
-Since $\neg$\texttt{canBeWinningLoop($\SCC$)}, there are no marked state in $\SCC$, $w$ must leave $\SCC$. 
-Let $s$ be the first state reached by $w$ not in $\SCC$, $s$ is in $\LES \cup \NONE$, and doesn't have a $\NONE$ path to $e'$ then by Lemma~\ref{lem:newWinnersLosersAreNonePredecessors} $s$ will still not change it status.
-Since $s \notin \WESS$, $s$ doesn't have a supervisor in $\unexploredToBottom{\structure'}$, but $\sigma$ accepts runs that lead to $s$, absurd.
+Sea $e' \in \WESS \setminus \WES$ pero $\neg$\texttt{canBeWinningLoop($\SCC$)}.
+Existe un supervisor $\sigma$ para $e'$ en $\unexploredToBottom{\structure'}$, esto significa que debe existir un camino $w$ desde $e'$ hasta un estado marcado $m$. 
+Dado que $\neg$\texttt{canBeWinningLoop($\SCC$)}, no hay estados marcados en $\SCC$, $w$ debe salir de $\SCC$. 
+Sea $s$ el primer estado que alcanza $w$ fuera de $\SCC$, $s$ pertenece a $\LES \cup \NONE$, y no tiene un camino de estados $\NONE$ hasta $e'$ entonces según Lemma~\ref{lem:newWinnersLosersAreNonePredecessors} $s$ va a seguir sin cambiar su estado.
+Dado que $s \notin \WESS$, $s$ no tiene un supervisor en $\unexploredToBottom{\structure'}$, pero $\sigma$ acepta corridas que llevan a $s$, llegamos a un absurdo.
 
+Asumiendo \texttt{canBeWinningLoop($\SCC$)} simplemente construimos un supervisor $\sigma^4$ para $e'$ en $\unexploredToTop{\structure'}$ para probar que $e' \notin \LESS$
 
+Definimos $\sigma^4$ tal que habilita todas las transiciones no controlables (para que sea $controllable$).
 
-Assuming \texttt{canBeWinningLoop($\SCC$)} we simply build a supervisor $\sigma^4$ for $e'$ in $\unexploredToTop{\structure'}$ to prove that $e' \notin \LESS$
-
-
-We define $\sigma^4$ so that it enables all uncontrollable transitions (to be $controllable$).
-
-$\sigma^4(w_0.w_1) = \sigma_{s'}(w_1)$ if $w_0$ is the shortest word such that there is an $s' \notin \SCC \wedge s'\notin \LES$ and $e' \runw{w_0}{\unexploredToTop{\structure'}} s'$.
-Else if $e' \runw{w}{\unexploredToTop{\structure'}} p \wedge p \in \SCC$ then for all controllable $\l'$, $\l' \in\sigma^4(w)$ iff $\exists  p' \ldot p \step{l'}{} p' \wedge p' \notin \LES$.
+$\sigma^4(w_0.w_1) = \sigma_{s'}(w_1)$ si $w_0$ es el camino más corto tal que existe $s' \notin \SCC \wedge s'\notin \LES$ y $e' \runw{w_0}{\unexploredToTop{\structure'}} s'$.
+En otro caso $e' \runw{w}{\unexploredToTop{\structure'}} p \wedge p \in \SCC$ entonces para toda $\l'$ controlable, $\l' \in\sigma^4(w)$ si y solo si $\exists  p' \ldot p \step{l'}{} p' \wedge p' \notin \LES$.
 %todas las transiciones que van al loop mas todas las transiciones que salen a un estado NONE (o TOP), i.e. no error. 
 
-We use the supervisors $\sigma_{s'}$ where $s'$ is such that exists $s \in \SCC$ and $s\step{\l'}{\unexploredToTop{\structure'}} s'\wedge s' \notin \SCC \wedge s'\notin \LES$. If none such $s'$ exists, we know there is a marked state in $\SCC$ and $\sigma^4$ never leaves $\SCC$ since all reachable states from $\SCC$ are in $\LES$.
+Usamos los supervisores $\sigma_{s'}$ donde $s'$ es tal que existe $s \in \SCC$ y $s\step{\l'}{\unexploredToTop{\structure'}} s'\wedge s' \notin \SCC \wedge s'\notin \LES$. Si no existe tal $s'$, sabemos que debe haber un estado marcado en $\SCC$ y $\sigma^4$ nunca abandona el conjunto $\SCC$ ya que todos los estados alcanzables desde $\SCC$ pertenecen a $\LES$.\\
 
+Probaremos que $\sigma^4$ es $controllable$ y $non-blocking$.
 
+Dado que habilitamos todas las transiciones no controlables, $\sigma^4$ es trivialmente $controllable$.
 
-We will prove that $\sigma^4$ is $controllable$ and $non-blocking$.
+Para $non-blocking$, sea $w$ compatible con $\sigma^4$, mostraremos que puede ser extendido. Si $w = w_0.w_1$ y $w_0$ es la palabra más corta tal que existe una $s' \notin \SCC \wedge s' \notin \LES$ y $e' \runw{w_0}{\unexploredToTop{\structure'}} s'$. Entonces por definición de $\sigma^4$ sabemos que  $\sigma^4(w_0.w_1.w_2) = \sigma_{s'}(w_1.w_2)$ para todo $w_2$. Ya que $\sigma_{s'}$ es $non-blocking$, existe un $w_2$ tal que $\sigma_{s'}(w_1.w_2)$ alcanza un estado marcado. Entonces $\sigma^4(w_0.w_1)$ puede ser extendido para alcanzar ese estado marcado. 
 
-Since we enabled all uncontrollable transitions, $\sigma^4$ is trivially $controllable$.
+En otro caso, $w$ nunca abandona $\SCC$. Debemos probar que para todo $\l'$ tal que $w.\l'$ sea consistente con $\sigma^4$, $w.\l'$ puede ser extendido con un $w'$ para alcanzar un estado marcado. Sea $p'$ tal que $e' \runw{w.\l'}{} p'$. Si $p' \notin \SCC$ entonces $\sigma^4(w.\l') = \sigma_{p'}(\lambda)$ y, como antes, sabemos que $\sigma_{p'}$ es $non-blocking$ entonces $w.l'$ puede extenderse para llegar a un estado marcado.
 
-For $non-blocking$, assume $w$ compatible with $\sigma^4$, we will show that it can be extended. If $w = w_0.w_1$ where $w_0$ is the shortest word such that there is an $s' \notin \SCC \wedge s' \notin \LES$ and $e' \runw{w_0}{\unexploredToTop{\structure'}} s'$. Then by definition of $\sigma^4$ we have that $\sigma^4(w_0.w_1.w_2) = \sigma_{s'}(w_1.w_2)$ for all $w_2$. As $\sigma_{s'}$ is $non-blocking$, there is a $w_2$ such that $\sigma_{s'}(w_1.w_2)$ hits a marked state. So $\sigma^4(w_0.w_1)$ can be extended to hit the marked state. 
-
-Otherwise, $w$ never exits $\SCC$. We want to prove that for every $\l'$ such that $w.\l'$ is consistent with $\sigma^4$, $w.\l'$ is extendable with a $w'$ to reach a marked state. Let $p'$ be such that $e' \runw{w.\l'}{} p'$. If $p' \notin \SCC$ then $\sigma^4(w.\l') = \sigma_{p'}(\lambda)$ and, as before, we know $\sigma_{p'}$ is $non-blocking$ so $w.l'$ is extendable to reach a marked state.\\
-If $p' \in \SCC$, then  $w.l'$ can be extended to reach any state $s$ in the $\SCC$. We know that either there is a marked state in $\SCC$ or a state in $\WES$ reachable in one step from $\SCC$, either way we can extend $w.l'$ to reach a marked state.\\
+Si $p' \in \SCC$, entonces $w.l'$ puede extenderse para llegar a cualquier $s$ en $\SCC$. Sabemos que o existe un estado marcado en $\SCC$ o algún estado en $\WES$ es alcanzable en un paso desde $\SCC$, de cualquier forma podemos extender $w.l'$ para llegar a un estado marcado.\\
 \begin{flushright}
 	$\square$
 \end{flushright}
