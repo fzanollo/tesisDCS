@@ -27,46 +27,51 @@ Para cada servicio que se desea sub-contratar presentamos una versión simplific
 
 El problema puede escalar de forma muy rápida si se incrementa la cantidad de servicios a contratar o la cantidad de pasos para reservar cada servicio (como se verá en la sección~\ref{chpt:performance}).
 
-Mostramos en la figura~\ref{fig:modelos} un LTS (Labeled transition system) para cada uno de los componentes descriptos y el LTS compuesto para el caso en el que se sub-contrata un solo servicio.
+Mostramos en la figura~\ref{fig:N1} un LTS (Labeled transition system) para cada uno de los componentes descriptos y el LTS compuesto para el caso en el que se sub-contrata un solo servicio.
 
+Puede verse que para el caso de solo un sub-servicio que debe ser contratado el problema es manejable. Los modelos gráficos de la planta y el controlador, generados automáticamente por MTSA se comprenden con un vistaso. Ya el caso con $N=2$ (fig~\ref{fig:N2}) si bien puede generarse una representación gráfica, requiere un trabajo considerable para comprender qué estado del problema representa cada estado del modelo. Simplemente aumentando a $N=5$ ya la planta compuesta cuenta con 1025 estados y 4085 transiciones, de las cuales nuestro algoritmo explora 381 estados para construir un controlador válido.
 
 \begin{figure}[htb]
 	\begin{center}
 	\makebox[\linewidth][c]{%
-	\begin{subfigure}[t]{.7\textwidth}
+	\begin{subfigure}[t]{.5\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{figures/ModeloCuentaBanco.pdf}  
-		\caption{Cuenta bancaria}
-		\label{fig:ModeloBanco}
+		\includegraphics[width=\linewidth]{figures/ejemploServicios/agencia.png}  
+		\caption{agencia}
+		\label{fig:agencia}
 	\end{subfigure}
-	\begin{subfigure}[t]{.7\textwidth}
+	\begin{subfigure}[t]{.5\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{figures/ModeloEnsamblaje.pdf}  
-		\caption{Estacion de ensamblaje}
-		\label{fig:modeloEnsamblajes}
+		\includegraphics[width=\linewidth]{figures/ejemploServicios/subServicio.png}  
+		\caption{un sub servicio}
+		\label{fig:subserv}
 	\end{subfigure}
 	}
 	\makebox[\linewidth][c]{%
-	\begin{subfigure}[t]{.7\textwidth}
+	\begin{subfigure}[t]{.5\textwidth}
 		\centering
-		\includegraphics[width=\linewidth]{figures/ModeloVentas.pdf}  
-		\caption{Estacion de ventas}
-		\label{fig:modeloVentas}
+		\includegraphics[width=\linewidth]{figures/ejemploServicios/N1Planta.png}  
+		\caption{Planta compuesta}
+		\label{fig:N1Planta}
 	\end{subfigure}
-	\begin{subfigure}[t]{.7\textwidth}
+	\begin{subfigure}[t]{.5\textwidth}
 	\centering
-	\includegraphics[width=\linewidth]{figures/ModeloCompuestoSin2Caminos.pdf}  
-	\caption{Composición de los componentes}
-	\label{fig:compuesto}
+	\includegraphics[width=\linewidth]{figures/ejemploServicios/N1Controlador.png}  
+	\caption{Controlador resultante}
+	\label{fig:controladorN1}
 	\end{subfigure}
 	}
-	\caption{Modelo de ejemplo}
-	\label{fig:modelos}
+	\caption{Caso con un solo sub-sevicio}
+	\label{fig:N1}
 	\end{center}
 \end{figure}
 
 
-
+\begin{figure}[htb]
+	\includegraphics[width=\linewidth]{figures/ejemploServicios/N2Planta.png}  
+	\caption{Planta compuesta con 2 sub-servicios}
+	\label{fig:N2}
+\end{figure}
 
 
 
