@@ -63,10 +63,15 @@ En conclusión, es difícil decidir dónde hacer el corte. Son muchos casos y no
 	\label{fig:propagacionLocal}
 \end{figure}
 
-
 % FALTA DE COMPLETITUD
-Respecto a la falta de completitud, queda claro que teniendo una conclusión para cada uno de los estados hijos del inicial podemos definir si el problema es o no controlable. Lo que sucedía era que al tener conclusiones erroneas y problemas de propagación había ciertos casos donde según el algoritmo de exploración el problema era controlable; pero que al llegar al constructor del controlador se daba cuenta que había estados a los cuáles les faltaba exploración y que de hecho tenían transiciones no controlables a estados sin mirar. Llegado ese punto devolvía que no había controlador, cuando de seguir explorando hubiese visto que lo que faltaba era algo ganador.
-%TODO figura con parte explorada y por explorar ganadora, que se note bien cada una
+Respecto a la falta de completitud, queda claro que teniendo una conclusión para cada uno de los estados hijos del inicial podemos definir si el problema es o no controlable. Lo que sucedía era que al tener conclusiones erroneas y problemas de propagación había ciertos casos donde, según el algoritmo de exploración el problema era controlable pero al llegar al constructor del controlador se daba cuenta que había estados a los cuáles les faltaba exploración y que, de hecho, tenían transiciones no controlables a estados sin mirar. Llegado ese punto devolvía que no había controlador, cuando de seguir explorando hubiese visto que lo que faltaba era algo ganador. Una ejemplo particular de esto puede verse en la figura \ref{fig:faltaCompletitud}, al terminar la exploración se concluyó que era controlable, sin embargo al querer construir el controlador se descubre que el estado $1$ tiene una no controlable por explorar, devolviendo entonces que no existe controlador.
+\begin{figure}[htb]
+ \centering
+ \includegraphics[width=\linewidth/2]{figures/faltaDeCompletitud.pdf}
+ \caption{Ejemplo de falta de completitud, los estados en gris son los faltantes por explorar.}
+ \label{fig:faltaCompletitud}
+\end{figure}
+
 
 %TODO EXPLICAR QUE NUESTRO ALGORITMO ES AGNÓSTICO A LA HEURÍSICA (COMO DEBERÍA), y algo que enganche este final con el comienzo del prox capitulo
     
