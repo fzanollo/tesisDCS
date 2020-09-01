@@ -59,6 +59,14 @@ Los autómatas definen un lenguaje, un conjunto de palabras, que aceptan. Dado u
 
 \section{Controlador objetivo}
 
+Dado un autómata y una partición de sus eventos en dos subconjuntos: $controlables$ y $no controlables$, lo que buscamos es un $controlador$ (supervisor) que restrinja el vocabulario aceptado de forma de mantener un camino posible a los estados marcados del autómata.
+
+Un controlador observa las transiciones no controlables y deshabilita alguna transiciones controlables para generar una planta restringida. Una palabra $w$ pertenece al lenguaje generado por $T$ restringido por una función del controlador $\sigma : A_T^* \into 2^{A_T}$ (anotado como $\L^\sigma(T)$) si cada prefijo de $w$ ``sobrevive'' a $\sigma$.
+Formalmente, sea $w = \l_0,\ldots,\l_k$ una palabra en $\L(T)$, entonces $w \in \L^\sigma(T)$ si y solo si para todo $0 \leq i \leq k$:
+$
+\init{t} \run{\,\l_0}{\l_i}{T} t_{i+1} \wedge \l_i \in \sigma(\l_0,\ldots,\l_{i-1})
+$
+
 \begin{definition}[Problema de Control Supervisado] \label{def:control-problem}
 	Un \k{Problema de Control Supervisado} composicional es una tupla $\E = (E, A_E^C)$, donde $E$ es un conjunto de autómatas $\{E_0,\ldots,E_n\}$ (podemos abusar la notación y usar $E = (S_E,A_E,\D_E,\init{e},M_E)$ para referirnos a la composición $E_0\|\ldots\|E_n$), y $A_E^C \C A_E$ es el conjunto de eventos controlables (i.e., $A_E^U = A_E \setminus A_E^C$ es el conjunto de eventos no controlables).
 	Una solución para $\E$ es un supervisor $\sigma : A_E^* \into 2^{A_E}$, tal que $\sigma$ es:
@@ -72,28 +80,17 @@ Los autómatas definen un lenguaje, un conjunto de palabras, que aceptan. Dado u
 	
 \end{definition}
 
-
-El problema a tratar consiste en encontrar para la planta de entrada, un controlador, es decir, un autómata con las siguientes características:
-
-\begin{itemize}
-	\item sub-autómata de la planta: todos los estados y transiciones del controlador existen en la planta compuesta.
-	
-	\item controlable: todas las transiciones no controlables de la planta se encuentran en el controlador.
-	
-	\item non-blocking: cada palabra válida para el controlador puede ser extendida por otra palabra no vacía para que su concatenación alcance un estado marcado.
-\end{itemize}
-
 Podemos pensar en un controlador non-blocking como un jugador optimista. Se encarga de no perder, y mientras tenga un futuro camino posible que lo lleva al destino buscado, considera que está ganando.
 
 Es clave entender que en el problema a tratar, la posición de "tablas" del ajedrez, en la que ambos jugadores repiten sus jugadas 50 veces, se considera ganadora si todavía hay opción de dar un jaque mate. Si repetimos nuestras jugadas y todavía tengo dos torres considero que gané el partido, porque eventualmente mi oponente podría cansarse y dejarme ganar. Si repetimos nuestras jugadas pero solo tengo mi rey, no hay forma de dar mate, no puedo extender esta "palabra", esta partida, de forma de dar mate, y considero que perdí.
 
 Es importante notar que como se busca que cualquier palabra sea extendible a otro estado marcado, lo que se busca es pasar por algún estado marcado infinitas veces. O sea, un estado 'e' marcado que tenga un camino para que el jugador pueda volver controlablemente al mismo estado 'e'.
 
-Por esto, las estructuras claves que analizamos en nuestro algoritmo son los "loops", ya que los primeros estados ganadores son aquellos que están en un loop controlable con un estado marcado dentro. Luego señalizamos como ganadores también a cualquier estado que controlablemente alcanza un estado ganador.
+Por esto, las estructuras claves que analizamos en nuestro algoritmo son los ciclos ($loops$), ya que los primeros estados ganadores son aquellos que están en un loop controlable con un estado marcado dentro. Luego anotamos como ganadores también a cualquier estado que controlablemente alcanza un estado ganador.
 
-También los "loops" son esenciales para encontrar los estados perdedores, ya que la única forma de que un estado sea perdedor es que no pueda alcanzar un estado ganador. En otras palabras, los estados perdedores son aquellos que forman parte de un loop que no tiene estados marcados ni transiciones salientes.
+Los ciclos también son esenciales para encontrar los estados perdedores, ya que la única forma de que un estado sea perdedor es que no pueda alcanzar un estado ganador. En otras palabras, los estados perdedores son aquellos que forman parte de un loop que no tiene estados marcados ni transiciones salientes.
 
-De forma más concreta, en nuestro algoritmo, un "loop" del cual el jugador no puede escapar, pero desde el cual existe un camino hacia un estado ganador, se considera ganador.
+De forma más concreta, en nuestro algoritmo, un ciclo del cual el jugador no puede escapar, pero desde el cual existe un camino hacia un estado ganador, se considera ganador.
 
 \section{Algoritmo monolítico}
 
@@ -101,7 +98,7 @@ Una solución a este problema (o problemas similares), ampliamente estudiada[ref
 
 De los estados que no pueden forzar a los marcados, ya sabiendo que son estados donde gana el ambiente, se pueden retirar del punto fijo, y también a cualquier estado 
 
-\textbf{Falta la descripción y el pseudo pero me maree}
+\textbf{Falta la descripción y el pseudo pero me maree, poner ref al pseudo que hay abajo}
 \begin{lstlisting}[language={pseudocode},label={lst:classical},caption={Status confirmation.},float=ht]
 Algorithm classicalSolver($E, A_E^C$):
 	$C = E$
@@ -126,7 +123,7 @@ Para combatir esto, la exploración on-the-fly clasifica estados como ganadores 
 
 Para incrementar las ramas podadas se utiliza una heurística de exploración Best First Search \cite{tesisDani} que busca ganar controlablemente o perder no controlablemente, para garantizar con la menor exploración posible que el estado actual es ganador o perdedor.
 
-En el peor caso, se perdió tiempo en los puntos fijos, intentando clasificar estados, y se realiza una última vez el algoritmo clásico con la planta totalmente explorada. Esto garantiza la completitud del algoritmo, como se detalla en mayor profundidad en el capítulo~\ref{chpt:dcs}.
+En el peor caso, no se pudo concluir nada antes de componer la planta en su totalidad, se perdió tiempo en los puntos fijos, intentando clasificar estados, y se realiza una última vez el algoritmo clásico con la planta totalmente explorada. Esto garantiza la completitud del algoritmo, como se detalla en mayor profundidad en el capítulo~\ref{chpt:dcs}.
 
 \subsection{Agnosticismo a la heurística}
 
