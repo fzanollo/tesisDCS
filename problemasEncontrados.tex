@@ -9,30 +9,38 @@ En función de poner a prueba sólo el algoritmo de exploración desarrollamos u
 A partir de entonces usamos los nombres de las transiciones para explorar nuestros casos de test de la forma que nos interesaba. 
 
 \section{Suite de regresión}
-%TODO tests que desarrollamos y un poco de info de alguno
 A continuación mostraremos algunos tests dignos de mención y explicaremos qué problemática ataca. En el capítulo \ref{chpt:implementation} se puede encontrar más información sobre ellos, junto con el código del modelo.
 
-Nuestro suite de regresión cuenta con 50 tests, todos de casos sumamente especiales o variaciones pequeñas de los mismos que son interesantes desde un punto de vista implementativo. En la figura \ref{fig:resultadosTest} vemos un resúmen sobre los tests fallados con heurística \textit{RA} y \textit{Dummy}, señalando en cuáles dan diferentes resultados. 
+Nuestro suite de regresión cuenta con 50 tests, todos casos sumamente especiales o variaciones pequeñas de los mismos que son interesantes desde un punto de vista implementativo. 
 
-%TODO mejorar esta chochinada
-\begin{figure}
-    \large{RA}
-    \begin{description}
-     \item[Concurrent Modification Exception] 2, 8, 15, 36, 38, 44, 45
-     \item[Controlables que no] 7, 12, 16, 20, 31, 32, 39
-     \item[No controlables que si] 
-    \end{description}
+Como podemos ver en la tabla \ref{tab:resultadosTest} los tests se comportan diferente según la heurística que se use, \textit{RA} o \textit{Dummy}. Exception refiere a un error implementativo que surgía en tiempo de ejecución, específicamente Concurrent Modification Exception, esto pasaba porque se modificaba a la vez que se recorría un conjunto de estados. Falso no controlable son casos que deberían haber dado controlable y no fue así, la inversa para los falsos controlable.
 
+Cabe destacar que, además, fallan en distintos tests. Hay 4 tests que dieron falsos no controlables con \textit{RA} pero funcionaron correctamente con \textit{Dummy}. Por su lado \textit{Dummy} falla en 4 tests ``nuevos'' en esta categoría.
+
+\begin{table}
+    \centering
+    \begin{tabular}{|l|c|c|c|}
+    \hline
+         & Exception & Falso no controlable & Falso controlable \\ \hline
+        RA & 7 & 7 & - \\ \hline
+        Dummy & 3 & 7 & 3 \\ 
+    \hline
+    \end{tabular}
+    \caption{Resúmen fallos del suite}
+    \label{tab:resultadosTest}
+\end{table}
+
+%TODO explicar y mostrar imagenes de los tests: 7,12,20,31 (4 que fallan en ra y no dummy); 13,23,44,45 (4 que fallan en dummy y no ra); 40,42,46 (3 que dan controlables cuando no deberían en dummy)
+%     RA
+%     [Concurrent Modification Exception] 2, 8, 15, 36, 38, 44, 45
+%     [Controlables que no] 7, 12, 16, 20, 31, 32, 39
+%     [No controlables que si] -
+% 
+%     Dummy
+%     [Concurrent Modification Exception] 8, 36, 38
+%     [Controlables que no] 13, 16, 23, 32, 39, 44, 45
+%     [No controlables que si] 40, 42, 46
     
-    \large{Dummy}
-    \begin{description}
-     \item[Concurrent Modification Exception] 8, 36, 38
-     \item[Controlables que no] 13, 16, 23, 32, 39, 44, 45
-     \item[No controlables que si] 40, 42, 46
-    \end{description}
-    \caption{Resúmen resultados del suite}
-    \label{fig:resultadosTest}
-\end{figure}
 
 
 \section{Puntos a resolver}
