@@ -57,9 +57,9 @@ Cabe destacar que esto era posible debido a que no se requería que un estado hi
 \end{figure}
 
 % PROPAGACION LOCAL
-Por otro lado, al propagar tenía una mirada local, perdiendo información sobre lo que sucede dentro del conjunto. Es así que no podía reconocer casos donde, por ejemplo, hay un loop no controlable entre dos estados y uno de ellos va no controlablemente a un error. En este caso es obvio que todo debe ser error pero según la mirada local ambos tienen \textit{una forma de escapar del error}, el otro estado del conjunto. Para una aclaración visual ver la fugura \ref{fig:propagarError}.
+Por otro lado, al propagar tenía una mirada local, perdiendo información sobre lo que sucede dentro del conjunto. Es así que no podía reconocer casos donde, por ejemplo: hay un loop controlable entre dos estados, el cuál se explora primero, y uno de ellos va controlablemente a un error. En este caso es obvio que todo debe ser error pero según la mirada local ambos tienen \textit{una forma de escapar del error}, el otro estado del conjunto. Para una aclaración visual ver la fugura \ref{fig:propagarError}.
 
-Incluso habiendo reconocido $\Goals$, no se puede propagar la información sin mirar un conjunto de nodos a la vez, en la figura \ref{fig:propagarGoal} se puede ver un ejemplo de esto. Aunque tanto $1$ como $2$ llegan al estado marcado $3$, ninguno puede forzarlo. Por ser non-blocking esto no nos molestaría y debería ser controlable, pero si miramos localmente al propagar $Goal$ desde $3$, no sabemos dónde nos lleva la transición no controlable, y deberiamos suponer lo peor.
+Equivalentemente tampoco funciona reconociendo $\Goals$, en la figura \ref{fig:propagarGoal} se puede ver un ejemplo. El estado $2$ llega al estado marcado $3$, pero no puede forzarlo. Por ser non-blocking esto no nos molestaría y el modelo debería ser controlable. Pero si miramos localmente al propagar $Goal$ desde $3$, no sabemos dónde nos lleva la transición no controlable, y deberiamos suponer lo peor.
 
 En conclusión, es difícil decidir dónde hacer el corte. Son muchos casos y no se puede, localmente, distinguirlos a todos. Por ende es necesario un algoritmo más inteligente, con una mirada global del conjunto a propagar.
 \begin{figure}[htb]
@@ -78,20 +78,19 @@ En conclusión, es difícil decidir dónde hacer el corte. Son muchos casos y no
 		\label{fig:propagarGoal}
 	\end{subfigure}
 	}
-	\caption{Problemas de propagación local}
+	\caption{Problemas de propagación local.}
 	\label{fig:propagacionLocal}
 \end{figure}
 
 % FALTA DE COMPLETITUD
-Respecto a la falta de completitud, queda claro que teniendo una conclusión para cada uno de los estados hijos del inicial podemos definir si el problema es o no controlable. Lo que sucedía era que al tener conclusiones erroneas y problemas de propagación había ciertos casos donde, según el algoritmo de exploración el problema era controlable pero al llegar al constructor del controlador se daba cuenta que había estados a los cuáles les faltaba exploración y que, de hecho, tenían transiciones no controlables a estados sin mirar. Llegado ese punto devolvía que no había controlador, cuando de seguir explorando hubiese visto que lo que faltaba era algo ganador. Una ejemplo particular de esto puede verse en la figura \ref{fig:faltaCompletitud}, al terminar la exploración se concluyó que era controlable, sin embargo al querer construir el controlador se descubre que el estado $1$ tiene una no controlable por explorar, devolviendo entonces que no existe controlador.
+Respecto a la falta de completitud, queda claro que teniendo una conclusión para cada uno de los estados hijos del inicial podemos definir si el problema es o no controlable. 
+Lo que sucedía era que al tener conclusiones erroneas y problemas de propagación había ciertos casos donde, según el algoritmo de exploración el problema era controlable pero al llegar al constructor del controlador se daba cuenta que había estados a los cuáles les faltaba exploración y que, de hecho, tenían transiciones no controlables a estados sin mirar. 
+Llegado ese punto devolvía que no había controlador, cuando de seguir explorando hubiese visto que lo que faltaba era algo ganador. Una ejemplo particular de esto puede verse en la figura \ref{fig:faltaCompletitud}, al terminar la exploración se concluyó que era controlable, sin embargo al querer construir el controlador se descubre que el estado $1$ tiene una no controlable por explorar, devolviendo entonces que no existe controlador. 
+
 \begin{figure}[htb]
  \centering
  \includegraphics[width=\linewidth/2]{figures/faltaDeCompletitud.pdf}
  \caption{Ejemplo de falta de completitud, los estados en gris son los faltantes por explorar.}
  \label{fig:faltaCompletitud}
-\end{figure}
-
-
-%TODO EXPLICAR QUE NUESTRO ALGORITMO ES AGNÓSTICO A LA HEURÍSICA (COMO DEBERÍA), y algo que enganche este final con el comienzo del prox capitulo
-    
+\end{figure}    
 
