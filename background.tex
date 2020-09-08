@@ -94,21 +94,46 @@ De forma más concreta, en nuestro algoritmo, un ciclo del cual el jugador no pu
 
 \section{Algoritmo monolítico}
 
-Una solución a este problema (o problemas similares), ampliamente estudiada[refs paper funcional, tesis dipi, buchiGames] se basa en un doble punto fijo. Ya que en la solución clásica se conoce toda la planta compuesta, se parte de la base de todos los estados marcados como objetivos, y a partir de ellos se desde que estados un controlador puede forzar a llegar a los estados marcados al menos una vez.
+Una solución a este problema (o problemas similares), anteriormente estudiada~\cite{fundacionalReactSynth} se basa en un doble punto fijo. Ya que en la solución clásica se conoce toda la planta compuesta, se parte de la base de todos los estados marcados como objetivos, y a partir de ellos se desde que estados un controlador puede forzar a llegar a los estados marcados al menos una vez.
 
 De los estados que no pueden forzar a los marcados, ya sabiendo que son estados donde gana el ambiente, se pueden retirar del punto fijo, y también a cualquier estado 
 
 \textbf{Falta la descripción y el pseudo pero me maree, poner ref al pseudo que hay abajo}
 \begin{lstlisting}[language={pseudocode},label={lst:classical},caption={Status confirmation.},float=ht]
 Algorithm classicalSolver($E, A_E^C$):
+	//cita
 	$C = E$
 	$C' = \emptyset$
 	while $C' \neq  C:$
 		$C' = C$
-		$R = playerCanForce(C,C \cap M_E)$
-		$Tr = C \setminus R$
-		$W = ambientCanForce(C, Tr \cup (S_E \setminus (C \cup \Goals)))$
-		$C=C \setminus W$
+		$H_0 = \emptyset$
+		for $i=0,1..$ until $H' = H$:
+			$H_{j+1}=$playerCanForce(E,$H_j$)$\cup(M_E \cap$playerCanForce(E,C)$)$
+		$C=H_j$
+	return C
+	
+	
+	//nuestro
+	$C = \SCC$
+	$C' = \emptyset$
+	while $C' \neq  C:$
+		$C' = C$
+		$C=C \setminus \{ s \in C \mid$ 
+		isForcedToLose($s,C$) $\vee$
+		cannotBeReached($s,C$) $\vee$
+		cannotReachGoalOrMarkedIn($s, C$)$\}$
+	return C
+	
+	
+	//blocking
+	$C = E$
+	$C' = \emptyset$
+	while $C' \neq  C:$
+	$C' = C$
+	$R = playerCanForce(C,C \cap M_E)$
+	$Tr = C \setminus R$
+	$W = ambientCanForce(C, Tr \cup (S_E \setminus (C \cup \Goals)))$
+	$C=C \setminus W$
 	return C
 \end{lstlisting}
 
