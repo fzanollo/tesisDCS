@@ -144,12 +144,7 @@ entonces \emph{\texttt{canBeWinningLoop}($\SCC$)}. Además, si \\
 
 
 Si \texttt{canBeWinningLoop()} retorna true, en la  linea~\ref{line:lookingForWinner}, 
-sabemos que si $e'$ cambia su estado es porque $e' \in \WESS$. Para ver si este cambio se produce, se realiza una computación estándar de punto fijo. 
-%However, we introduce an optimization, namely that there must be new 
-%$\NONE$-loop (i.e., a loop over states that are  $\NONE$)
-%that includes the new transition that either reaches a marked state 
-%or 
-%can reach a winning state in one step. 
+sabemos que si $e'$ cambia su estado es porque $e' \in \WESS$. Para ver si este cambio se produce, se realiza una computación de punto fijo basada en la solución del problema monolítico~(\ref{chpt:algoMono}). 
 Sin embargo, el método \texttt{findNewGoalsIn} aplica una optimización basada en Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}; solo considera estados que están en un $\NONE$-loop a través de la nueva transición ($\SCC$).
 
 Si \texttt{canBeWinningLoop()} retorna false, entonces debemos comprobar si $e' \in \LESS$.
