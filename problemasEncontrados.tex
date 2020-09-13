@@ -11,9 +11,9 @@ A partir de entonces usamos los nombres de las transiciones para explorar nuestr
 \section{Suite de regresión}
 A continuación mostraremos algunos tests dignos de mención y explicaremos qué problemática ataca. En el capítulo \ref{chpt:implementation} se puede encontrar más información sobre ellos, junto con el código del modelo.
 
-Nuestro suite de regresión cuenta con 50 tests, todos casos sumamente especiales o variaciones pequeñas de los mismos que son interesantes desde un punto de vista implementativo. 
+Nuestra suite de regresión cuenta con 50 tests, todos casos sumamente especiales o variaciones pequeñas de los mismos que son interesantes desde un punto de vista implementativo. 
 
-Como podemos ver en la tabla \ref{tab:resultadosTest} los tests se comportan diferente según la heurística que se use, \textit{RA} o \textit{Dummy}. Exception refiere a un error implementativo que surgía en tiempo de ejecución, específicamente Concurrent Modification Exception, esto pasaba porque se modificaba a la vez que se recorría un conjunto de estados. Falso no controlable son casos que deberían haber dado controlable y no fue así, la inversa para los falsos controlable.
+Como podemos ver en la tabla \ref{tab:resultadosTest} los tests se comportan diferente según la heurística que se use, \textit{RA} o \textit{Dummy}. Exception refiere a un error implementativo que surgía en tiempo de ejecución, específicamente Concurrent Modification Exception, esto pasaba porque se modificaba a la vez que se recorría un conjunto de estados. \textit{Falsos  no controlables} son casos que deberían haber dado controlable y no fue así, la inversa para \textit{falsos controlables}.
 
 Cabe destacar que, además, fallan en distintos tests. Hay 4 tests que dieron falsos no controlables con \textit{RA} pero funcionaron correctamente con \textit{Dummy}. Por su lado \textit{Dummy} falla en 4 tests ``nuevos'' en esta categoría.
 
@@ -21,12 +21,12 @@ Cabe destacar que, además, fallan en distintos tests. Hay 4 tests que dieron fa
     \centering
     \begin{tabular}{|l|c|c|c|}
     \hline
-         & Exception & Falso no controlable & Falso controlable \\ \hline
+         & Exception & Falsos no controlables & Falsos controlables \\ \hline
         RA & 7 & 7 & - \\ \hline
         Dummy & 3 & 7 & 3 \\ 
     \hline
     \end{tabular}
-    \caption{Resúmen fallos del suite}
+    \caption{Resumen fallos del suite}
     \label{tab:resultadosTest}
 \end{table}
 
@@ -52,7 +52,7 @@ Gracias a esta suite de tests pudimos encontrar que la exploración fallaba en t
 \end{itemize}
 
 % FALENCIAS AL ENCONTRAR ERRORES
-En cuanto a agregar estados al conjunto $\Errors$ la inadvertencia se debía a que no sacaba conclusión alguna al haber explorado todo un sub-autómata, por ende al propagar información desde otra rama se podría llegar a un resultado erroneo. 
+En cuanto a agregar estados al conjunto $\Errors$ la inadvertencia se debía a que no sacaba conclusión alguna al haber explorado todo un sub-autómata, por ende al propagar información desde otra rama se podría llegar a un resultado erróneo. 
 
 Para comprender mejor observar la figura \ref{fig:falenciasErrores} donde desde el estado e tenemos dos sub-ramas a explorar. Si se mira primero la rama de abajo y no lo marcamos como error, a pesar de estar completamente explorado, entonces al mirar la de arriba diremos que es goal y propagaremos dicha información, equivocadamente, más allá de e. 
 
@@ -65,9 +65,9 @@ Cabe destacar que esto era posible debido a que no se requería que un estado hi
 \end{figure}
 
 % PROPAGACION LOCAL
-Por otro lado, al propagar tenía una mirada local, perdiendo información sobre lo que sucede dentro del conjunto. Es así que no podía reconocer casos donde, por ejemplo: hay un loop controlable entre dos estados, el cuál se explora primero, y uno de ellos va controlablemente a un error. En este caso es obvio que todo debe ser error pero según la mirada local ambos tienen \textit{una forma de escapar del error}, el otro estado del conjunto. Para una aclaración visual ver la fugura \ref{fig:propagarError}.
+Por otro lado, al propagar tenía una mirada local, perdiendo información sobre lo que sucede dentro del conjunto. Es así que no podía reconocer casos donde, por ejemplo: hay un loop controlable entre dos estados, el cual se explora primero, y uno de ellos va controlablemente a un error. En este caso es obvio que todo debe ser error pero según la mirada local ambos tienen \textit{una forma de escapar del error}, el otro estado del conjunto. Para una aclaración visual ver la fugura \ref{fig:propagarError}.
 
-Equivalentemente tampoco funciona reconociendo $\Goals$, en la figura \ref{fig:propagarGoal} se puede ver un ejemplo. El estado $2$ llega al estado marcado $3$, pero no puede forzarlo. Por ser non-blocking esto no nos molestaría y el modelo debería ser controlable. Pero si miramos localmente al propagar $Goal$ desde $3$, no sabemos dónde nos lleva la transición no controlable, y deberiamos suponer lo peor.
+Equivalentemente tampoco funciona reconociendo $\Goals$, en la figura \ref{fig:propagarGoal} se puede ver un ejemplo. El estado $2$ llega al estado marcado $3$, pero no puede forzarlo. Por ser non-blocking esto no nos molestaría y el modelo debería ser controlable. Pero si miramos localmente al propagar $Goal$ desde $3$, no sabemos dónde nos lleva la transición no controlable, y deberíamos suponer lo peor.
 
 En conclusión, es difícil decidir dónde hacer el corte. Son muchos casos y no se puede, localmente, distinguirlos a todos. Por ende es necesario un algoritmo más inteligente, con una mirada global del conjunto a propagar.
 \begin{figure}[htb]
@@ -92,8 +92,8 @@ En conclusión, es difícil decidir dónde hacer el corte. Son muchos casos y no
 
 % FALTA DE COMPLETITUD
 Respecto a la falta de completitud, queda claro que teniendo una conclusión para cada uno de los estados hijos del inicial podemos definir si el problema es o no controlable. 
-Lo que sucedía era que al tener conclusiones erroneas y problemas de propagación había ciertos casos donde, según el algoritmo de exploración el problema era controlable pero al llegar al constructor del controlador se daba cuenta que había estados a los cuáles les faltaba exploración y que, de hecho, tenían transiciones no controlables a estados sin mirar. 
-Llegado ese punto devolvía que no había controlador, cuando de seguir explorando hubiese visto que lo que faltaba era algo ganador. Una ejemplo particular de esto puede verse en la figura \ref{fig:faltaCompletitud}, al terminar la exploración se concluyó que era controlable, sin embargo al querer construir el controlador se descubre que el estado $1$ tiene una no controlable por explorar, devolviendo entonces que no existe controlador. 
+Lo que sucedía era que al tener conclusiones erróneas y problemas de propagación había ciertos casos donde, según el algoritmo de exploración el problema era controlable pero al llegar al constructor del controlador se daba cuenta que había estados a los cuales les faltaba exploración y que, de hecho, tenían transiciones no controlables a estados sin mirar. 
+Llegado ese punto devolvía que no había controlador, cuando de seguir explorando hubiese visto que lo que faltaba era algo ganador. Un ejemplo particular de esto puede verse en la figura \ref{fig:faltaCompletitud}, al terminar la exploración se concluyó que era controlable, sin embargo al querer construir el controlador se descubre que el estado $1$ tiene una no controlable por explorar, devolviendo entonces que no existe controlador. 
 
 \begin{figure}[htb]
  \centering

@@ -17,8 +17,8 @@ Sabemos que $w_0$ es un prefijo no vacío de $w$. Sea $\ell$ tal que $w_0.\ell$ 
 Por la definición de $\unexploredToBottom{\structure}$, $w_0.\ell$ alcanza un estado $deadlock$ en $\unexploredToBottom{\structure}$. Esto es una contradicción, ya que $\sigma$ es un supervisor para
 $\unexploredToBottom{\structure}$. 
 
-Para mostrar que $\L^\sigma(\unexploredToBottom{Z}) \supseteq \L^\sigma(\unexploredToBottom{\structure})$, asumimos que $w \in \L^\sigma(\unexploredToBottom{\structure})$. Si $w$ también está en $\L^\sigma(\structure)$ entonces debe pertenecer a $\L^\sigma(Z)$ y $\L^\sigma(\unexploredToBottom{Z})$. De otra forma, $w = w_0.\ell$ alcanza un estado $deadlock$ en $\unexploredToBottom{\structure}$. Como $w_0$ pertenece a $\L^\sigma(\structure)$, pertenecer también a $\L^\sigma(Z)$. Consideramos el estado $s$ alcanzado por  $w_0$ en $E$, debe tener una transición etiquetada como $\ell$ para justificar su inclusión en $\unexploredToBottom{\structure}$. En $Z$, el estado $s$ o tiene la transición y por lo tanto $w_0.\ell \in \L^\sigma(Z) \subseteq 
-\L^\sigma(\unexploredToBottom{Z})$, o no tiene la transición, pero el estado en $\unexploredToBottom{Z})$ tiene una transición $\ell$ a un estado $deadlock$, por lo tanto $w_0.\ell \in 
+Para mostrar que $\L^\sigma(\unexploredToBottom{Z}) \supseteq \L^\sigma(\unexploredToBottom{\structure})$, asumimos que $w \in \L^\sigma(\unexploredToBottom{\structure})$. Si $w$ también está en $\L^\sigma(\structure)$ entonces debe pertenecer a $\L^\sigma(Z)$ y $\L^\sigma(\unexploredToBottom{Z})$. De otra forma, $w = w_0.\ell$ alcanza un estado $deadlock$ en $\unexploredToBottom{\structure}$. Como $w_0$ pertenece a $\L^\sigma(\structure)$, debe pertenecer también a $\L^\sigma(Z)$. Consideramos el estado $s$ alcanzado por  $w_0$ en $E$, debe tener una transición etiquetada como $\ell$ para justificar su inclusión en $\unexploredToBottom{\structure}$. En $Z$, el estado $s$ o tiene la transición y por lo tanto $w_0.\ell \in \L^\sigma(Z) \subseteq 
+\L^\sigma(\unexploredToBottom{Z})$, o no tiene la transición, pero el estado en $\unexploredToBottom{Z}$ tiene una transición $\ell$ a un estado $deadlock$, por lo tanto $w_0.\ell \in 
 L^\sigma(\unexploredToBottom{Z})$.
 
 Ahora, sabiendo que $\L^\sigma(\unexploredToBottom{Z}) = 
@@ -27,7 +27,7 @@ Ahora, sabiendo que $\L^\sigma(\unexploredToBottom{Z}) =
 Como $w$ también se encuentra en $L^\sigma(\unexploredToBottom{\structure})$ entonces, como $\sigma$ es un supervisor para $\unexploredToBottom{\structure}$, existe un $w'$ tal que
 $w.w' \in L^\sigma(\unexploredToBottom{\structure}) = L^\sigma(\unexploredToBottom{Z})$ y alcanza un estado marcado. Notar que la corrida para $w.w'$ siempre se encuentra en $\structure$, lo que significa que la corrida también está en $\unexploredToBottom{Z}$. Finalmente llegamos a una contradicción.\\
 
-Para demostrar que $\LES \subseteq \LESS$, asumimos que existe un estado $s \in \LES \setminus \LESS$. Como $s \notin \LESS$, tiene un supervisor $\sigma$ en $\unexploredToTop{\structure'}$, pero $s \in \LES$ por lo que no puede existitr un supervisor válido $\sigma'$ para $s$ en $\unexploredToTop{\structure}$. Esto es falso, más aún, mostraremos que si $\sigma$ es un supervisor para $s$ en $\unexploredToTop{\structure'}$, entonces hay un supervisor válido $\sigma'$ para $s$ en cualquier $\unexploredToTop{Z}$ si $Z \subseteq \structure$.
+Para demostrar que $\LES \subseteq \LESS$, asumimos que existe un estado $s \in \LES \setminus \LESS$. Como $s \notin \LESS$, tiene un supervisor $\sigma$ en $\unexploredToTop{\structure'}$, pero $s \in \LES$ por lo que no puede existir un supervisor válido $\sigma'$ para $s$ en $\unexploredToTop{\structure}$. Esto es falso, más aún, mostraremos que si $\sigma$ es un supervisor para $s$ en $\unexploredToTop{\structure'}$, entonces hay un supervisor válido $\sigma'$ para $s$ en cualquier $\unexploredToTop{Z}$ si $Z \subseteq \structure$.
 
 $\sigma$ es un supervisor valido en $\unexploredToTop{\structure'}$, por lo que cualquier palabra en $\L^\sigma(\unexploredToTop{\structure'})$ puede ser extendida para alcanzar un estado marcado. Solo hay una cantidad finita de estados en  $\unexploredToTop{\structure'}$, por lo que deben existir $w'$ y $w''$ tal que $w.w'.w'' \in \L^\sigma(\unexploredToTop{\structure'})$, $w.w'$ llega a un estado marcado, y $w.w'.w''$ llega al mismo estado que $w.w'$.
 
@@ -41,7 +41,7 @@ $\square$
 
 
 \begin{proof}
-	(Idea: Si $s$ no es un predecesor de $e'$, como $e \step{l}{\structure'} e'$ es la única diferencia entre $\structure$ y $\structure'$, entonces los decendientes de $s$ son los mismos, 
+	(Idea: Si $s$ no es un predecesor de $e'$, como $e \step{l}{\structure'} e'$ es la única diferencia entre $\structure$ y $\structure'$, entonces los descendientes de $s$ son los mismos, 
 	por lo tanto sus posibles supervisores en $\unexploredToTop{\structure'}$ y
 	$\unexploredToBottom{\structure'}$ no cambiaron. Entonces, $s \notin \WESS \cup 
 	\LESS$ lo cual es una contradicción.
@@ -57,7 +57,7 @@ $\square$
 	\WES$ contradiciendo la hipótesis. )\\
 
 
-Si un estado $s$ no se encuentra en $\WES \cup \LES$ es porque tiene un supervisor $\sigma$ en $\unexploredToTop{\structure}$ pero no tiene uno para $\unexploredToBottom{\structure}$. Esto depende únicamente de los descendientes de $s$, dado que éstos son los únicos estados que $\sigma$ puede alcanzar. Si $s$ no es un predecesor de $e'$, y $e \step{l}{\structure'} e'$ es la única diferencia entre $\structure$ y $\structure'$ entonces los decendientes de $s$ son los mismos, por lo que los posibles supervisores no tuvieron ningún cambio, y $s$ sigue siendo NONE.
+Si un estado $s$ no se encuentra en $\WES \cup \LES$ es porque tiene un supervisor $\sigma$ en $\unexploredToTop{\structure}$ pero no tiene uno para $\unexploredToBottom{\structure}$. Esto depende únicamente de los descendientes de $s$, dado que éstos son los únicos estados que $\sigma$ puede alcanzar. Si $s$ no es un predecesor de $e'$, y $e \step{l}{\structure'} e'$ es la única diferencia entre $\structure$ y $\structure'$ entonces los descendientes de $s$ son los mismos, por lo que los posibles supervisores no tuvieron ningún cambio, y $s$ sigue siendo NONE.
 
 Lo que no es tan claro, es que $s$ no tiene nuevos supervisores posibles si tiene un camino que puede alcanzar $e'$ pero solo pasando por al menos un estado de $\WES \cup \LES$. Asumiendo que debe pasar por estados en $\WES \cup \LES$ mostramos que:
 
@@ -100,7 +100,7 @@ Lo que no es tan claro, es que $s$ no tiene nuevos supervisores posibles si tien
 	\WES$ para llegar a una contradicción. El estado $s$ debe tener un supervisor en 
 	$\WESS$ que evita $e \step{\l}{} e'$, la única diferencia entre $\unexploredToBottom{\structure}$ y $\unexploredToBottom{\structure'}$. Este supervisor entonces es también un supervisor para $s$ en $\WES$ llegando a un absurdo. 
 	
-	Si asumimos $e' \notin \LESS$.  usamos un testigo $s$ de $\LESS \neq \LES$ para llegar a una contradicción. Notar que como $e' \notin \LESS$, hay un supervisor $\sigma$ desde $e'$ en  
+	Asumimos $e' \notin \LESS$ y usamos un testigo $s$ de $\LESS \neq \LES$ para llegar a una contradicción. Notar que como $e' \notin \LESS$, hay un supervisor $\sigma$ desde $e'$ en  
 	$\unexploredToTop{\structure'}$. Como $s \notin \LES$ también debe haber un supervisor $\sigma'$ en $\unexploredToTop{\structure}$. Construimos un nuevo supervisor para $\unexploredToTop{\structure'}$ desde $s$ que funciona exactamente como $\sigma'$ pero cuando alcanza $e \step{\l}{} e'$ se comporta como $\sigma$. Este nuevo supervisor prueba que $s \in \LESS$ lo cual es una contradicción.)\\
 
 
@@ -109,7 +109,7 @@ Probamos ambas implicaciones por contradicción.
 Primero asumimos que $e' \not \in 
 \WESS \setminus \WES$. Notar que como $e' \notin \WES$ entonces $e' \notin \WESS$. Como $\WESS \neq \WES$ y por la monotonicidad del (Lemma\ref{lem:WESandLesMonotonicity}) debe existir un estado $s$ tal que $s \in \WESS \setminus 
 \WES$, entonces $s$ debe tener un supervisor en $\WESS $. Este supervisor no puede alcanzar $e'$ porque si lo hiciera, debería haber un supervisor para $e'$ y comenzamos asumiendo que $e' 
-\notin \WESS$. Más aún, si el supervisor alcanzara $e$, entonces $\l$ debe ser controlable (si fuera no controlable, el supervisor alcanzaría $e'$ lo cual ya establecimos no es posible). Entonces, el supervisor evita $e \step{\l}{} e'$ lo que significa que debe ser también un supervisor para $s$ en $\unexploredToBottom{\structure}$ (i.e.,  $s \in \WES$) y alcanzamos una contradicción.
+\notin \WESS$. Más aún, si el supervisor alcanzara $e$, entonces $\l$ debe ser controlable (si fuera no controlable, el supervisor alcanzaría $e'$ lo cual ya establecimos que no es posible). Entonces, el supervisor evita $e \step{\l}{} e'$ lo que significa que debe ser también un supervisor para $s$ en $\unexploredToBottom{\structure}$ (i.e.,  $s \in \WES$) y alcanzamos una contradicción.
 
 Ahora asumimos $e' \not\in \LESS \setminus \LES$. Notar que como $e' \notin \LES$ entonces $e' \notin \LESS$. Sea $s \in \LESS$ y $s \not\in \LES$. Sabemos que desde $s$ debe haber un supervisor $\sigma'$ para  $\unexploredToTop{\structure}$. Este supervisor puede o ser también un supervisor para $\structure$ o alcanzar el estado $\top$ en $\unexploredToTop{\structure}$. En el primer caso, es también un supervisor en $\structure'$ y en $\unexploredToTop{\structure'}$, una contradicción. En el segundo caso, o usa una transición que no se encuentra ni en $\structure'$ ni en $\structure$, lo que significa que en $\unexploredToTop{\structure'}$ va a alcanzar un estado ganador $\top$; o usa una transición que se encuentra en $\structure'$ pero no en $\structure$ lo que lleva a $e'$. Como sabemos que $e'$ no se encuentra en $\LESS$, entonces cuenta con un supervisor en  $\unexploredToTop{\structure'}$, entonces sabemos que existe un supervisor $\sigma''$ que incluye tanto a  $\sigma'$ como al supervisor para $e'$. Finalmente, $\sigma''$ es un supervisor para $s$ en  $\unexploredToTop{\structure'}$, pero $s \notin \LESS$, ABS!	
 \begin{flushright}

@@ -8,9 +8,9 @@ Entiende el problema y tendrás la solución
 \vspace{.5cm}}
 El presente proyecto de tesis consistió en un estudio y extensión del método previamente propuesto por Daniel Ciolek en su tesis de doctorado \cite{tesisDani}. Más precisamente, se trató de analizar carencias del algoritmo de exploración on-the-fly para problemas de Supervisory Control, cuya propiedad central era de tipo Non-blocking, y posteriormente analizados los problemas afrontarlos con una nueva especificación e implementación del algoritmo.
 
-Un problema de Control Supervisado, dentro del área de AI Planning, consiste en un Sistema de Eventos Discreto (DES) con un subconjunto de sus estados marcados. Un factor clave de estos problemas es que el DES se presenta de forma modular tal que la composición paralela de múltiples componentes den lugar a la DES de interés. Desarrollaremos en mayor detalle las definiciones del problema en el capítulo~\ref{chpt:background}.
+Un problema de Control Supervisado, dentro del área de AI Planning, consiste en un Sistema de Eventos Discretos (DES) con un subconjunto de sus estados marcados. Un factor clave de estos problemas es que el DES se presenta de forma modular tal que la composición paralela de múltiples componentes den lugar a la DES de interés. Desarrollaremos en mayor detalle las definiciones del problema en el capítulo~\ref{chpt:background}.
 
-La motivación para analizar dichos problemas surge de la necesidad de verificar software, hoy en día utilizado en prácticamente todo emprendimiento humano. Si bien puede irse ganando confianza sobre la correctitud de un algoritmo a través de una bateria de tests, éstos no proveen una garantía si no una seguridad cada vez mayor. 
+La motivación para analizar dichos problemas surge de la necesidad de verificar software, hoy en día utilizado en prácticamente todo emprendimiento humano. Si bien puede irse ganando confianza sobre la correctitud de un algoritmo a través de una bateria de tests, éstos no proveen una garantía sino una seguridad cada vez mayor. 
 
 Un método alternativo es el de la verificación de la implementación del algoritmo con un modelo formal que cumpla los objetivos y requerimientos deseados del programa. Con esta visión en mente, el área de `Controller Synthesis` va un paso más allá y busca la generación automática de un controlador que dado un modelo (en forma de DES) cumpla siempre en toda ejecución posible los requisitos del problema.
 
@@ -21,7 +21,7 @@ Como contraste, la Síntesis de controladores toma como input las reglas del jue
 \section{Caso de estudio}
 A continuación se presenta un ejemplo para comprender el problema a resolver. Se trata de una versión simplificada del problema $Travel Agency$ utilizado para medir la performance del algoritmo.
 
-Se desea armar un sevicio de venta online de paquetes vacacionales que reservará de forma automática una variedad de servicios (alquiler de auto, hotel, pasaje de avion, etc.) asegurando que no se perderá nada de dinero a menos que se reserve el paquete completo.
+Se desea armar un sevicio de venta online de paquetes vacacionales que reservará de forma automática una variedad de servicios (alquiler de auto, hotel, pasaje de avión, etc.) asegurando que no se perderá nada de dinero a menos que se reserve el paquete completo.
 
 Para cada servicio que se desea sub-contratar presentamos una versión simplificada en la cual se consulta si ese servicio está disponible. En caso de estar disponible queda reservado hasta la compra definitiva del paquete completo y la cancelación de la reserva si otro servicio no estaba disponible no implica un gasto.
 
@@ -29,7 +29,7 @@ El problema puede escalar de forma muy rápida si se incrementa la cantidad de s
 
 Mostramos en la figura~\ref{fig:N1} un LTS (Labeled transition system) para cada uno de los componentes descriptos y el LTS compuesto para el caso en el que se sub-contrata un solo servicio.
 
-Puede verse que para el caso de solo un sub-servicio que debe ser contratado el problema es manejable. Los modelos gráficos de la planta y el controlador, generados automáticamente por MTSA se comprenden con un vistaso. Ya el caso con $N=2$ (fig~\ref{fig:N2}) si bien puede generarse una representación gráfica, requiere un trabajo considerable para comprender qué estado del problema representa cada estado del modelo. Simplemente aumentando a $N=5$ ya la planta compuesta cuenta con 1025 estados y 4085 transiciones, de las cuales nuestro algoritmo explora 381 estados para construir un controlador válido.
+Puede verse que para el caso de solo un sub-servicio que debe ser contratado el problema es manejable. Los modelos gráficos de la planta y el controlador, generados automáticamente por MTSA se comprenden con un vistazo. Ya el caso con $N=2$ (fig~\ref{fig:N2}) si bien puede generarse una representación gráfica, requiere un trabajo considerable para comprender qué estado del problema representa cada estado del modelo. Simplemente aumentando a $N=5$ ya la planta compuesta cuenta con 1025 estados y 4085 transiciones, de las cuales nuestro algoritmo explora 381 estados para construir un controlador válido.
 
 \begin{figure}[htb]
 	\begin{center}

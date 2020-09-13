@@ -98,7 +98,7 @@ s_0 \step{\l_0}{\structure}\ldots s_{n} \step{\l}{\structure} e'$.
 Ya en la linea~\ref{line:isLoop} sabemos que $e'$ no es ganador en $\unexploredToBottom{\structure}$ ni perdedor en $\unexploredToTop{\structure}$, chequeamos si $e 
 \step{\l}{\structure} e'$ cierra un nuevo loop. Si no es el caso, entonces no hay nada que hacer ya que $e'$ alcanza las mismas transiciones en $\structure'$ que en $\structure$. Entonces, $e' \notin 
 (\WESS \cup \LESS)$ ya que cualquier supervisor para $e'$ en $\unexploredToBottom{\structure'}$ (resp. $\unexploredToTop{\structure'}$) es también un supervisor en $\unexploredToBottom{\structure}$ (resp. 
-$\unexploredToTop{\structure}$) y vice versa.
+$\unexploredToTop{\structure}$) y viceversa.
 %Thus, there is no new information about whether it is winning or 
 %losing (Lemma~\ref{lem:noNewLoopImpliesNoNewInformation}). 
 %
@@ -134,7 +134,7 @@ Lemma~\ref{lem:canBeWinningLoopWorks}).
 
 \begin{lemma}\textbf{\emph{(Condición necesaria/suficiente para ganar/perder)}}
 \label{lem:canBeWinningLoopWorks}
-Sea $e \step{\l}{} e'$ la única diferencia entre dos eploraciones parciales, 
+Sea $e \step{\l}{} e'$ la única diferencia entre dos exploraciones parciales, 
 $\structure$ y $\structure'$. Sea $\SCC$ = \emph{\texttt{getMaxLoop($e$, 
 $e'$)}}.
 Si $e' \in \WESS \setminus \WES$ 

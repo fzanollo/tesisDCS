@@ -14,7 +14,7 @@ Para esto, los lemas detallados en la próxima sección aseguran que un estado m
 
 \textbf{Encontrar errores}: La detección de errores tiene tres grandes casos, de los cuales dos son sencillos pero uno trae grandes problemas que lo ponen al mismo nivel de la detección de ganadores. El caso de un $deadlock$, un estado sin transiciones salientes es trivial. Luego la propagación de errores, la clasificación de $s$ como perdedor porque no puede escapar de caer en estados perdedores cuando toma una transición no trae dificultades. El problema radica en detectar los ciclos de estados que pueden extender sus palabras infinitamente pero nunca alcanzarán un estado marcado infinitas veces. 
 
-Sólo podemos concluir que un ciclo es error cuando este ha sido explorado en su completitud y los decendientes que salen del ciclo han sido clasificados. Esto es así debido a la naturaleza optimista de los problemas non-blocking. Si se tiene un ciclo con ningún estado marcado, y todos tienen transiciones controlables a perdedores, pero un solo estado $s$ tiene un camino para llegar a un estado ganador, todos los estados del ciclo son ganadores. %TODO esto último me parece que confunde un poco, porque parece como si fuese un ejemplo de lo contrario, sacaría desde 'Si se tiene'
+Sólo podemos concluir que un ciclo es error cuando este ha sido explorado en su completitud y los descendientes que salen del ciclo han sido clasificados. Esto es así debido a la naturaleza optimista de los problemas non-blocking. Si se tiene un ciclo con ningún estado marcado, y todos tienen transiciones controlables a perdedores, pero un solo estado $s$ tiene un camino para llegar a un estado ganador, todos los estados del ciclo son ganadores. %TODO esto último me parece que confunde un poco, porque parece como si fuese un ejemplo de lo contrario, sacaría desde 'Si se tiene'
 
 Fue esta necesidad y dificultad para marcar errores lo que nos llevó a incluir el siguiente invariante para la síntesis on-the-fly.\\
 
@@ -22,7 +22,7 @@ Fue esta necesidad y dificultad para marcar errores lo que nos llevó a incluir 
 
 Como se verá en la propiedad~\ref{def:invariant}, un estado $s$ solo puede seguir sin clasificar (siendo $\NONE$) si, con los explorados hasta el momento, y siendo totalmente optimistas sobre las transiciones desconocidas no podemos asegurar que $s$ está condenado a ser perdedor (y tampoco podemos concluir que es ganador).
 
-Al momento de haber explorado todos los decendientes de $s$, incluso si no se exploró toda la planta total, es claro que no importa si se es optimista ($\top$) o pesimista ($\bot$) para saber si $s$ es un estado ganador o perdedor, por lo que nos forzamos por nuestro invariante a clasificarlo. Con esto evitamos las ramas totalmente exploradas pero sin clasificar que traían complicaciones en la figura~\ref{fig:falenciasErrores} y solo permitimos que un estado sea $\NONE$ si tiene un camino a una transición no explorada.
+Al momento de haber explorado todos los descendientes de $s$, incluso si no se exploró toda la planta total, es claro que no importa si se es optimista ($\top$) o pesimista ($\bot$) para saber si $s$ es un estado ganador o perdedor, por lo que nos forzamos por nuestro invariante a clasificarlo. Con esto evitamos las ramas totalmente exploradas pero sin clasificar que traían complicaciones en la figura~\ref{fig:falenciasErrores} y solo permitimos que un estado sea $\NONE$ si tiene un camino a una transición no explorada.
 
 \section{Propuesta de nuevo algoritmo}
 
@@ -30,7 +30,7 @@ Al momento de haber explorado todos los decendientes de $s$, incluso si no se ex
 
 \FloatBarrier
 
-\section{Demostración de corectitud y completitud}
+\section{Demostración de correctitud y completitud}
 \input{prueba.tex}
 
 \section{Demostración de Lemas}

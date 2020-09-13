@@ -6,7 +6,7 @@
 El algoritmo fue implementado en el lenguaje Java, agregando a la funcionalidad del programa Modal Transition System Analyser (MTSA)\cite{mtsaRepo}.
 
 \section{MTSA}
-El software utilizado cuenta con una gran cantidad de funcionalidad. Principalmente nos interesa la forma de escribir Labelled Transition Systems (LTS), esto se puede hacer mediante Finite State Process (FSP). En el listing~\ref{ejLTS} podemos ver un ejemplo donde se declara un LTS llamado $MiLTS$, el mismo tiene como estado inicial $A0$. Este estado puede ir por $c01$ a $A1$, $A1$ se declara en la linea siguiente. Tenemos la información entonces de cada estado y sus transiciones. Además se pueden componer las distintas LTSs con el comando \texttt{||}.
+El software utilizado cuenta con una gran cantidad de funcionalidad. Principalmente nos interesa la forma de escribir Labelled Transition Systems (LTS), esto se puede hacer mediante Finite State Process (FSP). En el listing~\ref{ejLTS} podemos ver un ejemplo donde se declara un LTS llamado $MiLTS$, el mismo tiene como estado inicial $A0$. Este estado puede ir por $c01$ a $A1$, $A1$ se declara en la línea siguiente. Tenemos la información entonces de cada estado y sus transiciones. Además se pueden componer las distintas LTSs con el comando \texttt{||}.
 
 \begin{lstlisting}[language = mtsa, caption=Ejemplo de LTS y composición, label=ejLTS]
 MiLTS = A0,
@@ -42,7 +42,7 @@ heuristic ||DirectedController = Compuesto~{Goal}.
 
 
 \section{Testing}
-Luego de haber presentado la sintaxis con la cuál desarrollamos nuestros tests vamos a hablar un poco de ellos y qué es lo que se esperaba en cada uno. 
+Luego de haber presentado la sintaxis con la cual desarrollamos nuestros tests vamos a hablar un poco de ellos y qué es lo que se esperaba en cada uno. 
 
 %TODO AGREGAR LOS TESTS QUE NOS HICIERON DAR CUENTA QUE EL PROPAGATE NO PODIA SER LOCAL Y HABIA QUE MARCAR ERRORES AL TERMINAR DE EXPLORAR ALGO
 
@@ -50,13 +50,13 @@ TO ADD\\
 
 - TEST 1, Cuando encuentra el primer loop no controlable, propaga mal WEAK, cuando vuelve a ver el nodo inicial. El problema es que no vuelve a poner al nodo inicial en open, entonces no ve el otro camino, que lleva al goal.\\
 
-- TEST 7, caso donde encontraba un loop que pensaba era goal pero luego, recién al querer crear controloador, fallaba porque tenía cosas por explorar. Esto era doblemente malo porque se puede tener una conclusión erronea y no se sigue explorando.\\
+- TEST 7, caso donde encontraba un loop que pensaba era goal pero luego, recién al querer crear controloador, fallaba porque tenía cosas por explorar. Esto era doblemente malo porque se puede tener una conclusión errónea y no se sigue explorando.\\
 
 - TEST 19, 22, daban que no habia controlador y son controlables
 
 - TEST 26? este puede ser interesante porque son dos loops no controlables pero ganas en ambos\\
 
-- TEST 35 El tema es que arma un CCC y no chequea que sea valido bien, porque ya no hay loop con marcado. Entonces el build Controller se queja y da que no hay controlador. Pero si revisaba para el otro lado había un CCC válido
+- TEST 35 El tema es que arma un CCC y no chequea que sea válido bien, porque ya no hay loop con marcado. Entonces el build Controller se queja y da que no hay controlador. Pero si revisaba para el otro lado había un CCC válido
 
 \begin{lstlisting}[language = mtsa, caption=Ejemplo de test]
 Ejemplo = A0,
