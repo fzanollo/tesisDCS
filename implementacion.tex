@@ -6,38 +6,48 @@
 El algoritmo fue implementado en el lenguaje Java, agregando a la funcionalidad del programa Modal Transition System Analyser (MTSA)\cite{mtsaRepo}.
 
 \section{MTSA}
-El software utilizado cuenta con una gran cantidad de funcionalidad. Principalmente nos interesa la forma de escribir Labelled Transition Systems (LTS), esto se puede hacer mediante Finite State Process (FSP). En el listing~\ref{ejLTS} podemos ver un ejemplo donde se declara un LTS llamado $MiLTS$, el mismo tiene como estado inicial $A0$. Este estado puede ir por $c01$ a $A1$, $A1$ se declara en la línea siguiente. Tenemos la información entonces de cada estado y sus transiciones. Además se pueden componer las distintas LTSs con el comando \texttt{||}.
+El software utilizado cuenta con una gran cantidad de funcionalidad. Principalmente nos interesa la forma de escribir Labelled Transition Systems (LTS), esto se puede hacer mediante Finite State Process (FSP). En el listing~\ref{ejLTS} volvemos al caso de estudio presentado en~\ref{chpt:casoAviones} esta vez escrito en la herrmienta MTSA.
+
+En primer lugar definimos las constantes que determinan la cantidad de sub-servicios a contratar. Luego definimos la componente \texttt{Agencia}, con un único estado que vuelve a sí mismo con las siguientes transiciones: \texttt{cancelacion, compra, query[servicio]}, este último se lee como cualquier transición \texttt{query[i]} si $i \in Servicio$.
+
+Con la definición de los sub-servicios se puede ver una definición genérica compacta de múltiples componentes idénticas del problema, tantas como elementos haya en \texttt{Servicio}, cada una con su \texttt{id}, comenzado en 0, que es utilizado para definir transiciones únicas para cada componente. También se ve que para un componente más complejo simplemente se declaran más estados, cada uno con su nombre en mayúscula, sin necesidad de aclarar que pertenecen a un componente. Si se quiere que un estado tenga 2 transiciones que lleven a estados distintos se logra con el operador \texttt{||} (como ejemplo, ver el estado \texttt{Queried}).
+
+Finalmente mostramos como se pueden componer las distintas LTSs con el comando \texttt{||}, con el cual nuestra planta compuesta tendrá tanto a la agencia como a los subservicios.
 
 \begin{lstlisting}[language = mtsa, caption=Ejemplo de LTS y composición, label=ejLTS]
-MiLTS = A0,
-A0 = (c01 -> A1),
-A1 = (u12 -> A2 | u13 -> A3),
-A2 = (u23 -> A3),
-A3 = (u33 -> A3).
+const N = 1
+range Servicio = 0..(N-1)
 
-OtroLTS = B0,
-B0 = (c01 -> A1),
-B1 = (u12 -> A2 | u13 -> A3),
-B2 = (u23 -> A3 | inicial -> A1).
+Agencia = (
+{cancelacion,compra} -> Agencia |
+query[servicio] -> Agencia ).
 
-|| Compuesto = (MiLTS || OtroLTS).
+SubService(id=0) = Unqueried,
+Unqueried = (cancelacion -> Unqueried |
+query[id] -> Queried),
+Queried = (valido -> Disponible | noValido -> Imposible),
+Disponible = ({compra,cancelacion} -> Unqueried),
+Imposible = (canelacion -> Unqueried).
+
+||Plant = Agencia || SubService[Servicio].
 ...
 \end{lstlisting}
-QUIZAS CAMBIAR LOS EJEMPLOS POR UNOS MENOS HORRIBLES
 
-En el listing~\ref{ejController} vemos un ejemplo de cómo definir un controlador, en este caso lo llamamos $Goal$. En el área de \textit{Automated planning} el objetivo es alcanzar algún estado \textit{final}, es decir, los estados son los marcados; sin embargo en el contexto MTSA y al representar el problema con LTSs solo podemos marcar transiciones. La interpretación final es que las transiciones señaladas como \textit{marcadas} llevan a estados marcados y estos serán nuestros objetivos. En el ejemplo se declara la transición $u12$ como marcada, por ende el estado $A2$ estará marcado. Luego definimos el conjunto de transiciones controlables, en este caso solo $c01$. Luego debemos agregar la palabra clave \texttt{nonblocking}, en caso contrario se intentará, por defecto, resolver \textit{blocking}.
+En el listing~\ref{ejController} vemos un ejemplo de cómo definir un controlador, en este caso lo llamamos $Goal$. En el área de \textit{Automated planning} el objetivo es alcanzar algún estado \textit{final}, es decir, los estados son los marcados; sin embargo en el contexto MTSA y al representar el problema con LTSs solo podemos marcar transiciones. La interpretación final es que las transiciones señaladas como \textit{marcadas} llevan a estados marcados y estos serán nuestros objetivos. En el ejemplo se declara la transición $compra$ como marcada, señalando la compra sin errores de un paquete. En este punto, aclaramos únicamente para facilitar cualquier intento de reproducción, que al utilizar transiciones marcadas, se puede generar un desdoblamiento de los estados, como ejemplo notar que el estado \texttt{Agencia} va a tener internamente para la herramienta 2 versiones, una marcada alcanzada por $compra$ y otra no marcada alcanzada por $cancelacion$ y $query[servicio]$.
 
-En la última línea utilizamos la palabra clave \texttt{heuristic} para aclarar que queremos utilizar el algoritmo de DCS, luego le damos el nombre de $DirectedController$ y lo definimos como el LTS $Compuesto$ dirigido bajo el controller $Goal$.
+Luego definimos el conjunto de transiciones controlables, en este caso $cancelacion, compra$ y $ query[Servicio]$. Luego debemos agregar la palabra clave \texttt{nonblocking}, en caso contrario se intentará, por defecto, resolver otro problema de control fuera del alcance de este trabajo (\textit{blocking}).
+
+En la última línea utilizamos la palabra clave \texttt{heuristic} para aclarar que queremos utilizar el algoritmo de DCS, luego nombramos como $DirectedController$ al controlador que devuelve nuestro algoritmo cuando lo definimos como el LTS $Compuesto$ ($Plant$) que cumple con la especificación $Goal$.
 
 \begin{lstlisting}[language = mtsa, caption=Ejemplo de Controller y DCS, label=ejController]
 ...
 controllerSpec Goal = {
-    marking = {u12}
-    controllable = {c01}
-    nonblocking
+marking = {compra}
+controllable = {cancelacion, compra, query[Servicio]}
+nonblocking
 }
 
-heuristic ||DirectedController = Compuesto~{Goal}.
+heuristic ||DirectedController = Plant~{Goal}.
 \end{lstlisting}
 
 
