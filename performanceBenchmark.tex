@@ -26,15 +26,24 @@ Como ya dijimos, el principal foco del trabajo fue de brindar una mayor segurida
 
 La comparación se realizó para dos heurísticas distintas, $Monotonic Abstraction$ y $Ready Abstraction$, desarrolladas en \cite{tesisDani}, para observar la diferencia de performance en distintas condiciones. Puede notarse que la segunda heurística supera ampliamente a la primera, pero que para ambas las diferencias entre los algoritmos de exploración es mínima.
 
-\begin{figure}[htb]
+\begin{figure}[th]
     \centering
-    \includegraphics[width=\linewidth]{figures/dcs_vs.pdf}  
-    \caption{dcs2 = performance nuevo algoritmo}
-    \label{fig:dcs_vs}
+    \hspace*{-20mm}
+    \begin{subfigure}{0.7\textwidth}
+        \includegraphics[width=\linewidth]{figures/benchmark/dcs_vs.pdf}\label{fig:dcs:results:detailed}
+        \caption{\DCS detailed benchmark results.}
+    \end{subfigure}%
+    \begin{subfigure}{0.5\textwidth}
+        \includegraphics[width=0.9\linewidth]{figures/benchmark/dcs_instances.pdf}\label{fig:dcs:results:instances}
+        \includegraphics[width=\linewidth]{figures/benchmark/dcs_time.pdf}\label{fig:dcs:results:time}
+        \caption{Total solved instances (top) and execution time (bottom) with \DCS.}
+    \end{subfigure}
+\caption{Benchmark results.}
+\label{fig:dcs:results}
 \end{figure}
 
 
-En la figura~\ref{fig:dcs_vs} puede verse la comparación y que en la mayoría de los problemas los resultados son similares. En los problemas $CM$ y $TA$, la nueva versión del algoritmo $DCS2$ no logra resolver algunas instancias antes del $timeout$ que previamente podían ser resueltas. No consideramos eso como una señal mayor de mala performance en el algoritmo, ya que hay otros problemas como $AT$ y $BW$ donde los resultados para la heurística $Monotonic Abstraction$ no solo no empeoraron sino que mejoraron.
+En la figura~\ref{fig:dcs:results:detailed} puede verse la comparación y que en la mayoría de los problemas los resultados son similares. En los problemas $CM$ y $TA$, la nueva versión del algoritmo $DCS2$ no logra resolver algunas instancias antes del $timeout$ que previamente podían ser resueltas. No consideramos eso como una señal mayor de mala performance en el algoritmo, ya que hay otros problemas como $AT$ y $BW$ donde los resultados para la heurística $Monotonic Abstraction$ no solo no empeoraron sino que mejoraron.
 
 Es esperable que en un proceso exploratorio guiado de forma heurística, cambios en la poda de ramas (por la clasificación o falta de la misma de ciertos estados) van a llevar a explorar caminos más o menos fructíferos según la estructura del problema. Lo relevante de la comparación es que no se observa una diferencia generalizada en los desempeños de las distintas versiones del algoritmo de exploración.
 
@@ -42,28 +51,23 @@ De estos resultados concluímos que las modificaciones al algoritmo no afectan d
 
 \section{Comparación con otros programas}
 
-En función de la completitud del capítulo decidimos agregar los gráficos de comparación entre DCS2 y las herramientas utilizadas en \cite{tesisDani}. Al igual que su versión anterior DCS2 supera ampliamente en muchas de las instancias a las demás herramientas del estado del arte, esto se puede apreciar en la figura~\ref{fig:vs_otros}. Además la figura~\ref{fig:dcs:results} muestra un resumen visual del total de instancias resultas y tiempo de ejecución, respectivamente.
+En función de la completitud del capítulo decidimos agregar los gráficos de comparación entre DCS2 y las herramientas utilizadas en \cite{tesisDani}. Al igual que su versión anterior DCS2 supera ampliamente en muchas de las instancias a las demás herramientas del estado del arte, esto se puede apreciar en la figura~\ref{fig:tools:results:detailed}. Además la figura~\ref{fig:tools:results} muestra un resumen visual del total de instancias resultas y tiempo de ejecución, respectivamente.
 
-
-\begin{figure}[htb]
-	\centering
-	\includegraphics[width=\linewidth]{figures/nuestrosResults/detailed.pdf}  
-	\caption{comparación detallada}
-	\label{fig:vs_otros}
+\begin{figure}[th]
+    \centering
+    \hspace*{-20mm}
+    \begin{subfigure}{0.7\textwidth}
+        \includegraphics[width=\linewidth]{figures/benchmark/tools_vs.pdf}\label{fig:tools:results:detailed}
+        \caption{\DCS detailed benchmark results.}
+    \end{subfigure}%
+    \begin{subfigure}{0.5\textwidth}
+        \includegraphics[width=0.9\linewidth]{figures/benchmark/tools_instances.pdf}\label{fig:tools:results:instances}
+        \includegraphics[width=\linewidth]{figures/benchmark/tools_time.pdf}\label{fig:tools:results:time}
+        \caption{Total solved instances (top) and execution time (bottom) with \DCS.}
+    \end{subfigure}
+\caption{Benchmark results.}
+\label{fig:tools:results}
 \end{figure}
-
-\begin{figure*}[th]
-	\centering
-	\vspace{10cm}
-	\hspace{-2cm}
-	\begin{minipage}[T]{1.20\linewidth}
-		\vspace{-95mm}
-		\includegraphics[scale=.905]{figures/nuestrosResults/instances.pdf}\label{fig:dcs:results:instances}
-		\includegraphics[scale=.905]{figures/nuestrosResults/time.pdf}\label{fig:dcs:results:time}
-	\end{minipage}
-	\caption{Cantidad total de instancias resueltas (izquierda) y tiempo de ejecución (derecha) con \DCS y otras herramientas.}
-	\label{fig:dcs:results}
-\end{figure*}
 
 
 
