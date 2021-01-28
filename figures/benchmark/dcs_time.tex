@@ -1,0 +1,68 @@
+\documentclass{article}
+
+\usepackage[%
+  papersize={9.75cm,7.25cm},
+  hmargin=0cm,%
+  vmargin=0cm,%
+  head=0cm,%
+  headsep=0pt,%
+  foot=0cm%
+  ]{geometry}
+
+\usepackage[dvipsnames]{xcolor} % for color palettes
+\usepackage{etex}       % changes how LaTex allocates registers (needed for pgfplots)
+\usepackage{pgfplots}   % for drawing plots
+\usepackage{charter}    % sets font as bitstream charter
+\usepackage{filecontents}
+\usetikzlibrary{patterns,external}
+\usepgfplotslibrary{colormaps}
+
+\pgfplotsset{compat=1.9}
+
+\pagestyle{empty}
+
+\newcommand{\MA}{{\scshape dcs-ma}}
+\newcommand{\RA}{{\scshape dcs-ra}}
+\newcommand{\MAnew}{{\scshape dcs2-ma}}
+\newcommand{\RAnew}{{\scshape dcs2-ra}}
+\newcommand{\BFS}{{\scshape dcs2-bfs}}
+  
+\begin{document}
+
+\begin{figure}
+\centering
+\begin{tikzpicture}
+\begin{axis}[
+  ybar stacked,
+  bar width=15pt,
+  enlarge x limits=0.15,
+  ymin=0,
+  ymax=3100,
+  font=\scriptsize,
+  xticklabel style={font=\small},
+  reverse legend,
+  legend style={at={(1.18,0.75)},legend columns=1},
+  ylabel={Execution time [min]},
+  symbolic x coords={\MA,\RA,\MAnew,\RAnew,\BFS},
+  xtick=data,
+  x tick label style={rotate=45,anchor=east},
+  font=\fontsize{7}{7}\selectfont
+]
+\addplot+[ybar,color=blue,fill=blue!25,text=black,postaction={pattern=crosshatch,pattern color=blue!45}]
+  plot coordinates {(\MA,0.06) (\RA,0.06) (\MAnew,0.13) (\RAnew,0.34) (\BFS,1.0)}; % TL
+\addplot+[ybar,color=red,fill=red!25,text=black,postaction={pattern=north east lines,pattern color=red!45}]
+  plot coordinates {(\MA,306.16) (\RA,0.12) (\MAnew,420.82) (\RAnew,0.15) (\BFS,427.56)}; % DP
+\addplot+[ybar,color=Green,fill=Green!25,text=black,postaction={pattern=horizontal lines,pattern color=ForestGreen!90}]
+  plot coordinates {(\MA,600.01) (\RA,525.24) (\MAnew,634.06) (\RAnew,570.69) (\BFS,685.56)}; % CM
+\addplot+[ybar,color=Violet,fill=Violet!25,text=black,postaction={pattern=north west lines,pattern color=Violet!50}]
+  plot coordinates {(\MA,113.39) (\RA,52.80) (\MAnew,158.12) (\RAnew,123.99) (\BFS,103.34)}; % AT
+\addplot+[ybar,color=BurntOrange,fill=BurntOrange!25,text=black,postaction={pattern=vertical lines,pattern color=BurntOrange!55}]
+  plot coordinates {(\MA,257.76) (\RA,1.66) (\MAnew,353.61) (\RAnew,350.33) (\BFS,290.52)}; % BW
+\addplot+[ybar,color=SpringGreen,fill=SpringGreen!25,text=black]
+  plot coordinates {(\MA,555.35) (\RA,225.72) (\MAnew,392.58) (\RAnew,205.13) (\BFS,394.26)}; % TA
+\legend{\strut TL, \strut DP, \strut CM, \strut AT, \strut BW, \strut TA}
+\end{axis}
+\end{tikzpicture}
+\end{figure}
+
+\end{document}

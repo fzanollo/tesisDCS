@@ -40,8 +40,8 @@
     xtick style={draw=none},
     ytick style={draw=none},
     title style={font=\normalsize},
-    width=\textwidth/5,
-    height=\textwidth/5},
+    width=3.5995cm,
+    height=3.5995cm},
   mat/.style={
     surf,
     shader=flat corner,
@@ -54,16 +54,12 @@
 \newcommand{\SUP}{{\scshape supremica}}
 \newcommand{\MBP}{{\scshape mbp}}
 \newcommand{\MYND}{{\scshape mynd}}
-\newcommand{\MA}{{\scshape dcs-ma}}
 \newcommand{\RA}{{\scshape dcs-ra}}
-\newcommand{\MAnew}{{\scshape dcs2-ma}}
 \newcommand{\RAnew}{{\scshape dcs2-ra}}
 
 \pagestyle{empty}
-
   
 \begin{document}
-
 \begin{figure}
 \centering
 \begin{tikzpicture}
@@ -71,79 +67,91 @@
 % TL %
 \begin{axis}[heat,yticklabels={0,1,2,3,4,5,6},title=\MTSA]
   \addplot3[mat] table[z index=2] {data/TL.dat}; \end{axis} &  % MTSA (2)
-\begin{axis}[heat,title=\MA]
-  \addplot3[mat] table[z index=2] {data/TL-dcs.dat}; \end{axis} &  % MA (2)
-\begin{axis}[heat,title=\MAnew]
-  \addplot3[mat] table[z index=2] {data/TL-dcs2.dat}; \end{axis} &  % MA
+\begin{axis}[heat,title=\SUP] 
+  \addplot3[mat] table[z index=3] {data/TL.dat}; \end{axis} &  % SUPREMICA (3)
+\begin{axis}[heat,title=\MBP] 
+  \addplot3[mat] table[z index=4] {data/TL.dat}; \end{axis} &  % MBP (4)
+\begin{axis}[heat,title=\MYND] 
+  \addplot3[mat] table[z index=6] {data/TL.dat}; \end{axis} &  % MYND (6)
 \begin{axis}[heat,title=\RA] 
   \addplot3[mat] table[z index=3] {data/TL-dcs.dat}; \end{axis} & % RA (3)
 \begin{axis}[heat,title=\RAnew]
-  \addplot3[mat] table[z index=3] {data/TL-dcs2.dat}; \end{axis} \\ % RA
+  \addplot3[mat] table[z index=3] {data/TL-dcs2.dat}; \end{axis} \\ % RA new
 % DP %
 \begin{axis}[heat,yticklabels={0,1,2,3,4,5,6}]
   \addplot3[mat] table[z index=2] {data/DP.dat}; \end{axis} &  % MTSA (2)
 \begin{axis}[heat]
-  \addplot3[mat] table[z index=2] {data/DP-dcs.dat}; \end{axis} &  % MA (2)
+  \addplot3[mat] table[z index=3] {data/DP.dat}; \end{axis} &  % SUPREMICA (3)
 \begin{axis}[heat]
-  \addplot3[mat] table[z index=2] {data/DP-dcs2.dat}; \end{axis} &  % MA
-\begin{axis}[heat] 
+  \addplot3[mat] table[z index=4] {data/DP.dat}; \end{axis} &  % MBP (4)
+\begin{axis}[heat]
+  \addplot3[mat] table[z index=6] {data/DP.dat}; \end{axis} &  % MYND (6)
+\begin{axis}[heat]
   \addplot3[mat] table[z index=3] {data/DP-dcs.dat}; \end{axis} & % RA (3)
 \begin{axis}[heat]
-  \addplot3[mat] table[z index=3] {data/DP-dcs2.dat}; \end{axis} \\ % RA
+  \addplot3[mat] table[z index=3] {data/DP-dcs2.dat}; \end{axis} \\ % RA new
 % CM %
 \begin{axis}[heat,yticklabels={0,1,2,3,4,5,6}]
   \addplot3[mat] table[z index=2] {data/CM.dat}; \end{axis} &  % MTSA (2)
 \begin{axis}[heat]
-  \addplot3[mat] table[z index=2] {data/CM-dcs.dat}; \end{axis} &  % MA (2)
+  \addplot3[mat] table[z index=3] {data/CM.dat}; \end{axis} &  % SUPREMICA (3)
 \begin{axis}[heat]
-  \addplot3[mat] table[z index=2] {data/CM-dcs2.dat}; \end{axis} &  % MA
-\begin{axis}[heat] 
+  \addplot3[mat] table[z index=4] {data/CM.dat}; \end{axis} &  % MBP (4)
+\begin{axis}[heat]
+  \addplot3[mat] table[z index=6] {data/CM.dat}; \end{axis} &  % MYND (6)
+\begin{axis}[heat]
   \addplot3[mat] table[z index=3] {data/CM-dcs.dat}; \end{axis} & % RA (3)
 \begin{axis}[heat]
-  \addplot3[mat] table[z index=3] {data/CM-dcs2.dat}; \end{axis} \\ % RA
+  \addplot3[mat] table[z index=3] {data/CM-dcs2.dat}; \end{axis} \\ % RA new
 % AT %
 \begin{axis}[heat,yticklabels={0,1,2,3,4,5,6}]
   \addplot3[mat] table[z index=2] {data/AT.dat}; \end{axis} &  % MTSA (2)
 \begin{axis}[heat]
-\addplot3[mat] table[z index=2] {data/AT-dcs.dat}; \end{axis} &  % MA (2)
+  \addplot3[mat] table[z index=3] {data/AT.dat}; \end{axis} &  % SUPREMICA (3)
 \begin{axis}[heat]
-\addplot3[mat] table[z index=2] {data/AT-dcs2.dat}; \end{axis} &  % MA
-\begin{axis}[heat] 
-\addplot3[mat] table[z index=3] {data/AT-dcs.dat}; \end{axis} & % RA (3)
+  \addplot3[mat] table[z index=4] {data/AT.dat}; \end{axis} &  % MBP (4)
 \begin{axis}[heat]
-\addplot3[mat] table[z index=3] {data/AT-dcs2.dat}; \end{axis} \\ % RA
+  \addplot3[mat] table[z index=6] {data/AT.dat}; \end{axis} &  % MYND (6)
+\begin{axis}[heat]
+  \addplot3[mat] table[z index=3] {data/AT-dcs.dat}; \end{axis} & % RA (3)
+\begin{axis}[heat]
+  \addplot3[mat] table[z index=3] {data/AT-dcs2.dat}; \end{axis} \\ % RA new
 % BW %
 \begin{axis}[heat,yticklabels={0,1,2,3,4,5,6}]
   \addplot3[mat] table[z index=2] {data/BW.dat}; \end{axis} &  % MTSA (2)
 \begin{axis}[heat]
-\addplot3[mat] table[z index=2] {data/BW-dcs.dat}; \end{axis} &  % MA (2)
+  \addplot3[mat] table[z index=3] {data/BW.dat}; \end{axis} &  % SUPREMICA (3)
 \begin{axis}[heat]
-\addplot3[mat] table[z index=2] {data/BW-dcs2.dat}; \end{axis} &  % MA
-\begin{axis}[heat] 
-\addplot3[mat] table[z index=3] {data/BW-dcs.dat}; \end{axis} & % RA (3)
+  \addplot3[mat] table[z index=4] {data/BW.dat}; \end{axis} &  % MBP (4)
 \begin{axis}[heat]
-\addplot3[mat] table[z index=3] {data/BW-dcs2.dat}; \end{axis} \\ % RA
+  \addplot3[mat] table[z index=6] {data/BW.dat}; \end{axis} &  % MYND (6)
+\begin{axis}[heat]
+  \addplot3[mat] table[z index=3] {data/BW-dcs.dat}; \end{axis} & % RA (3)
+\begin{axis}[heat]
+  \addplot3[mat] table[z index=3] {data/BW-dcs2.dat}; \end{axis} \\ % RA new
 % TA %
 \begin{axis}[heat,yticklabels={0,1,2,3,4,5,6},xticklabels={0,1,2,3,4,5,6}]
   \addplot3[mat] table[z index=2] {data/TA.dat}; \end{axis} &  % MTSA (2)
 \begin{axis}[heat,xticklabels={0,1,2,3,4,5,6}]
-  \addplot3[mat] table[z index=2] {data/TA-dcs.dat}; \end{axis} &  % MA (2)
+  \addplot3[mat] table[z index=3] {data/TA.dat}; \end{axis} &  % SUPREMICA (3)
 \begin{axis}[heat,xticklabels={0,1,2,3,4,5,6}]
-\addplot3[mat] table[z index=2] {data/TA-dcs2.dat}; \end{axis} &  % MA (2)
+  \addplot3[mat] table[z index=4] {data/TA.dat}; \end{axis} &  % MBP (4)
+\begin{axis}[heat,xticklabels={0,1,2,3,4,5,6}]
+  \addplot3[mat] table[z index=6] {data/TA.dat}; \end{axis} &  % MYND (6)
 \begin{axis}[heat,xticklabels={0,1,2,3,4,5,6}]
   \addplot3[mat] table[z index=3] {data/TA-dcs.dat}; \end{axis} & % RA (3)
 \begin{axis}[heat,xticklabels={0,1,2,3,4,5,6}]
-\addplot3[mat] table[z index=3] {data/TA-dcs2.dat}; \end{axis} \\ % RA (3)
+  \addplot3[mat] table[z index=3] {data/TA-dcs2.dat}; \end{axis} \\ % RA new
 };
 % LABELS %
-\node (n) at (0.15,-7.7) {\footnotesize Value of $n$};
-\node[rotate=90] (k) at (-6.5,-0.1) {\footnotesize Value of $k$};
-\node (tl) at (6.5,5.7)   {\small TL};
-\node (dp) at (6.5,3.35)  {\small DP};
-\node (cm) at (6.5,1.05)  {\small CM};
-\node (at) at (6.5,-1.25) {\small AT};
-\node (bw) at (6.5,-3.6)  {\small BW};
-\node (ta) at (6.5,-5.9)  {\small TA};
+\node (n) at (0.15,-7.6) {\footnotesize Value of $n$};
+\node[rotate=90] (k) at (-7.3,-0.1) {\footnotesize Value of $k$};
+\node (tl) at (7.4,5.7)   {\small TL};
+\node (dp) at (7.4,3.35)  {\small DP};
+\node (cm) at (7.4,1.05)  {\small CM};
+\node (at) at (7.4,-1.25) {\small AT};
+\node (bw) at (7.4,-3.6)  {\small BW};
+\node (ta) at (7.4,-5.9)  {\small TA};
 \end{tikzpicture}
 % COLOR BAR %
 \begin{tikzpicture}
