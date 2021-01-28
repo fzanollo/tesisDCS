@@ -4,8 +4,11 @@
  function DCS($\E {=} (E, A_E^C)$,$\:\heuristic$):
    $\initial$ = $\<\init{e}^0,\ldots,\init{e}^n\>$
    $\structure = \trimlst{(\{ \initial \}, A_E, \emptyset, \initial, M_E \cap \{\initial\})}$
-   $\Goals = \Errors = \emptyset$
+   $\Goals = \Errors = \Witness = \emptyset$
    $\NONE = \{\initial\}$
+   if (isDeadlock($\initial$)):(*@\label{line:initialDead}@*)
+   $\Errors = \{\initial\}$
+   $\NONE = \emptyset$
    while $\initial \not\in \Errors \cup \Goals$:
      $(e,\l,e')$ = expandNext($\heuristic$) (*@\label{line:expand}@*)
      $S_{\structure'} = S_\structure\cup  \{ e' \}$
@@ -19,18 +22,23 @@
        $\SCC$ = getMaxLoop($e$,$e'$) (*@\label{line:getMaxLoop}@*)
        if canBeWinningLoop($\SCC$): (*@\label{line:CanBeWinning}@*)
          C = findNewGoalsIn($\SCC$) (*@\label{line:lookingForWinner}@*)
+         $\Witness = \Witness \cup (C \cap M_{\structure'})$
          $\Goals = \Goals \cup C$
          $\NONE = \NONE \setminus C$
          propagateGoal(C)   (*@\label{line:propagateGoal2}@*)
        else:    (*@\label{line:CanBeLosing}@*)
          P = findNewErrorsIn($\SCC$)
-         $\Errors = \Errors \cup \SCC$
-         $\NONE = \NONE \setminus \SCC$
+         $\Errors = \Errors \cup P$
+         $\NONE = \NONE \setminus P$
          propagateError(P) (*@\label{line:propagateError2}@*)
      $\structure = \structure'$
  
    if $\initial \in \Goals$:
-     return $\!(\, \lambda w \ldot \{ \, \l \mid \trimlst{\initial \runw{w}{\structure} e \step{\l}{\structure} e'} \wedge e' \in \Goals \, \} )$
+     $r = rankStates(\structure)$ (*@\label{line:controller-start}@*)
+     $return \, \lambda w \ldot \{ \, \l \mid \trimlst{\initial \runw{w}{\structure} e 
+     \step{\l}{\structure} e'} \wedge e' \in \Goals\,$
+     $\wedge (l \in A^C_E \then \l = bestControllable(s,r,\structure) 
+     )\}$(*@\label{line:controller-end}@*)
    else:
      return UNREALIZABLE
 \end{lstlisting}  
@@ -39,9 +47,8 @@
 \lstset{numbers=none, numberstyle=\tiny, stepnumber=1, numbersep=5pt}
 \begin{lstlisting}[language={pseudocode},label={lst:dcs.propagate},caption={Status propagation procedures.},float=ht, frame=single]
  function propagateGoal($newGoals$):
-   $C$ = ancestorsNone($newGoals$)
-   $C' = \emptyset$
-   while $C_{Viejo} \neq C$:
+   $C' = \emptyset$; $C$ = ancestorsNone($newGoals$)
+   while $C'\neq C$:
      $C' = C$
      $C=C \setminus \{ s \in C \mid$ 
        isForcedToLose($s,C$) $\vee$
@@ -51,12 +58,11 @@
 
  procedure propagateError($newErrors$):
    $P$ = ancestorsNone($newErrors$)
-   $C$ = $P$
-   $C' = \emptyset$
+   $C$ = $P$; $C' = \emptyset$
    while $C' \neq C$:
      $C' = C$
      $C=C \setminus \{ s \in C \mid$ 
-     	$(\exists e\ldot $forcedTo($s,e,\unexploredToTop{\structure'}$)$ \wedge e \in \Errors)\ \vee$
+     	$(\exists e \in \Errors \ldot $forcedTo($s,e,\unexploredToTop{\structure'}$)$)\ \vee$
      	cannotReachGoalIn($s, C$)$\}$
    $P = P \setminus C$
    $\Errors = \Errors\ \cup P$
@@ -66,19 +72,20 @@
 
 \begin{lstlisting}[language={pseudocode},label={lst:dcs.gather},caption={Status confirmation.},float=ht, frame=single]
  function findNewGoalsIn($\SCC$):
-   $C = \SCC$
-   $C' = \emptyset$
+   $C = \SCC$; $C' = \emptyset$
    while $C' \neq  C:$
-     $C' = C$
-     $C=C \setminus \{ s \in C \mid$ 
-        isForcedToLose($s,C$) $\vee$
-     	cannotBeReached($s,C$) $\vee$
-     	cannotReachGoalOrMarkedIn($s, C$)$\}$
+     $C' = C$; $C'' = \emptyset$
+     while $C'' \neq C:$
+       $C'' = C$
+       $C=C \setminus \{ s \in C \mid$ 
+               isForcedToLose($s,C$) $\vee$
+               cannotBeReached($s,C$) $\}$
+     $C = C \setminus \{ s \in C \mid $cannotReachGoalOrMarkedIn($s, C$)$\}$
    return C
   
  function findNewErrorsIn($\SCC$):
    if ($\exists s \in \SCC \ldot \trimlst{s \step{\l'}{\unexploredToTop{\structure'}}  s'} 
-   \wedge (s' \notin \SCC \wedge s' \in \NONE)$):
+   \wedge (s' \notin \SCC \wedge s' \notin \Errors)$):
      $P = \emptyset$
    else: 
      $P = \SCC$
@@ -108,16 +115,16 @@
    return $(e,\l,e')$
  
  function ancestorsNone(targets):
-   return $\{ \, e \in \structure \mid \exists e' \in targets \ldot \exists w \ldot \trimlst{e \runw{w}{\structure} e'} \wedge$
-          $ \nexists s \in w \ldot s \in \Goals \cup \Errors \}$
+   return $\{ \, e \in \structure' \mid \exists e' \in targets \ldot \exists w \ldot \trimlst{e \runw{w}{\structure'} e'} \wedge$
+          $ \nexists s \in w(e) \ldot s \neq e' \wedge \in \Goals \cup \Errors \}$
    
  function canBeWinningLoop(loop):
-   return $(\marked{loop}{\structure}) \vee$ 
+   return $(\marked{loop}{\structure'}) \vee$ 
           $(\exists s \in loop \ldot $canReachInOneStep($s, \structure, \Goals$)$)$
    
  function getMaxLoop($e$,$e'$):
    return $\{s \mid \exists w, w' \ldot \trimlst{e \runw{w}{\structure'} s} \wedge \trimlst{s \runw{w'}{\structure'} e'} \wedge$ 
-          $\nexists s' \in w,w' \ldot s' \neq e' \wedge s' \in \Goals \cup \Errors \}$
+          $\nexists s' \ldot (s' \in w(e) \vee s' \in w'(s)) \wedge s' \neq e' \wedge s' \in \Goals \cup \Errors \}$
 
  function forcedTo($s,e,Z$):
    return $(\exists \l_u \in A_Z^U \ldot \trimlst{s \step{\l_u}{Z} e})\ \vee$
@@ -128,7 +135,7 @@
     e\notin (C\cup\Goals)$
     
  function cannotBeReached($s, C$):
-    return $\trimlst{\forall s' \in C \ldot \nexists w \ldot s' \runw{w}{\structure'} s \wedge | w | > 0}$
+    return $\nexists s' \in C , \exists \l \ldot s' \step{\l}{\structure'} s$
    
  function cannotReachGoalOrMarkedIn($s, C$)
     return $\trimlst{\nexists w \ldot s \runw{w}{C} s' \wedge s'\in C\ \wedge}$ 
@@ -138,7 +145,33 @@
  function cannotReachGoalIn($s, C$)
     return $\trimlst{\nexists w \ldot s \runw{w}{C} s' \wedge s'\in C\ \wedge}$ 
            canReachInOneStep$(s', \structure, \Goals)$
+           
+ function canReach($s', s$)
+    return $\exists w \ldot s' \runw{w}{\structure'} s$
+
+ function canReachInOneStep($s, Targets$)
+    return $\exists l \ldot s \step{\l}{\structure'} s' \wedge s' \in Targets$
+
+ function isDeadlock($s$)
+    return $\nexists l \ldot s \step{\l}{E} s'$
 \end{lstlisting}
+
+\begin{lstlisting}[language={pseudocode},label={lst:dcs.aux},caption={ranking procedures.},float=ht, frame=single]
+ function rankStates($\structure$)
+    $r = 0$; $W' = \Witness$; $W = \emptyset$
+    while $W' \neq  W:$
+      $\forall w \in W', $rank$(w) = r$
+      $W = W \cup W'$
+      $W'= \{ s \in (\Goals \setminus W) \mid \exists s' \in W \ldot s \step{}{\structure} s'\}$
+      $r = r + 1$
+    return rank
+
+ function bestControllable($e, r, \structure$)
+    return $\l \in A^C_E \ldot e \step{\l}{\structure} e' \wedge \nexists \l' \in A^C_E \ldot $
+			$e \step{\l'}{\structure} e'', r(e'') \leq r(e')$
+
+\end{lstlisting}
+
 
 %
 % function isDeadlock($e$):

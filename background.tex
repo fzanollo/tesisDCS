@@ -59,7 +59,7 @@ Los autómatas definen un lenguaje, un conjunto de palabras, que aceptan. Dado u
 
 \section{Controlador objetivo}
 
-Dado un autómata y una partición de sus eventos en dos subconjuntos: $controlables$ y $no controlables$, lo que buscamos es un $controlador$ (supervisor) que restrinja el vocabulario aceptado de forma de mantener un camino posible a los estados marcados del autómata.
+Dado un autómata y una partición de sus eventos en dos subconjuntos: $controlables$ y $no controlables$, lo que buscamos es un $controlador$ (director) que restrinja el vocabulario aceptado de forma de mantener un camino posible a los estados marcados del autómata.
 
 Un controlador observa las transiciones no controlables y deshabilita alguna transiciones controlables para generar una planta restringida. Una palabra $w$ pertenece al lenguaje generado por $T$ restringido por una función del controlador $\sigma : A_T^* \into 2^{A_T}$ (anotado como $\L^\sigma(T)$) si cada prefijo de $w$ ``sobrevive'' a $\sigma$.
 Formalmente, sea $w = \l_0,\ldots,\l_k$ una palabra en $\L(T)$, entonces $w \in \L^\sigma(T)$ si y solo si para todo $0 \leq i \leq k$:
@@ -67,14 +67,14 @@ $
 \init{t} \run{\,\l_0}{\l_i}{T} t_{i+1} \wedge \l_i \in \sigma(\l_0,\ldots,\l_{i-1})
 $
 
-\begin{definition}[Problema de Control Supervisado] \label{def:control-problem}
-	Un \k{Problema de Control Supervisado} composicional es una tupla $\E = (E, A_E^C)$, donde $E$ es un conjunto de autómatas $\{E_0,\ldots,E_n\}$ (podemos abusar la notación y usar $E = (S_E,A_E,\D_E,\init{e},M_E)$ para referirnos a la composición $E_0\|\ldots\|E_n$), y $A_E^C \C A_E$ es el conjunto de eventos controlables (i.e., $A_E^U = A_E \setminus A_E^C$ es el conjunto de eventos no controlables).
+\begin{definition}[Problema de Control Safe y Non-Blocking] \label{def:control-problem}
+	Un \k{Problema de Control} con objetivos \k{Safe} y \k{Non-Blocking} composicional es una tupla $\E = (E, A_E^C)$, donde $E$ es un conjunto de autómatas $\{E_0,\ldots,E_n\}$ (podemos abusar la notación y usar $E = (S_E,A_E,\D_E,\init{e},M_E)$ para referirnos a la composición $E_0\|\ldots\|E_n$), y $A_E^C \C A_E$ es el conjunto de eventos controlables (i.e., $A_E^U = A_E \setminus A_E^C$ es el conjunto de eventos no controlables).
 	Una solución para $\E$ es un supervisor $\sigma : A_E^* \into 2^{A_E}$, tal que $\sigma$ es:
 	\begin{itemize}[itemsep=4pt,topsep=-8pt]
 		
 		\item \k{Controlable}: $A_E^U \C \sigma(w)$ con $w \in A_E^*$; y
 		
-		\item \k{Nonblocking}: para cada palabra $w \in \L^\sigma(E)$ existe una palabra no vacía $w' \in A_E^*$ tal que, la concatenación $ww' \in \L^\sigma(E)$ y $\init{e} \runw{\;ww'}{E} e_m$ con $e_m \in M_E$ (i.e., un estado marcado de $E$).
+		\item \k{Safe y Nonblocking}: para cada palabra $w \in \L^\sigma(E)$ existe una palabra no vacía $w' \in A_E^*$ tal que, la concatenación $ww' \in \L^\sigma(E)$ y $\init{e} \runw{\;ww'}{E} e_m$ con $e_m \in M_E$ (i.e., un estado marcado de $E$).
 		
 	\end{itemize}
 	
@@ -91,6 +91,25 @@ Por esto, las estructuras claves que analizamos en nuestro algoritmo son los cic
 Los ciclos también son esenciales para encontrar los estados perdedores, ya que la única forma de que un estado sea perdedor es que no pueda alcanzar un estado ganador. En otras palabras, los estados perdedores son aquellos que forman parte de un loop que no tiene estados marcados ni transiciones salientes.
 
 De forma más concreta, en nuestro algoritmo, un ciclo del cual el jugador no puede escapar, pero desde el cual existe un camino hacia un estado ganador, se considera ganador.
+
+\section{Director} \label{chpt:director}
+En particular, buscamos como solución al problema de control, controladores que sean directores, como en \textcolor{red}{[REFS Huang]}. Un director se destaca por habilitar a lo sumo un evento controlable en cada punto de la ejecución. 
+
+\begin{definition}[Director] \label{def:director}
+	Dado un controlador $\sigma : A_E^* \into 2^{A_E}$ de un problema de control $\E$, decimos que $\sigma$ es un director si $\forall w \in A_E^*$, $\|\sigma(w) \cap A_E^C\| \leq 1$.	
+\end{definition}
+
+Esto es en contraste con las soluciones tradicionales de Discrete Event Control y sus herramientas, como \textcolor{red}{poner a SUP?} que presentan supervisores maximales. Los supervisores deben habilitar todos los eventos controlables que sean válidos en algún controlador que cumpla el objetivo del problema. Es decir que un director será un controlador que cumpla el mismo objetivo que un supervisor, pero restringiendo las palabras posibles a un subconjunto del lenguaje aceptado por el supervisor.
+
+El foco en la construcción de directores tiene las siguientes razones:
+
+\begin{itemize}
+	\item Los directores pueden ser más apropiados en contextos donde el controlador \textit{ejecuta} las acciones controlables \textcolor{red}{REF}.
+	\item La construcción de directores puede requerir una menor exploración de la planta que la construcción de un supervisor. En este caso la síntesis de director podría usarse tanto para controlar la planta como para probar la controlabilidad de un problema donde herramientas de construcción de supervisores fallan por el tamaño del problema.
+	\item Hay hasta la fecha una falta de herramientas disponibles para la síntesis de directores
+\end{itemize}
+
+Notar que en \textcolor{red}{[REF 15 paper]} se prueba que un director existe si y solo si un supervisor maximal existe.
 
 \section{Algoritmo monolítico} \label{chpt:algoMono}
 
@@ -130,7 +149,7 @@ En el peor caso, no se pudo concluir nada antes de componer la planta en su tota
 
 Una distinción clave del algoritmo \textit{on-the-fly} es que está dividido en dos partes. Por un lado se tiene el algoritmo de exploración responsable de que al final se llegue al resultado correcto, por el otro tenemos una heurística que le brinda la próxima transición a explorar. Ese algoritmo de exploración no puede depender de la heurística, ya que la misma, por su nombre, no garantiza siempre elegir el mejor camino posible, sino solo la mejor aproximación que encuentre. Es en esa correctitud independiente de la heurística donde nuestro trabajo hizo foco.
 
-El proyecto \texttt{MTSA} por el momento cuenta con dos heurísticas \texttt{BFS} para exploración, \textit{Monotonic Abstraction} y \textit{Ready Abstraction}. Ambas son muy buenas y logran gran eficiencia en síntesis de controlador con exploración parcial, pero presentaban un problema.
+El proyecto \texttt{MTSA} inicialmente contaba con dos heurísticas \texttt{BFS} para exploración, \textit{Monotonic Abstraction} y \textit{Ready Abstraction}. Ambas cumplen su función en síntesis de controlador con exploración parcial, pero presentaban un problema.
 
 El algoritmo de exploración había sido desarrollado en conjunto con las heurísticas y si bien esto ayudaba a la eficiencia del mismo, no resultaba agnóstico a las mismas. El nuevo enfoque no depende de la forma de explorar, por ende, da una mayor libertad de investigar a futuro nuevos criterios de evaluación para mejorar la eficiencia de la técnica sin comprometer correctitud ni completitud.
 

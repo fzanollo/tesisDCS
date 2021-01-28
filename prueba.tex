@@ -1,10 +1,16 @@
 \begin{notation}
-Decimos que un estado $s$ es ganador["winning"] (resp. perdedor["losing"]) en el problema $\E = 
-(E, A_E^C)$ siendo $s$ el estado inicial de $E$ si hay una (resp. no hay una) solución para $\E$. Nos referimos a los estados ganadores y perdedores de $E$ cuando $A_E^C$ es inferible del contexto, también usamos $W_E$ y $L_E$ para denotar el conjunto de estados ganadores y perdedores de $\E$.
+Decimos que un estado $s$ es ganador["winning"] (resp. perdedor["losing"]) en el problema $\E = (E, A_E^C)$ 
+si hay (resp. no hay) una solución para $(E_s, A_E^C)$ donde $E_s$ es el resultado de cambiar el estado inicial de $E$ a $s$.
+Nos referimos como controlador para $s$ en $E$ a una solución de $(E_s, A_E^C)$.
+Nos referimos a los estados ganadores y perdedores de $E$ cuando $A_E^C$ es inferible del contexto, también usamos $W_E$ y $L_E$ para denotar el conjunto de estados ganadores y perdedores de $\E$.
 \end{notation}
 
 El algoritmo (ver Listing~\ref{lst:dcs}) explora incrementalmente el espacio de estados de $E$ utilizando una estructura de exploración parcial ($ES$), añadiéndole una transición por vez.
 
+\begin{notation}
+	Decimos que un estado $s$ es alcanzado por una palabra $w$ en una corrida comenzando en el estado $s'$, anotado como $s \in w(s')$, cuando $\exists w_0 \ldot \exists w_1 \ldot w = w_0.w_1$ 
+	and $s' \runw{w_0}{E} s$
+\end{notation}
 
 \begin{definition}
 [Exploración Parcial] \label{def:unexploredTo}
@@ -95,9 +101,9 @@ Sea la transición $e \step{\l}{\structure} e'$ la única diferencia entre dos e
 s_0 \step{\l_0}{\structure}\ldots s_{n} \step{\l}{\structure} e'$.
 \end{lemma}
 
-Ya en la linea~\ref{line:isLoop} sabemos que $e'$ no es ganador en $\unexploredToBottom{\structure}$ ni perdedor en $\unexploredToTop{\structure}$, chequeamos si $e 
-\step{\l}{\structure} e'$ cierra un nuevo loop. Si no es el caso, entonces no hay nada que hacer ya que $e'$ alcanza las mismas transiciones en $\structure'$ que en $\structure$. Entonces, $e' \notin 
-(\WESS \cup \LESS)$ ya que cualquier supervisor para $e'$ en $\unexploredToBottom{\structure'}$ (resp. $\unexploredToTop{\structure'}$) es también un supervisor en $\unexploredToBottom{\structure}$ (resp. 
+Ya en la linea~\ref{line:isLoop} sabemos que $e'$ no es ganador en $\unexploredToBottom{\structure}$ ni perdedor en $\unexploredToTop{\structure}$, determinamos si $e 
+\step{\l}{\structure} e'$ cierra un nuevo loop al chequear si $e'$ puede alcanzar a $e$. Si no es el caso, entonces no hay nada que hacer ya que $e'$ alcanza las mismas transiciones en $\structure'$ que en $\structure$ (o es un estado nuevo cuyas transiciones salientes no están exploradas). Entonces, $e' \notin 
+(\WESS \cup \LESS)$ ya que cualquier controlador para $e'$ en $\unexploredToBottom{\structure'}$ (resp. $\unexploredToTop{\structure'}$) es también un controlador en $\unexploredToBottom{\structure}$ (resp. 
 $\unexploredToTop{\structure}$) y viceversa.
 %Thus, there is no new information about whether it is winning or 
 %losing (Lemma~\ref{lem:noNewLoopImpliesNoNewInformation}). 
@@ -117,7 +123,7 @@ Más aún, que no haya nueva información para $e'$ implica que no hay nuevos ga
 
 \begin{lemma}\textbf{\emph{(Nuevos ganadores/perdedores solo si $e'$ es un nuevo ganador/perdedor)}}
 \label{lem:E'isNoneThenAllIsNone}
-Sea $e \step{\l}{} e'$ la única diferencia entre dos exploraciones parciales, $\structure$ y $\structure'$. Si $\WESS \neq \WES \Rightarrow e' \in \WESS \setminus \WES$, y si $\LESS \neq \LES \Rightarrow e' \in \LESS \setminus \LES$. ENTONCES?
+Sea $e \step{\l}{} e'$ la única diferencia entre dos exploraciones parciales, $\structure$ y $\structure'$, y $e' \notin \LES \cup \WES$. Si $\WESS \neq \WES \Rightarrow e' \in \WESS \setminus \WES$, y si $\LESS \neq \LES \Rightarrow e' \in \LESS \setminus \LES$. ENTONCES?
 %Then for all $s$ such that 
 %$\exists w \ldot s \runw{w}{\structure'} e'$, if $s \notin (\WES \cup \LES)$ then $s \notin (\WESS \cup \LESS)$.
 \end{lemma}
@@ -127,7 +133,7 @@ Si se cerró un nuevo loop(line~\ref{line:isLoop}), por Lemma~\ref{lem:E'isNoneT
 \in \WESS \uplus \LESS$, y por Lemma~\ref{lem:newWinnersLosersAreNonePredecessors} propagar cualquier información nueva de $e'$ a sus predecesores. 
 
 En la linea~\ref{line:getMaxLoop} computamos $\SCC$, el conjunto de estados que pertenecen a un loop que pasa por $e \step{\l}{\structure'} e'$ y nunca por $\WES \cup \LES$. 
-Intuitivamente, cualquier supervisor para $e'$ va a depender de alguno de estos loops. O, en términos del Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, para que $e'$ cambie su estado, debe ser a través de un camino de estados $\NONE$. 
+Intuitivamente, cualquier controlador para $e'$ va a depender de alguno de estos loops. O, en términos del Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, para que $e'$ cambie su estado, debe ser a través de un camino de estados $\NONE$. 
 
 En la linea~\ref{line:CanBeWinning} usamos \texttt{canBeWinningLoop}($\SCC$) para chequear si existe algún estado marcado en $\SCC$ o si es posible escapar de $\SCC$ y alcanzar un "goal" en un paso. Esto distingue entre dos posibles opciones: $e' \in \WESS$ o $e' \in \LESS$ (ver 
 Lemma~\ref{lem:canBeWinningLoopWorks}). 
@@ -172,16 +178,19 @@ Por motivos de eficiencia, \texttt{findNewGoalsIn} y
 \texttt{findNewErrorsIn} no solo verifican si $e' \in \WESS$/$e' \in 
 \LESS$ sino que también agregan estados ganadores/perdedores cuando pueden. La detección completa de nuevos estados ganadores y perdedores se hace finalmente con los procesos de propagación. 
 
-Habiendo argumentado que la propiedad~~\ref{def:invariant} es válida, la correctitud y completitud le siguen de forma natural. 
 
-Primero, notar que el algoritmo termina cuando logra determinar que $\init{e}$ está en $\LESS$ o $\WESS$. En el segundo caso, es simple construir un supervisor basándose en la estructura de exploración
-$\structure$.\hfill$\qed$
+Habiendo argumentado que la propiedad~~\ref{def:invariant} es válida, la correctitud y completitud se desprenden de las siguientes observaciones:
+$i)$ El \texttt{main loop} termina cuando logró determinar que 
+$\init{e}$ se encuentra en $\LESS$ o $\WESS$. Esto en peor caso eventualmente sucede cuando $ES = E$.
+$ii)$ Las lineas ~\ref{line:controller-start} a ~\ref{line:controller-end} extraen un director del conjunto de estados ganadoes
+($\Goals$). Usamos el mismo punto fijo descripto en el Algorithm 4 de 	\cite{Huang:2008:DCD} para computar un ranking (line~\ref{line:controller-start}) y una función determinística 
+(line~\ref{line:controller-end}) que retorna cuál transición controlable debe ser habilitada, cumpliendo la condición de un director.
 
 \begin{theorem}[Correctitud y Completitud]
-Sea $\E = (E,A_E^C)$ un problema de control composicional según Definition~\ref{def:control-problem}. Existe una solución para $\E$ si y solo si el algoritmo DCS retorna un supervisor para $\E$.
+Sea $\E = (E,A_E^C)$ un problema de control composicional según la Definición~\ref{def:control-problem}. Existe una solución para $\E$ si y solo si el algoritmo DCS retorna un director para $\E$.
 \end{theorem}
 
 Demostración (Correctitud y completitud):
 El teorema se desprende del invariante de ciclo del algoritmo (Definition~\ref{def:invariant}), el
-Lemma~\ref{lem:WESandLesMonotonicity}, y el hecho de que en el peor caso todas las transiciones son agregadas a la estructura de exploración. Entonces,  $E = \structure = 
+Lemma~\ref{lem:WESandLesMonotonicity}, la correctitud del algoritmo 4 de \cite{Huang:2008:DCD} y el hecho de que en el peor caso todas las transiciones son agregadas a la estructura de exploración. Entonces,  $E = \structure = 
 \unexploredToBottom{\structure} = \unexploredToTop{\structure}$.

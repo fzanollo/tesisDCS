@@ -1,14 +1,7 @@
 \section{Control Supervisado}
-{\begin{small}%
-\begin{flushright}%
-\it
-Entiende el problema y tendrás la solución
-\end{flushright}%
-\end{small}%
-\vspace{.5cm}}
-El presente proyecto de tesis consistió en un estudio y extensión del método previamente propuesto por Daniel Ciolek en su tesis de doctorado \cite{tesisDani}. Más precisamente, se trató de analizar carencias del algoritmo de exploración on-the-fly para problemas de Supervisory Control, cuya propiedad central era de tipo Non-blocking, y posteriormente analizados los problemas afrontarlos con una nueva especificación e implementación del algoritmo.
+El presente proyecto de tesis consistió en un estudio y extensión del método previamente propuesto por Daniel Ciolek en su tesis de doctorado \cite{tesisDani}. Más precisamente, se trató de analizar carencias del algoritmo de exploración on-the-fly para problemas de Supervisory Control, cuya propiedad central era de tipo Non-blocking, y posteriormente analizados los problemas afrontarlos con una nueva especificación e implementación del algoritmo. Finalmente, se adaptó el algoritmo para construir directores en lugar de supervisores maximales.
 
-Un problema de Control Supervisado, dentro del área de AI Planning, consiste en un Sistema de Eventos Discretos (DES) con un subconjunto de sus estados marcados. Un factor clave de estos problemas es que el DES se presenta de forma modular tal que la composición paralela de múltiples componentes den lugar a la DES de interés. Desarrollaremos en mayor detalle las definiciones del problema en el capítulo~\ref{chpt:background}.
+El problema de síntesis (construir automáticamente un controlador en base a una especificación) fue estudiado dentro de distintas áreas como: Discrete Event Control \textcolor{red}{[REFS]}, Reactive Synthesis \textcolor{red}{[REFS]} y Automated Planning \textcolor{red}{[REFS]}. El problema puede modelarse con un Sistema de Eventos Discretos (DES) con un subconjunto de sus estados marcados. Un factor clave de estos problemas es que el DES se presenta de forma modular tal que la composición paralela de múltiples componentes den lugar al DES de interés. Desarrollaremos en mayor detalle las definiciones del problema en el capítulo~\ref{chpt:background}.
 
 La motivación para analizar dichos problemas surge de la necesidad de verificar software, hoy en día utilizado en prácticamente todo emprendimiento humano. Si bien puede irse ganando confianza sobre la correctitud de un algoritmo a través de una bateria de tests, éstos no proveen una garantía sino una seguridad cada vez mayor. 
 
@@ -29,7 +22,7 @@ El problema puede escalar de forma muy rápida si se incrementa la cantidad de s
 
 Mostramos en la figura~\ref{fig:N1} un LTS (Labeled transition system) para cada uno de los componentes descriptos y el LTS compuesto para el caso en el que se sub-contrata un solo servicio.
 
-Puede verse que para el caso de solo un sub-servicio que debe ser contratado el problema es manejable. Los modelos gráficos de la planta y el controlador, generados automáticamente por MTSA se comprenden con un vistazo. Ya el caso con $N=2$ (fig~\ref{fig:N2}) si bien puede generarse una representación gráfica, requiere un trabajo considerable para comprender qué estado del problema representa cada estado del modelo. Simplemente aumentando a $N=5$ ya la planta compuesta cuenta con 1025 estados y 4085 transiciones, de las cuales nuestro algoritmo explora 381 estados para construir un controlador válido.
+Puede verse que para el caso de solo un sub-servicio que debe ser contratado el problema es manejable. Los modelos gráficos de la planta y el controlador, generados automáticamente por MTSA se comprenden con un vistazo. Ya el caso con $N=2$ (fig~\ref{fig:N2}) si bien puede generarse una representación gráfica, requiere un trabajo considerable para comprender qué estado del problema representa cada estado del modelo. Simplemente aumentando a $N=5$ ya la planta compuesta cuenta con 1025 estados y 4085 transiciones, de las cuales nuestro algoritmo explora (381 \textcolor{red}{Rechequear}) estados para construir un controlador válido.
 
 \begin{figure}[htb]
 	\begin{center}
