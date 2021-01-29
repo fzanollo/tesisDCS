@@ -1,181 +1,92 @@
-The complexity of the algorithm in Listing~\ref{lst:dcs} is bounded by  
+La complejidad del algoritmo en el Listing~\ref{lst:dcs} está acotada por
 	$O(|S_E|^3 
-	\times |A_E|^2)$ where $|S_E|$ and $|A_E|$ are the number of states and events in 
-	$E$. This follows from the fact that the main loop is run at most once per transition (i.e., 
-	$|T_{E}|$), that $|T_{E}| \leq|S_{E}|\times|A_E|$ and that the complexity of one 
-	loop iteration is bounded by $O(|S_{ES}|^2 \times |A_{E}|) \leq O(|S_{E}|^2 \times 
+	\times |A_E|^2)$, donde $|S_E|$ y $|A_E|$ son el número de estados y eventos en
+	$E$. Esto se desprende del hecho de que el loop principal se ejecuta a lo sumo una vez por transición (i.e., 
+	$|T_{E}|$), que $|T_{E}| \leq|S_{E}|\times|A_E|$ y que la complejidad de una iteración del loop está acotada por $O(|S_{ES}|^2 \times |A_{E}|) \leq O(|S_{E}|^2 \times 
 	|A_{E}|) $.
 
-The complexity of one loop is bounded by that of \texttt{findNewGoalsIn}, the 
-	most 
-	complex of the following procedures: $\texttt{propagateError}, \texttt{propagateGoal}, 
+La complejidad de cada iteración está acotada por la de \texttt{findNewGoalsIn}, la función más compleja de todas las llamadas durante cada iteración: $\texttt{propagateError}, \texttt{propagateGoal}, 
 	\texttt{canReach}$, \texttt{getMaxLoop}, \texttt{canBeWinningLoop}, 
 	\texttt{findNewGoalsIn}, and \texttt{findNewErrorsIn}.
 
+La complejidad de \texttt{findNewGoalsIn} está acotada por
+	$O(|S_{ES}|^2 \times |A_{E}|)$ y puede implementarse de la siguiente forma: 
+	Un punto fijo progresivamente remueve todos los estados que no son ganadores en $\unexploredToBottom{\structure'}$.
+	Esto en el peor caso resulta en $|S_{ES}|$ iteraciones, donde cada iteración tiene un costo de $|T_{ES}|$.
+	Cada iteración ejecuta otro punto fijo que va quitando los estados que son perdedores (en $\unexploredToBottom{\structure'}$)
+	o son inalcanzables desde dentro de $C$.
+	Esto se obtiene al chequear todas las transiciones entrantes y salientes para cada estado ($O(|T_{ES}|)$). 
+	Luego, cada iteración del primer punto fijo realiza una exploración "backwards $BFS$" sobre $C$ ($O(|T_{ES}|)$), comenzando desde los estados marcados de $C$ (o estados que tienen un hijo en $\Goals$). Cuando la exploración termina, todos los estados de $C$ que no fueron alcanzados son removidos.
 
-Complexity of \texttt{findNewGoalsIn} is bounded by 
-	$O(|S_{ES}|^2 \times |A_{E}|)$ and can be implemented as follows: 
-	A fix-point removes all states that are not winning
-	in $\unexploredToBottom{\structure'}$.
-	This is worst case $|S_{ES}|$ iterations where each iteration
-	has a cost of $|T_{ES}|$.
-	Each iteration runs another fix-point which removes all states
-	that are forced to lose (in $\unexploredToBottom{\structure'}$)
-	or are unreachable from within $C$.
-	This is done checking all incoming and outgoing transitions
-	of each state ($O(|T_{ES}|)$). 
-	Then, each iteration of the first fix-point does a backwards $BFS$
-	exploration over $C$ ($O(|T_{ES}|)$), starting from the marked states in $C$ (or states that
-	have a $\Goals$ child). When the exploration finishes, all states from 
-	$C$ that were not reached are removed.
+Notar que \texttt{canReach}, \texttt{getMaxLoop} y
+	\texttt{canBeWinningLoop} pueden ser computados en $O(|T_{ES}|)$ comenzando una búsqueda en anchura desde
+	$e$ sobre un grafo dirigido acíclico sobre todos los predecesores que frena cuando encuentra a $e'$ o a estados en $\Goals$ o $\Errors$.
 
+En comparación con la complejidad de computar un director en 
+	\cite{Huang:2007:Optimal}, notamos que se corresponde con la complejidad de la última iteración del loop principal de \DCS , O($|S_{E}|^2 * 
+	|A_{E}|$.
+	Sin embargo, en \DCS el loop es ejecuta hasta
+	|$T_E$| veces. Éste es el costo en complejidad a pagar por la construcción on-the-fly. 
+	Los resultados experimentales muestran que esta complejidad teórica adicional puede compensarse con el tiempo ganado al evitar la construcción completa del state space, y en consecuencia tener iteraciones menos costosas sobre un espacio menor. 
 
-Note that \texttt{canReach}, \texttt{getMaxLoop} and 
-	\texttt{canBeWinningLoop} can be computed in $O(|T_{ES}|)$ starting a breadth 
-	first search from 
-	$e$ in a directed acyclic graph of all predecessors that stops when 
-	reaching $e'$, $\Goals$ or $\Errors$ states.
+\vspace{1cm}
+\textcolor{red}{Arriba (paper) y abajo (responses) hay copiada información repetida porque una era del paper y otra de responses. Hay que mezclarlas para que sean coherentes.}
+\vspace{1cm}
 
+A continuación presentamos un análisis detallado de la complejidad de cada sub-rutina: 
 
-
-Comparing with the complexity of  computing a director in 
-	\cite{Huang:2007:Optimal}, we note that it is the complexity of the last iteration of 
-	the main loop, O($|S_{E}|^2 * 
-	|A_{E}|$ of \DCS. However, in \DCS the loop is executed up to 
-	|$T_E$| times. This is the complexity cost paid for the on-the-fly construction. 
-	Experimental results show that this additional complexity can be offset with the time 
-	gained by avoiding full state space construction and consequently less and less costly 
-	iterations. 
-
-\vspace{2cm}
-
-
-
-
-One of the reviewers requested a detailed complexity analysis. Due to space 
-restrictions, 
-we provide details here and only provide an overview of the conclusions in the 
-manuscript. 
-
-
-We first point out that the presented algorithm is a loop over all the transitions of the 
-plant E, thus the algorithmic complexity will be: O(O(loop) $\times |T_{E}|$).
-Where O(loop) is  max[ O(propagateError), O(propagateGoal), O(canReach), O(getMaxLoop),  
+En primer lugar remarcamos que el algoritmo presentado es un loop que agrega una a una todas las transiciones de la planta ($E$). Por esto, en el peor caso de que no se clasifique el estado inicial hasta la última iteración la complejidad será: O( O(iteración) $\times |T_{E}|$).
+Luego O(iteración) se puede resumir como: max[ O(propagateError), O(propagateGoal), O(canReach), O(getMaxLoop),  
 O(canBeWinningLoop, O(findNewGoalsIn),  O(findNewErrorsIn))]. 
 
-We use $|S_C|$ and $|T_C|$ to refer to the number of states and transitions of a 
-partial 
-exploration $C$ of the plant $E$.
+Usaremos $|S_C|$ y $|T_C|$ para referirnos al número de estados y transiciones de una exploración parcial $C$ de la planta $E$.
 
-Next we discuss the algorithmic complexity of each auxiliary function:
+A continuación discutimos la complejidad algorítmica de cada función auxiliar:
 
 \begin{enumerate}
-	\item O(findNewGoalsIn($loop$))$ <= O(|S_{ES}| \times |T_{ES}|)$: We have a fix point, 
-	that in the worst case removes in each iteration only one state still remaining in 
-	$loop$. The worst case size of $loop$ is $|S_{ES}|$.  Thus the cost will be  at most 
-	$O(|S_{ES}| \times (O($iteration$)))$. 
+	\item O(findNewGoalsIn($loop$))$ <= O(|S_{ES}| \times |T_{ES}|)$: Esta arriba en la parte del paper.
 	
-	Each iteration removes states $s$ that are $(i)$
-	forced 
-	to lose in one step, $(ii)$ cannot be reached by states in $C$ in one step, or $(iii)$ can't 
-	reach a goal or marked state 
-	within 	$C$. The implementation  does the following: It first removes states that satisfy 
-	$(i)$ 
-	or $(ii)$. Worse case this is inspecting all transition  twice (looking at all outgoing 
-	and incoming transitions for every state $s$): $|T_{ES}| \times 2$
-	
-	Having done $(i)$ and $(ii)$ we are 
-	guaranteed to  only have states in loops in $C$. Furthermore, all states are in a strongly 
-	connected component within $C$. Thus, for every strongly connected component, to decide 
-	removal, we check 
-	if it doesn't have a 
-	marked 
-	state nor a goal child. The cost of this is  $O(|T_{ES}|)$.
-	
-	In conclusion, 	$O($iteration$) = O(|T_{ES}|)$ and O(findNewGoalsIn($loop$))$ <= 
-	O(|S_{ES}| \times |T_{ES}|)$.
-	
-	
-	
-	\item O(findNewErrorsIn($loops$))$ <= O(|S_{ES}| \times |A_E|)$: We only need to 
-	iterate over all the states in the loop and check if there's at least one with a NONE 
-	child 
-	out of the loop. Since our automaton is deterministic we know that for any state 
-	$s$, 
-	$|childs(s)|<=|A_E|$ (the number of events).  The size of $loops$ is bounded by $S_{ES}$.
-	
-	
+	\item O(findNewErrorsIn($loops$))$ <= O(|S_{ES}| \times |A_E|)$: Simplemente iteramos sobre todos los estados del loop y chequeamos si hay al menos un estado con un hijo NONE fuera del loop. Como nuestro autómata es determinístico sabemos que para cualquier estado $s$, 
+	$|hijos(s)|<=|A_E|$ (la cantidad de eventos). Además, la cantidad de estados del $loops$ está acotada por $S_{ES}$.
 	
 	\item O(propagateGoals($newGoals$))$ <= O(|S_{ES}| \times |T_{ES}|)$: 
-	The reasoning is similar to that in findNewGoalsIn, but now iterating over all found 
-	NONE-Ancestors, which is bounded by $S_{ES}$.  Thus, the complexity is bounded by 
-	$O(|S_{ES}| \times (O($ 
-	iteration$)))$. 
+	El razonamiento es similar al de findNewGoalsIn, pero ahora iterando sobre todos los ancestros-NONE, cuya cantidad está acotada por $S_{ES}$. Luego, la complejidad de la función está acotada por $O(|S_{ES}| \times (O($ 
+	iteración$)))$. 
 	
-	Each iteration removes all states 
-	$s$ that are forced to lose in one step or can't reach a goal state within $C$. The 
-	implementation 
-	achieves this with complexity $O(|T_{ES}|)$. Checking if every $s$ if it is forced to lose in 
-	one 
-	step  requires checking their immediate  successors ($O(|T_{ES}|)$ ). Checking which 
-	states can reach a goal, 
-	requires starting from all states in $C$ that have a GOAL-child and performing a  breadth 
-	first search backwards through their ancestors in $C$. Worst case, this is  $|T_{ES}|$ 
-	transitions.
+	Cada iteración quita los estados $s$ que son forzados a perder en un paso o no pueden alcanzar un estado $goal$ dentro de $C$. La
+	implementación logra esto con complejidad $O(|T_{ES}|)$. Revisar si cada estado $s$ está forzado a perder en un paso solo requiere chequear sus hijos ($O(|T_{ES}|)$ ). Chequear cuales estados pueden alcanzar un goal requiere una búsqueda en anchura que comienza en los estados de $C$ con un hijo $goal$ y propagar hacia los ancestros (dentro de $C$).
+	En el peor caso esto requiere iterar sobre todas las transiciones $|T_{ES}|$ .
 	
-	In conclusion $O($ 
-	iteration$) = |T_{ES}|$  and  O(propagateGoals($newGoals$))$ \leq O(|S_{ES}| \times 
+	En conclusón $O($ iteración$) = |T_{ES}|$  y O(propagateGoals($newGoals$))$ \leq O(|S_{ES}| \times 
 	|T_{ES}|)$.
 	
-	\item O(propagateErrors($newErrors$))$ = O(|S_{ES}| \times |T_{ES}|))$: This function 
-	works similarly to propagateGoals. Same reasoning applies.
+	\item O(propagateErrors($newErrors$))$ = O(|S_{ES}| \times |T_{ES}|))$: Esta función es similar a propagateGoals y se aplica el mismo razonamiento.	
+	
+	\item O(canReach($e, e'$))$ = O(|T_{ES}|)$: Simplemente requiere una búsqueda en anchura sobre las transiciones salientes.
+	
+	\item O(getMaxLoop($e, e'$))$ = O(|T_{ES}|)$: 
+	Comenzando por $e$ se puede realizar una búsqueda en anchura para iterar sobre todos sus ancestros, cortando la exploración cuando se llega a un estado GOAL, ERROR o $e'$. 
 	
 	
-	\item O(canReach($e, e'$))$ = O(|T_{ES}|)$: Requires simply a breadth first search over 
-	outgoing transitions.
-	
-	\item O(getMaxLoop($e, e'$))$ = O(|T_{ES}|)$: Starting from $e$  a breadth first search 
-	can be performed to see all its ancestors, cutting the exploration when reaching $e'$  or a 
-	GOAL or ERROR state. 
-	
-	
-	\item O(canBeWinningLoop($loops$))$ = O(|T_{ES}|)$:  Requires checking it there is a 
-	marked state in $loops$ ($|loops| \leq |S_{ES}|$) and checking all immediate 
-	successors of states in $loops$ to see if they are GOAL or ERROR states ($|T_{ES}|$).  
-	We have  $O(|S_{ES}| + |T_{ES}|) = O(|T_{ES}|)$
-	
-	
-	%	\item O(canReach + getMaxLoop + canBeWinningLoop)$ = O(|T_{ES}|)$: Starting from $e$ 
-	%	(the parent state of the new transition), we do a \texttt{BFS} to see all its ancestors, cutting 
-	%	the exploration when reaching $e'$ (the newly found child of $e$) or a GOAL or ERROR 
-	%	state. This way, we can know (and at the same time gather for the MaxLoop) all NONE 
-	%	ancestors of $e$ that make a loop by reaching $e'$. In the worst case where we know of no 
-	%	ERROR or GOAL states, this can require us to traverse all transitions in $ES$, so the 
-	%	complexity is $O(|T_{ES}|)$. Note that while we are exploring all the ancestors of $e$, it is 
-	%	easy to remember which ones are either marked or have a goalChild without extra effort, 
-	%	thus later knowing if the loop can be a winning one takes no effort.
+	\item O(canBeWinningLoop($loops$))$ = O(|T_{ES}|)$: Requiere verificar si hay un estado marcado en $loops$ ($|loops| \leq |S_{ES}|$) y ver todos los hijos de estados en $loops$ para ver si alguno es un estado en GOAL o ERROR ($|T_{ES}|$).  
+	Tenemos entonces $O(|S_{ES}| + |T_{ES}|) = O(|T_{ES}|)$
 	
 \end{enumerate}
 
-So we have that the max complexity of all functions is bounded by $O(|S_{ES}| \times |T_{ES}|)$  
+Entonces concluimos que la complejidad máxima de todas las funciones está acotada por $O(|S_{ES}| \times |T_{ES}|)$  
 
-Considering that $|T_{ES}| \leq|S_{ES}|\times|A_E|$ and that the worst case for an 
-iteration is when $ES=E$, then all iterations of the main loop are bounded by 
-$O(|S_E|^2\times|A_E|)$ .
+Considerando que $|T_{ES}| \leq|S_{ES}|\times|A_E|$ y que en el peor caso para el tamaño de $ES$ se da cuando $ES=E$, entonces todas las iteraciones del loop principal están acotadas por $O(|S_E|^2\times|A_E|)$.
 
-Finally, the full complexity of our algorithm is: $O(|T_E| \times (|S_E|^2 \times |A_E|)) \leq O(|S_E|^3 \times |A_E|^2)$.
+Finalmente, la complejidad total de nuestro algoritmo es: $O(|T_E| \times (|S_E|^2 \times |A_E|)) \leq O(|S_E|^3 \times |A_E|^2)$.
 
-Previously, \cite{Huang:2007:Optimal}
-presented a solution to build an optimal 
-controller in $O(|X| \times |\Sigma| × (|X m − X t | + 1))$ (where $X=S_E$, $\Sigma = A_E$ and $X_m - X_t$ is the number of 
-marked states that are not terminal. Thus, when comparing  \cite{Huang:2007:Optimal} 
-against the last iteration of our approach (when $ES=E$), the difference resides in the relation 
-between $|S_E|$ and $|X_m - X_t|$. Although $|S_E| \geq |X_m - X_t|$, the number of  
-marked non-terminal states may suffer proportionally the same state blow up as the states of 
-the plant. Thus, worst case, $O(|S_E|) = O(|X_m - X_t|)$. Which allows us to state that 
-the  last iteration of 
-our algorithm has a worst case complexity comparable to that of  
+Previamente, \cite{Huang:2007:Optimal}
+presentó una solución para construir un director optimal en $O(|X| \times |\Sigma| × (|X m − X t | + 1))$ (donde $X=S_E$, $\Sigma = A_E$ y $X_m - X_t$ es el número de 
+estados marcados que no son terminales. 
+Luego, comparando \cite{Huang:2007:Optimal} 
+con la última iteración de nuestro enfoque (cuando $ES=E$), la diferencia reside en la relación entre
+$|S_E|$ y $|X_m - X_t|$. 
+Aunque $|S_E| \geq |X_m - X_t|$, el número de estados marcados no terminales puede sufrir proporcionalmente la misma explosión que los estados de la planta.
+Por lo tanto, en el peor caso, $O(|S_E|) = O(|X_m - X_t|)$. Lo que permite la afirmación de que la última iteración de nuestro algoritmo tiene una complejidad peor caso comparable a la complejidad de 
 \cite{Huang:2007:Optimal}.
-However,  our work incurs in a penalty in complexity from trying 
-to solve the problem before knowing the full composite plant, more specifically, every time  
-$ES$ is expanded with one transition. 
+Sin embargo, nuestro trabajo sufre una penalidad a nivel de complejidad a raíz de intentar resolver el problema antes de conocer la composición completa de la planta. Más específicamente, cada vez que
+$ES$ es expandido con una transición. 
