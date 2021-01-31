@@ -8,43 +8,19 @@ La complejidad del algoritmo en el Listing~\ref{lst:dcs} está acotada por
 La complejidad de cada iteración está acotada por la de \texttt{findNewGoalsIn}, la función más compleja de todas las llamadas durante cada iteración: $\texttt{propagateError}, \texttt{propagateGoal}, 
 	\texttt{canReach}$, \texttt{getMaxLoop}, \texttt{canBeWinningLoop}, 
 	\texttt{findNewGoalsIn}, and \texttt{findNewErrorsIn}.
+	
+A continuación presentamos un análisis detallado de la complejidad de cada sub-rutina: 
 
-La complejidad de \texttt{findNewGoalsIn} está acotada por
-	$O(|S_{ES}|^2 \times |A_{E}|)$ y puede implementarse de la siguiente forma: 
+Usaremos $|S_C|$ y $|T_C|$ para referirnos al número de estados y transiciones de una exploración parcial $C$ de la planta $E$.
+
+\begin{enumerate}
+	\item O(findNewGoalsIn($loop$))$ <= O(|S_{ES}| \times |T_{ES}|)$: 
 	Un punto fijo progresivamente remueve todos los estados que no son ganadores en $\unexploredToBottom{\structure'}$.
-	Esto en el peor caso resulta en $|S_{ES}|$ iteraciones, donde cada iteración tiene un costo de $|T_{ES}|$.
+	En el peor caso se deben remover $|S_{ES}|$ estados, y el costo de remover cada un estado está acotado por $|T_{ES}|$.
 	Cada iteración ejecuta otro punto fijo que va quitando los estados que son perdedores (en $\unexploredToBottom{\structure'}$)
 	o son inalcanzables desde dentro de $C$.
 	Esto se obtiene al chequear todas las transiciones entrantes y salientes para cada estado ($O(|T_{ES}|)$). 
 	Luego, cada iteración del primer punto fijo realiza una exploración "backwards $BFS$" sobre $C$ ($O(|T_{ES}|)$), comenzando desde los estados marcados de $C$ (o estados que tienen un hijo en $\Goals$). Cuando la exploración termina, todos los estados de $C$ que no fueron alcanzados son removidos.
-
-Notar que \texttt{canReach}, \texttt{getMaxLoop} y
-	\texttt{canBeWinningLoop} pueden ser computados en $O(|T_{ES}|)$ comenzando una búsqueda en anchura desde
-	$e$ sobre un grafo dirigido acíclico sobre todos los predecesores que frena cuando encuentra a $e'$ o a estados en $\Goals$ o $\Errors$.
-
-En comparación con la complejidad de computar un director en 
-	\cite{Huang:2007:Optimal}, notamos que se corresponde con la complejidad de la última iteración del loop principal de \DCS , O($|S_{E}|^2 * 
-	|A_{E}|$.
-	Sin embargo, en \DCS el loop es ejecuta hasta
-	|$T_E$| veces. Éste es el costo en complejidad a pagar por la construcción on-the-fly. 
-	Los resultados experimentales muestran que esta complejidad teórica adicional puede compensarse con el tiempo ganado al evitar la construcción completa del state space, y en consecuencia tener iteraciones menos costosas sobre un espacio menor. 
-
-\vspace{1cm}
-\textcolor{red}{Arriba (paper) y abajo (responses) hay copiada información repetida porque una era del paper y otra de responses. Hay que mezclarlas para que sean coherentes.}
-\vspace{1cm}
-
-A continuación presentamos un análisis detallado de la complejidad de cada sub-rutina: 
-
-En primer lugar remarcamos que el algoritmo presentado es un loop que agrega una a una todas las transiciones de la planta ($E$). Por esto, en el peor caso de que no se clasifique el estado inicial hasta la última iteración la complejidad será: O( O(iteración) $\times |T_{E}|$).
-Luego O(iteración) se puede resumir como: max[ O(propagateError), O(propagateGoal), O(canReach), O(getMaxLoop),  
-O(canBeWinningLoop, O(findNewGoalsIn),  O(findNewErrorsIn))]. 
-
-Usaremos $|S_C|$ y $|T_C|$ para referirnos al número de estados y transiciones de una exploración parcial $C$ de la planta $E$.
-
-A continuación discutimos la complejidad algorítmica de cada función auxiliar:
-
-\begin{enumerate}
-	\item O(findNewGoalsIn($loop$))$ <= O(|S_{ES}| \times |T_{ES}|)$: Esta arriba en la parte del paper.
 	
 	\item O(findNewErrorsIn($loops$))$ <= O(|S_{ES}| \times |A_E|)$: Simplemente iteramos sobre todos los estados del loop y chequeamos si hay al menos un estado con un hijo NONE fuera del loop. Como nuestro autómata es determinístico sabemos que para cualquier estado $s$, 
 	$|hijos(s)|<=|A_E|$ (la cantidad de eventos). Además, la cantidad de estados del $loops$ está acotada por $S_{ES}$.
@@ -88,5 +64,13 @@ $|S_E|$ y $|X_m - X_t|$.
 Aunque $|S_E| \geq |X_m - X_t|$, el número de estados marcados no terminales puede sufrir proporcionalmente la misma explosión que los estados de la planta.
 Por lo tanto, en el peor caso, $O(|S_E|) = O(|X_m - X_t|)$. Lo que permite la afirmación de que la última iteración de nuestro algoritmo tiene una complejidad peor caso comparable a la complejidad de 
 \cite{Huang:2007:Optimal}.
-Sin embargo, nuestro trabajo sufre una penalidad a nivel de complejidad a raíz de intentar resolver el problema antes de conocer la composición completa de la planta. Más específicamente, cada vez que
-$ES$ es expandido con una transición. 
+Sin embargo, nuestro trabajo sufre una penalidad a nivel de complejidad a raíz de intentar resolver el problema antes de conocer la composición completa de la planta. En \DCS el loop es ejecuta hasta
+|$T_E$| veces, cada vez que a $\structure$ se le agrega una transición. Éste es el costo en complejidad a pagar por la construcción on-the-fly. 
+Los resultados experimentales muestran que esta complejidad teórica adicional puede compensarse con el tiempo ganado al evitar la construcción completa del state space, y en consecuencia tener iteraciones menos costosas sobre un espacio menor. 
+
+
+
+
+
+
+
