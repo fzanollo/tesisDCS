@@ -86,10 +86,9 @@
  function findNewErrorsIn($\SCC$):
    if ($\exists s \in \SCC \ldot \trimlst{s \step{\l'}{\unexploredToTop{\structure'}}  s'} 
    \wedge (s' \notin \SCC \wedge s' \notin \Errors)$):
-     $P = \emptyset$
+     return $\emptyset$
    else: 
-     $P = \SCC$
-   return $P$
+     return $\SCC$
 \end{lstlisting}
 
 

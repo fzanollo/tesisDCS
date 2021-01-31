@@ -9,7 +9,7 @@ El algoritmo (ver Listing~\ref{lst:dcs}) explora incrementalmente el espacio de 
 
 \begin{notation}
 	Decimos que un estado $s$ es alcanzado por una palabra $w$ en una corrida comenzando en el estado $s'$, anotado como $s \in w(s')$, cuando $\exists w_0 \ldot \exists w_1 \ldot w = w_0.w_1$ 
-	and $s' \runw{w_0}{E} s$
+	y $s' \runw{w_0}{E} s$
 \end{notation}
 
 \begin{definition}
@@ -44,7 +44,7 @@ $\unexploredToBottom{\structure} = (S_\structure \, \cup \,
 \end{definition}
 
 Usamos estos problemas de control para decidir tempranamente si un estado $s$ es ganador o perdedor en $E$ basado en lo que exploramos previamente en $\structure$. Si $s$ es ganador en $\unexploredToBottom{\structure}$ esto significa que sin importar a dónde lleven las transiciones no exploradas, $s$ también va a ser ganador en $E$. Similarmente, $s$ es perdedor en $E$ si es perdedor en $\unexploredToTop{\structure}$.
-Lemma~\ref{lem:WESandLesMonotonicity} refuerza este razonamiento.
+El Lema~\ref{lem:WESandLesMonotonicity} refuerza este razonamiento.
 
 
 \begin{lemma}\textbf{\emph{(Monotonicidad de $\WES$ y $\LES$)}}
@@ -76,7 +76,7 @@ $s\in\Errors\uplus\Goals\uplus\NONE$
 % \end{tabbing}
 \end{property}
 
-La explicación del Algorithm~\ref{lst:dcs} que detallamos a continuación sirve también como un esquema de demostración para Property~\ref{def:invariant}.   
+La explicación del Algorithm~\ref{lst:dcs} que detallamos a continuación sirve también como un esquema de demostración para la propiedad~\ref{def:invariant}.   
 
 Para empezar, notar que la función \texttt{expandNext} 
 (line~\ref{line:expand}) retorna una nueva transición $e \step{\l}{E} e'$ 
@@ -92,7 +92,7 @@ $\unexploredToTop{\structure'}$. Tanto \texttt{propagateGoal} como
 \texttt{propagateError} realizan un punto fijo estándar~\cite{Ramadge:1989:CDES} sobre
 $\unexploredToBottom{\structure}$ y
 $\unexploredToTop{\structure}$ pero solo sobre predecesores de $e'$ que están en $\NONE$. 
-Lemma~\ref{lem:newWinnersLosersAreNonePredecessors} asegura la completitud de esta propagación restringida.
+El Lema~\ref{lem:newWinnersLosersAreNonePredecessors} asegura la completitud de esta propagación restringida.
 
 %Hack de titulo de lemma porque si no, no corta linea.
 \begin{lemma}\textbf{\emph{(Ganadores/Perdedores nuevos tienen camino de estados-\textit{None} a transición nueva)}}
@@ -123,7 +123,7 @@ Más aún, que no haya nueva información para $e'$ implica que no hay nuevos ga
 
 \begin{lemma}\textbf{\emph{(Nuevos ganadores/perdedores solo si $e'$ es un nuevo ganador/perdedor)}}
 \label{lem:E'isNoneThenAllIsNone}
-Sea $e \step{\l}{} e'$ la única diferencia entre dos exploraciones parciales, $\structure$ y $\structure'$, y $e' \notin \LES \cup \WES$. Si $\WESS \neq \WES \Rightarrow e' \in \WESS \setminus \WES$, y si $\LESS \neq \LES \Rightarrow e' \in \LESS \setminus \LES$. ENTONCES?
+Sea $e \step{\l}{} e'$ la única diferencia entre dos exploraciones parciales, $\structure$ y $\structure'$, y $e' \notin \LES \cup \WES$. Si $\WESS \neq \WES$ entonces $e' \in \WESS \setminus \WES$, y si $\LESS \neq \LES $ entonces $e' \in \LESS \setminus \LES$.
 %Then for all $s$ such that 
 %$\exists w \ldot s \runw{w}{\structure'} e'$, if $s \notin (\WES \cup \LES)$ then $s \notin (\WESS \cup \LESS)$.
 \end{lemma}
@@ -135,7 +135,7 @@ Si se cerró un nuevo loop(line~\ref{line:isLoop}), por Lemma~\ref{lem:E'isNoneT
 En la linea~\ref{line:getMaxLoop} computamos $\SCC$, el conjunto de estados que pertenecen a un loop que pasa por $e \step{\l}{\structure'} e'$ y nunca por $\WES \cup \LES$. 
 Intuitivamente, cualquier controlador para $e'$ va a depender de alguno de estos loops. O, en términos del Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, para que $e'$ cambie su estado, debe ser a través de un camino de estados $\NONE$. 
 
-En la linea~\ref{line:CanBeWinning} usamos \texttt{canBeWinningLoop}($\SCC$) para chequear si existe algún estado marcado en $\SCC$ o si es posible escapar de $\SCC$ y alcanzar un "goal" en un paso. Esto distingue entre dos posibles opciones: $e' \in \WESS$ o $e' \in \LESS$ (ver 
+En la linea~\ref{line:CanBeWinning} usamos \texttt{canBeWinningLoop}($\SCC$) para chequear si existe algún estado marcado en $\SCC$ o si es posible escapar de $\SCC$ y alcanzar un \textit{goal} en un paso. Esto distingue entre dos posibles opciones: $e' \in \WESS$ o $e' \in \LESS$ (ver 
 Lemma~\ref{lem:canBeWinningLoopWorks}). 
 
 \begin{lemma}\textbf{\emph{(Condición necesaria/suficiente para ganar/perder)}}
@@ -164,9 +164,9 @@ Esto puede hacerse de forma más eficiente que con un punto fijo usando el Lemma
 %Hack de titulo de lemma porque si no, no corta linea.
 \begin{lemma}\textbf{\emph{(findNewErrorsIn es correcto y completo)}}
 \label{lem:findErrorsWorks}
-Si $\SCC =$ \emph{\texttt{getMaxLoop($e$, $e'$)}} $\wedge$\\ 
-$\neg$\emph{\texttt{canBeWinningLoop}}($\SCC$) y \\
-$P=\emph{\texttt{findNewErrorsIn}}(\SCC)$ entonces \\
+Si $\SCC =$ \emph{\texttt{getMaxLoop($e$, $e'$)}} $\wedge$
+$\neg$\emph{\texttt{canBeWinningLoop}}($\SCC$) y 
+$P=\emph{\texttt{findNewErrorsIn}}(\SCC)$ entonces 
 $(e' \in \LESS \Rightarrow e' \in P 
 \subseteq \LESS)$ $\wedge \, (e' \notin \LESS \Rightarrow P = 
 \emptyset)$
