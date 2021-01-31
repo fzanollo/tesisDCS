@@ -22,7 +22,7 @@ Para realizar las pruebas de performance decidimos usar el mismo conjunto de pro
 \section{Comparación con versión previa de \DCS}
 Como ya dijimos, el foco del trabajo no estuvo solo en corregir los errores encontrados en el algoritmo sino también en brindar una mayor seguridad sobre la corrección y completitud de la exploración on the fly. Esto debía hacerse sin perder la buena performance que aportaba la técnica, permitiendo aplicarla a casos de mayor tamaño. Aclaramos que el benchmark se corrió en un equipo de las mismas características para ambas versiones de \DCS.
 
-La comparación se realizó para las dos heurísticas desarrolladas en \cite{tesisDani}, Monotonic Abstraction y Ready Abstraction. Agregamos además una de las heurísticas naif, BFS, que desarrollamos para depurar el código; esto es en función de mostrar la posible ganancia obtenida a través de una buena heurística.
+La comparación se realizó para las dos heurísticas desarrolladas en \cite{tesisDani}, Monotonic Abstraction y Ready Abstraction. Agregamos además una de las heurísticas naif, Breadth First Search, que desarrollamos para depurar el código; esto es en función de mostrar la posible ganancia obtenida a través de una buena heurística.
 
 \begin{figure}[th]
     \centering
@@ -40,7 +40,7 @@ La comparación se realizó para las dos heurísticas desarrolladas en \cite{tes
 \label{fig:dcs:results}
 \end{figure}
 
-En la figura~\ref{fig:dcs:results} se pueden observar los resultados con respecto a DCS anterior. Antes que nada podemos concluir que hay una ganancia al utilizar mejores heurísticas, ya que BFS pierde contra RA tanto en cantidad de instancias como tiempo. Sorprendentemente a pesar de ser muy naif termina compitiendo contra MA. Esto se puede deber a la estructura de los problemas y la forma de cerrar estados, BFS estaría intentando llegar a una conclusión dentro de una localidad antes de mirar más lejos.
+En la figura~\ref{fig:dcs:results} se pueden observar los resultados con respecto a DCS anterior. Antes que nada podemos concluir que hay una ganancia al utilizar mejores heurísticas, ya que BFS pierde contra RA tanto en cantidad de instancias como tiempo. Sorprendentemente a pesar de ser muy naif termina compitiendo contra MA. Esto tiene su explicación en el cambio de objetivo, ya que MA fue presentada en \textcolor{red}{[REF reachability en paper]} para \textit{reachability}.
 
 Nuestra versión (dcs2) mantiene la performance en la mayoría de los casos de estudio. En TA hay algunas instancias nuevas que dan timeout, pero el resto concluyen rápidamente. El único caso donde pierde notoriamente es BW, pero mirando otras herramientas vemos que en general tienen problemas con las combinaciones más grandes (salvo \MYND). Nuestra suposición es que se están cerrando estados como $\Goals$ de manera anticipada y posiblemente erronea, quizás casos como el de \ref{test:goals:falsopositivo}. Esto puede hacer que se llegue a una conclusión apurada que, si bien es correcta porque el problema es controlable, devuelva un controlador incorrecto.
 
