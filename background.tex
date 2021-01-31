@@ -105,7 +105,11 @@ El foco en la construcción de directores tiene las siguientes razones:
 
 \begin{itemize}
 	\item Los directores pueden ser más apropiados en contextos donde el controlador \textit{ejecuta} las acciones controlables \textcolor{red}{REF}.
-	\item La construcción de directores puede requerir una menor exploración de la planta que la construcción de un supervisor. En este caso la síntesis de director podría usarse tanto para controlar la planta como para probar la controlabilidad de un problema donde herramientas de construcción de supervisores fallan por el tamaño del problema.
+	
+	\item La construcción de directores puede requerir una menor exploración de la planta que la construcción de un supervisor. Esto se sinergiza y potencia las ganancias en tiempo de la técnica al explorar la composición on-the-fly y permite componer una proporción menor de la planta.
+	
+	\item En el caso de poder sintetizar un director explorando menos de la planta, se podría usar tanto para controlar la planta como para probar la controlabilidad de un problema donde herramientas de construcción de supervisores fallan por tener que explorar en mayor medida un problema de gran tamaño.
+	
 	\item Hay hasta la fecha una falta de herramientas disponibles para la síntesis de directores
 \end{itemize}
 
