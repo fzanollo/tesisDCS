@@ -10,9 +10,9 @@ El software utilizado cuenta con una gran cantidad de funcionalidad. Principalme
 
 En primer lugar definimos las constantes que determinan la cantidad de sub-servicios a contratar. Luego definimos la componente \texttt{Agencia}, con un único estado que vuelve a sí mismo con las siguientes transiciones: \texttt{cancelacion, compra, query[servicio]}, este último se lee como cualquier transición \texttt{query[i]} si $i \in Servicio$.
 
-Con la definición de los sub-servicios se puede ver una definición genérica compacta de múltiples componentes idénticas del problema, tantas como elementos haya en \texttt{Servicio}, cada una con su \texttt{id}, comenzado en 0, que es utilizado para definir transiciones únicas para cada componente. También se ve que para un componente más complejo simplemente se declaran más estados, cada uno con su nombre en mayúscula, sin necesidad de aclarar que pertenecen a un componente. Si se quiere que un estado tenga 2 transiciones que lleven a estados distintos se logra con el operador \texttt{||} (como ejemplo, ver el estado \texttt{Queried}).
+Con la definición de los sub-servicios se puede ver una definición genérica compacta de múltiples componentes idénticas del problema, tantas como elementos haya en \texttt{Servicio}, cada una con su \texttt{id}, comenzado en 0, que es utilizado para definir transiciones únicas para cada componente. También se ve que para un componente más complejo simplemente se declaran más estados, cada uno con su nombre en mayúscula, sin necesidad de aclarar que pertenecen a un componente. Si se quiere que un estado tenga 2 transiciones que lleven a estados distintos se logra con el operador \texttt{|} (como ejemplo, ver el estado \texttt{Queried}).
 
-Finalmente mostramos como se pueden componer las distintas LTSs con el comando \texttt{||}, con el cual nuestra planta compuesta tendrá tanto a la agencia como a los subservicios.
+Finalmente mostramos cómo se pueden componer las distintas LTSs con el comando \texttt{||}, con el cual nuestra planta compuesta tendrá tanto a la agencia como a los subservicios.
 
 \begin{lstlisting}[language = mtsa, caption=Ejemplo de LTS y composición, label=ejLTS]
 const N = 1
@@ -33,11 +33,11 @@ Imposible = (canelacion -> Unqueried).
 ...
 \end{lstlisting}
 
-En el listing~\ref{ejController} vemos un ejemplo de cómo definir un controlador, en este caso lo llamamos $Goal$. En el área de \textit{Automated planning} el objetivo es alcanzar algún estado \textit{final}, es decir, los estados son los marcados; sin embargo en el contexto MTSA y al representar el problema con LTSs solo podemos marcar transiciones. La interpretación final es que las transiciones señaladas como \textit{marcadas} llevan a estados marcados y estos serán nuestros objetivos. En el ejemplo se declara la transición $compra$ como marcada, señalando la compra sin errores de un paquete. En este punto, aclaramos únicamente para facilitar cualquier intento de reproducción, que al utilizar transiciones marcadas, se puede generar un desdoblamiento de los estados, como ejemplo notar que el estado \texttt{Agencia} va a tener internamente para la herramienta 2 versiones, una marcada alcanzada por $compra$ y otra no marcada alcanzada por $cancelacion$ y $query[servicio]$.
+En el listing~\ref{ejController} vemos un ejemplo de cómo definir un controlador, en este caso lo llamamos $Goal$. En el área de \textit{Automated planning} el objetivo es alcanzar algún estado \textit{final}, es decir, los estados son los marcados; sin embargo en el contexto MTSA y al representar el problema con LTSs solo podemos marcar transiciones. La interpretación final es que las transiciones señaladas como \textit{marcadas} llevan a estados marcados y estos serán nuestros objetivos. En el ejemplo se declara la transición $compra$ como marcada, señalando la compra sin errores de un paquete. En este punto aclaramos, únicamente para facilitar cualquier intento de reproducción, que al utilizar transiciones marcadas, se puede generar un desdoblamiento de los estados. Como ejemplo notar que el estado \texttt{Agencia} va a tener (internamente) para la herramienta 2 versiones, una marcada alcanzada por $compra$ y otra no marcada alcanzada por $cancelacion$ y $query[servicio]$.
 
-Luego definimos el conjunto de transiciones controlables, en este caso $cancelacion, compra$ y $ query[Servicio]$. Luego debemos agregar la palabra clave \texttt{nonblocking}, en caso contrario se intentará, por defecto, resolver otro problema de control fuera del alcance de este trabajo (\textit{blocking}).
+Luego definimos el conjunto de transiciones controlables, en este caso $cancelacion, compra$ y $ query[Servicio]$. Por último debemos agregar la palabra clave \texttt{nonblocking}, en caso contrario se intentará, por defecto, resolver otro problema de control fuera del alcance de este trabajo.
 
-En la última línea utilizamos la palabra clave \texttt{heuristic} para aclarar que queremos utilizar el algoritmo de DCS, luego nombramos como $DirectedController$ al controlador que devuelve nuestro algoritmo cuando lo definimos como el LTS $Compuesto$ ($Plant$) que cumple con la especificación $Goal$.
+En la última línea utilizamos la palabra clave \texttt{heuristic} para aclarar que queremos utilizar el algoritmo de DCS, luego nombramos como $DirectedController$ al controlador que devuelve nuestro algoritmo cuando lo definimos como el LTS $Compuesto$ ($Plant$)\footnote{Cabe destacar que a esta altura la composición todavía no fue calculada} que cumple con la especificación $Goal$.
 
 \begin{lstlisting}[language = mtsa, caption=Ejemplo de Controller y DCS, label=ejController]
 ...
@@ -52,36 +52,58 @@ heuristic ||DirectedController = Plant~{Goal}.
 
 
 \section{Testing}
-Luego de haber presentado la sintaxis con la cual desarrollamos nuestros tests vamos a hablar un poco de ellos y qué es lo que se esperaba en cada uno. 
+Luego de haber mostrado la sintaxis con la cual desarrollamos nuestros tests vamos a hablar un poco de ellos y qué es lo que se esperaba en cada uno. 
+
+En total tenemos una batería de \totalTests tests, los cuáles no fueron desarrollados uno detrás del otro, utilizamos una técnica llamada TDD (Test Driven Development). Al comienzo se nos fue presentado el algoritmo original y, luego de mirar en detalle tanto el pseudocódigo como la implementación, notamos algunos casos que quizás resolvería mal; fue entonces que iniciamos la batería de tests. 
+Luego entramos en un ciclo donde fuimos generando versiones que corregían los casos y más tests que rompían otras partes del algoritmo. Además en ciertos puntos críticos decidimos refactorizar completamente partes amplias de la implementación, fuera de las refactorizaciones chicas al pasar los tests.
+
+\bigskip
+
+\textbf{Test 1}
+% TODO hago subsections o algo así? agregar imagen del test y mejorar la explicación
+Cuando encuentra el primer loop no controlable, propaga mal WEAK, cuando vuelve a ver el nodo inicial. El problema es que no vuelve a poner al nodo inicial en open, entonces no ve el otro camino, que lleva al goal.
 
 %TODO AGREGAR LOS TESTS QUE NOS HICIERON DAR CUENTA QUE EL PROPAGATE NO PODIA SER LOCAL Y HABIA QUE MARCAR ERRORES AL TERMINAR DE EXPLORAR ALGO
 
-TO ADD\\
+\smallskip
+\textbf{Test 7} caso donde encontraba un loop que pensaba era goal pero luego, recién al querer crear controloador, fallaba porque tenía cosas por explorar. Esto era doblemente malo porque se puede tener una conclusión errónea y no se sigue explorando.
 
-- TEST 1, Cuando encuentra el primer loop no controlable, propaga mal WEAK, cuando vuelve a ver el nodo inicial. El problema es que no vuelve a poner al nodo inicial en open, entonces no ve el otro camino, que lleva al goal.\\
+\smallskip
+\textbf{Test 8} daba que no habia controlador y son controlables
 
-- TEST 7, caso donde encontraba un loop que pensaba era goal pero luego, recién al querer crear controloador, fallaba porque tenía cosas por explorar. Esto era doblemente malo porque se puede tener una conclusión errónea y no se sigue explorando.\\
+\smallskip
+\textbf{Test 26?} este puede ser interesante porque son dos loops no controlables pero ganas en ambos
 
-- TEST 19, 22, daban que no habia controlador y son controlables
+\smallskip
+\textbf{Test 35} El tema es que arma un CCC y no chequea que sea válido bien, porque ya no hay loop con marcado. Entonces el build Controller se queja y da que no hay controlador. Pero si revisaba para el otro lado había un CCC válido
 
-- TEST 26? este puede ser interesante porque son dos loops no controlables pero ganas en ambos\\
+%TODO explicar y mostrar imagenes de los tests: 7,12,20,31 (4 que fallan en ra y no dummy); 13,23,44,45 (4 que fallan en dummy y no ra); 40,42,46 (3 que dan controlables cuando no deberían en dummy)
+%     RA
+%     [Concurrent Modification Exception] 2, 8, 15, 36, 38, 44, 45
+%     [Controlables que no] 7, 12, 16, 20, 31, 32, 39
+%     [No controlables que si] -
+% 
+%     Dummy
+%     [Concurrent Modification Exception] 8, 36, 38
+%     [Controlables que no] 13, 16, 23, 32, 39, 44, 45
+%     [No controlables que si] 40, 42, 46
 
-- TEST 35 El tema es que arma un CCC y no chequea que sea válido bien, porque ya no hay loop con marcado. Entonces el build Controller se queja y da que no hay controlador. Pero si revisaba para el otro lado había un CCC válido
+%TODO agregar los tests nuevos
 
-\begin{lstlisting}[language = mtsa, caption=Ejemplo de test]
-Ejemplo = A0,
-A0 = (c01 -> A1),
-A1 = (u12 -> A2 | u13 -> A3),
-A2 = (u23 -> A3),
-A3 = (u33 -> A3).
+\begin{lstlisting}[language = mtsa, caption=Test 1 a modo de ejemplo] 
+Ejemplo = A1,
+A1 = (u12 -> A2 | u14 ->A4),
+A2 = (u21 -> A1),
+A4 = (c45 ->A5),
+A5 = (u55 -> A5).
 
 ||Plant = Ejemplo.
 
 controllerSpec Goal = {
-controllable = {c01}
-marking = {u33}
+controllable = {c45}
+marking = {u55}
 nonblocking
 }
 
-heuristic ||DirectedController = Plant~{Goal}.
+heuristic ||C = Plant~{Goal}.
 \end{lstlisting}

@@ -9,11 +9,13 @@ En función de poner a prueba sólo el algoritmo de exploración desarrollamos u
 A partir de entonces usamos los nombres de las transiciones para explorar nuestros casos de test de la forma que nos interesaba. 
 
 \section{Suite de regresión}
-A continuación mostraremos algunos tests dignos de mención y explicaremos qué problemática ataca. En el capítulo \ref{chpt:implementation} se puede encontrar más información sobre ellos, junto con el código del modelo.
-
-Nuestra suite de regresión cuenta con 50 tests, todos casos sumamente especiales o variaciones pequeñas de los mismos que son interesantes desde un punto de vista implementativo. 
+A continuación mostraremos algunos resultados obtenidos a partir de nuestra batería de tests. La misma cuenta con \totalTests tests, todos casos sumamente especiales o variaciones pequeñas de los mismos que son interesantes desde un punto de vista implementativo. En el capítulo \ref{chpt:implementation} se puede encontrar más detalle sobre ellos y cómo los desarrollamos, junto con ejemplos de especificación del modelo.
 
 Como podemos ver en la tabla \ref{tab:resultadosTest} los tests se comportan diferente según la heurística que se use, \textit{RA} o \textit{Dummy}. Exception refiere a un error implementativo que surgía en tiempo de ejecución, específicamente Concurrent Modification Exception, esto pasaba porque se modificaba a la vez que se recorría un conjunto de estados. \textit{Falsos  no controlables} son casos que deberían haber dado controlable y no fue así, la inversa para \textit{falsos controlables}.
+
+%TODO acomodar estos parrafos mejor y agregar más explicación sobre las heurísticas
+
+TIENE SENTIDO MOSTRAR ESTO? los tests se hicieron para cada versión particular, por eso algunos van a andar en el original y otros no. Tiene sentido ir mostrando el progreso y por qué rompían cada uno en cada versión aunque esto me parece un poco mucho. Un punto medio sería explicar el por qué de cada test y listo.
 
 Cabe destacar que, además, fallan en distintos tests. Hay 4 tests que dieron falsos no controlables con \textit{RA} pero funcionaron correctamente con \textit{Dummy}. Por su lado \textit{Dummy} falla en 4 tests ``nuevos'' en esta categoría.
 
@@ -29,19 +31,6 @@ Cabe destacar que, además, fallan en distintos tests. Hay 4 tests que dieron fa
     \caption{Resumen fallos del suite}
     \label{tab:resultadosTest}
 \end{table}
-
-%TODO explicar y mostrar imagenes de los tests: 7,12,20,31 (4 que fallan en ra y no dummy); 13,23,44,45 (4 que fallan en dummy y no ra); 40,42,46 (3 que dan controlables cuando no deberían en dummy)
-%     RA
-%     [Concurrent Modification Exception] 2, 8, 15, 36, 38, 44, 45
-%     [Controlables que no] 7, 12, 16, 20, 31, 32, 39
-%     [No controlables que si] -
-% 
-%     Dummy
-%     [Concurrent Modification Exception] 8, 36, 38
-%     [Controlables que no] 13, 16, 23, 32, 39, 44, 45
-%     [No controlables que si] 40, 42, 46
-    
-
 
 \section{Puntos a resolver}
 Gracias a esta suite de tests pudimos encontrar que la exploración fallaba en tres puntos importantes:
