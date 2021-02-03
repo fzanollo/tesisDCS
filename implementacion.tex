@@ -52,43 +52,60 @@ heuristic ||DirectedController = Plant~{Goal}.
 
 
 \section{Testing}
-Luego de haber mostrado la sintaxis con la cual desarrollamos nuestros tests vamos a hablar un poco de ellos y qué es lo que se esperaba en cada uno. 
+Luego de haber mostrado la sintaxis con la cual desarrollamos nuestros tests vamos a hablar un poco de ellos y detalles sobre algunos a destacar. Si se desea ver la especificación de cada uno de los tests puede encontrarse en \href{https://bitbucket.org/lnahabedian/mtsa/src/master/maven-root/mtsa/src/test/resources/NonBlocking/}{el repositorio de MTSA}\footnote{https://bitbucket.org/lnahabedian/mtsa/src/master/maven-root/mtsa/src/test/resources/NonBlocking/}.
 
-En total tenemos una batería de \totalTests tests, los cuáles no fueron desarrollados uno detrás del otro, utilizamos una técnica llamada TDD (Test Driven Development). Al comienzo se nos fue presentado el algoritmo original y, luego de mirar en detalle tanto el pseudocódigo como la implementación, notamos algunos casos que quizás resolvería mal; fue entonces que iniciamos la batería de tests. 
+En total tenemos una batería de \totalTests tests. Los cuáles no fueron desarrollados uno detrás del otro sino que utilizamos una técnica llamada TDD (Test Driven Development). Al comienzo se nos fue presentado el algoritmo original y, luego de mirar en detalle tanto el pseudocódigo como la implementación, notamos algunos casos que quizás resolvería mal; fue entonces que iniciamos la batería de tests. 
 Luego entramos en un ciclo donde fuimos generando versiones que corregían los casos y más tests que rompían otras partes del algoritmo. Además en ciertos puntos críticos decidimos refactorizar completamente partes amplias de la implementación, fuera de las refactorizaciones chicas al pasar los tests.
 
+Como recordatorio resumimos los problemas encontrados en tres grandes grupos.
+\begin{itemize}
+ \item Falencias al encontrar errores
+ \item Propagación local
+ \item Falta de completitud
+\end{itemize}
+
+Es necesario entrar un poco en detalle sobre la implementación del algoritmo. Para manejar la exploración de manera ordenada contamos con una cola de estados ``open'', en ella colocamos los estados que están esperando para ser explorados. Notar que un estado puede salir y entrar de ``open'' varias veces, ya que podríamos estar explorando otra transición, pero sólo una ``cantidad de transiciones'' de veces. Muchos de los problemas intermedios fueron a la hora de reabrir estados, para que puedan seguir siendo explorados, esto se traducía en una finalización temprana de la exploración llegando a una conclusión incorrecta.
+
+Dentro de esta batería los siguientes casos son de especial interés.
 \bigskip
 
-\textbf{Test 1}
-% TODO hago subsections o algo así? agregar imagen del test y mejorar la explicación
-Cuando encuentra el primer loop no controlable, propaga mal WEAK, cuando vuelve a ver el nodo inicial. El problema es que no vuelve a poner al nodo inicial en open, entonces no ve el otro camino, que lleva al goal.
+\textbf{Test 1} Fig \ref{fig:test1}
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.7]{figures/tests/test1.png}
+ \caption{LTS del test 1}
+ \label{fig:test1}
+\end{figure}
+Ataca el problema de falta de completitud. Luego de encontrar el primer loop no controlable (u12, u21), al ver el nodo inicial nuevamente, propaga mal lo que en la versión anterior era conocido como WEAK, es decir, sabemos que está activo pero no tenemos datos suficientes para cerrarlo. El problema es que no vuelve a poner al nodo inicial en la cola de exploración, por ende no ve el otro camino, que lleva al estado marcado (y finalmente Goal).
 
-%TODO AGREGAR LOS TESTS QUE NOS HICIERON DAR CUENTA QUE EL PROPAGATE NO PODIA SER LOCAL Y HABIA QUE MARCAR ERRORES AL TERMINAR DE EXPLORAR ALGO
+% \smallskip
+% \textbf{Test 7} Es una suma y refinamiento de tests anteriores. La intención es ver cómo maneja distintos tipos de loops. Encontraba un loop que pensaba era Goal pero luego, recién al querer crear controloador, fallaba porque aún tenía estados por explorar. Esto era doblemente malo porque se puede tener una conclusión errónea y no se sigue explorando.
+% TODO dejamos el test 7? es medio gigante y no tiene algo que otros no. Quizás mejor mostrar varios, más chicos
 
 \smallskip
-\textbf{Test 7} caso donde encontraba un loop que pensaba era goal pero luego, recién al querer crear controloador, fallaba porque tenía cosas por explorar. Esto era doblemente malo porque se puede tener una conclusión errónea y no se sigue explorando.
+\textbf{Test 8} Fig \ref{fig:test8} Es un problema de falencias al encontrar errores ya que no señala el estado 3 como error, porque no detecta que es un livelock. Notar que esto sería lo mismo que si tenemos una rama totalmente explorada a partir de u33.
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.7]{figures/tests/test8.png}
+ \caption{LTS del test 8}
+ \label{fig:test8}
+\end{figure}
+
+TEST 12, este puede ser otro problema? porque daba no controlable, en realidad lo es pero mepa que no detectaba que podía cortar la controlable porque está marcada?
 
 \smallskip
-\textbf{Test 8} daba que no habia controlador y son controlables
+\textbf{Test 26?} este puede ser interesante porque son dos loops no controlables pero ganas en ambos y dice ``Caso para intentar mostrar que ver solo loops minimales no sirve''. %TODO volver a verlo en detalle y escribir la explicación, debería tener que ver con ``propagación local no sirve''
 
-\smallskip
-\textbf{Test 26?} este puede ser interesante porque son dos loops no controlables pero ganas en ambos
+TEST 30, ACÁ ESTÁ LA PAPA. otro caso de ``propagación local no sirve''. 2 y 3 son goal, pero al querer propagar a 0 dice ``uh esta no controlable me lleva a algo de estatus desconocido'' entonces no marca nada y termina diciendo que no es controlable cuando sí. %TODO mismo que para el 26
 
 \smallskip
 \textbf{Test 35} El tema es que arma un CCC y no chequea que sea válido bien, porque ya no hay loop con marcado. Entonces el build Controller se queja y da que no hay controlador. Pero si revisaba para el otro lado había un CCC válido
 
-%TODO explicar y mostrar imagenes de los tests: 7,12,20,31 (4 que fallan en ra y no dummy); 13,23,44,45 (4 que fallan en dummy y no ra); 40,42,46 (3 que dan controlables cuando no deberían en dummy)
-%     RA
-%     [Concurrent Modification Exception] 2, 8, 15, 36, 38, 44, 45
-%     [Controlables que no] 7, 12, 16, 20, 31, 32, 39
-%     [No controlables que si] -
-% 
-%     Dummy
-%     [Concurrent Modification Exception] 8, 36, 38
-%     [Controlables que no] 13, 16, 23, 32, 39, 44, 45
-%     [No controlables que si] 40, 42, 46
+%TODO agregar tests que usen debuggins abs (i.e., que tengan nombres las transiciones) Ej que puede estar muy bien: TEST 41
 
-%TODO agregar los tests nuevos
+%TODO AGREGAR LOS TESTS QUE NOS HICIERON DAR CUENTA QUE EL PROPAGATE NO PODIA SER LOCAL Y HABIA QUE MARCAR ERRORES AL TERMINAR DE EXPLORAR ALGO
+
+%TODO agregar los tests nuevos test 47 o 48?
 
 \begin{lstlisting}[language = mtsa, caption=Test 1 a modo de ejemplo] 
 Ejemplo = A1,
