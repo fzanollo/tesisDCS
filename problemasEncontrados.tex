@@ -38,6 +38,7 @@ Gracias a esta suite de tests pudimos encontrar que la exploración fallaba en t
  \item Falencias al encontrar errores
  \item Propagación local
  \item Falta de completitud en la exploración en casos donde era necesario seguir.
+ \item detección de estados ganadores poco robusta.
 \end{itemize}
 
 % FALENCIAS AL ENCONTRAR ERRORES
@@ -89,14 +90,23 @@ Llegado ese punto devolvía que no había controlador, cuando de seguir exploran
  \includegraphics[width=\linewidth/2]{figures/faltaDeCompletitud.pdf}
  \caption{Ejemplo de falta de completitud, los estados en gris son los faltantes por explorar.}
  \label{fig:faltaCompletitud}
-\end{figure}    
+\end{figure}
 
+Finalmente, la detección de loops con estados ganadores es una pieza central del problema, y tampoco puede solucionarse con una mirada local. Originalmente, la primera versión del pseudocódigo daba una descripción declarativa de los estados a encontrar (ver listng \ref{lst:viejoMCCC}). Esta descripción de los estados en un loop ganador es correcta, pero no resulta claro como implementarla. En particular, fue claro al incrementar la batería de tests que la detección de loops ganadores necesitaba una modificación.
 
+Luego de varias intentos más veloces (como ejemplo ver el pseudocódigo de \texttt{findNewErrorsIn($loops$)}) pero que presentaban fallas, llegamos a la conclusión de utilizar un algoritmo de punto fijo clásico (similar a listing \ref{lst:classical}) pero con una planta reducida. Como se verá más adelante, corremos el algoritmo clásico sobre una versión optimista que asume que toda transición no explorada es perdedora, y de los estados ya explorados solo tomamos en cuenta un grupo reducido que forma un loop sobre la última transición explorada. Este enfoque otorga la completitud del algoritmo tradicional mientras que sostiene la eficiencia de la exploración on-the-fly.
 
-\section{Hablar de ultimo cambio a findGoals?}
+\begin{lstlisting}[language={pseudocode},label={lst:viejoMCCC},caption={vieja descripción estados ganadores},float=ht, frame=single]
+function buildMCCC($e, e'$):
+  let $C$ such that
+    $C = \{ e_i \mid (e' \runw{w}{\structure} e_i \runw{w'}{\structure} e \vee e \runw{w}{\structure} e_i \runw{w'}{\structure} e') \wedge $extendsCCC($e_i,C \cup \Goals$)$ \wedge$
+    $(\exists w \ldot e \runw{w}{\structure} e_m \wedge e_m \in M_E \cap (C \cup \Goals)) \}$
+  return $C$
+  
+function extendsCCC($e, C$):
+  return $(\exists \l \ldot e \step{\l}{E} e' \wedge e' \in C) \wedge (\forall \l_u \in A_U \ldot e \step{\l_u}{E} e' \Rightarrow e' \in C)$
 
-
-
+\end{lstlisting}
 
 
 

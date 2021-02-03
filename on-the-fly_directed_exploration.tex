@@ -1,8 +1,19 @@
 %Subiría de nivel el “Nuevo algoritmo”. Trataría de explicar tempranamente la idea de construcción de núcleos de posibles zonas perdedoras o ganadoras optimistas y pesimistas y la propagación. Incluso con la formalización primero.
 
-En esta sección presentamos el nuevo algoritmo \DCS, que realiza una exploración sobre la marcha del espacio de estados. Por medio de dicha exploración el algoritmo encuentra un director que es solución para el problema dado de control composicional. También discutimos la correctitud y completitud del nuevo algoritmo \DCS. \\
+En esta sección presentamos el nuevo algoritmo \DCS, que realiza una exploración sobre la marcha del espacio de estados. Por medio de dicha exploración el algoritmo encuentra un director que es solución para el problema dado de control composicional. También discutimos la correctitud y completitud del nuevo algoritmo \DCS, demostramos los lemas presentados, detallamos la complejidad de nuesstro algoritmo y presentamos las ideas que llevaron a diseñar el algoritmo presentado. \\
+
+\section{Propuesta de nuevo algoritmo}
+
+\input{pseudocode.tex}
+
+\FloatBarrier
+
+\section{Demostración de correctitud y completitud}
+\input{prueba.tex}
 
 \section{Nuestro enfoque}
+
+En esta sección presentaremos las ideas y conceptos que tuvieron un rol central en el diseño del nuevo algoritmo, con la intención de dar una intuición sobre el enfoque elegido, más allá de las demostraciones técnicas.
 
 En función de obtener un algoritmo correcto, completo y agnóstico a la heurística, atacamos los problemas mencionados en el capítulo anterior y agregamos un $invariante$ que mantenemos a lo largo de la exploración.\\
 
@@ -22,16 +33,9 @@ Fue esta necesidad y dificultad para marcar errores lo que nos llevó a incluir 
 
 Como se verá en la propiedad~\ref{def:invariant}, un estado $s$ solo puede seguir sin clasificar (siendo $\NONE$) si, con los explorados hasta el momento, y siendo totalmente optimistas sobre las transiciones desconocidas no podemos asegurar que $s$ está condenado a ser perdedor (y tampoco podemos concluir que es ganador).
 
-Al momento de haber explorado todos los descendientes de $s$, incluso si no se exploró toda la planta total, es claro que no importa si se es optimista ($\top$) o pesimista ($\bot$) para saber si $s$ es un estado ganador o perdedor, por lo que nos forzamos por nuestro invariante a clasificarlo. Con esto evitamos las ramas totalmente exploradas pero sin clasificar que traían complicaciones en la figura~\ref{fig:falenciasErrores} y solo permitimos que un estado sea $\NONE$ si tiene un camino a una transición no explorada.
+Al momento de haber explorado todos los descendientes de $s$, incluso si no se exploró toda la planta total, es claro que no importa si se es optimista ($\top$) o pesimista ($\bot$) para saber si $s$ es un estado ganador o perdedor, por lo que nos forzamos por nuestro invariante a clasificarlo. Con esto evitamos las ramas totalmente exploradas pero sin clasificar que traían complicaciones en la figura~\ref{fig:falenciasErrores} y solo permitimos que un estado sea $\NONE$ si tiene un camino a una transición no explorada.\\
 
-\section{Propuesta de nuevo algoritmo}
-
-\input{pseudocode.tex}
-
-\FloatBarrier
-
-\section{Demostración de correctitud y completitud}
-\input{prueba.tex}
+\textbf{findGoals en planta reducida}: Para detectar los loops ganadores, el enfoque con mejores resultados fue el de un punto fijo clásico. La diferencia consiste en el uso del problema pesimista y en el uso de los lemas para solo analizar los estados que forman loops de estados NONE con la última transición explorada.
 
 \section{Demostración de Lemas}
 \input{lemmaProofs.tex}
