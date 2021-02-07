@@ -145,11 +145,29 @@ El conflicto reside en que al componer distintos DES, la cantidad de estados de 
 
 Para combatir esto, la exploración on-the-fly clasifica estados como ganadores o perdedores durante la composición. Se espera que con esto sea posible, en primer lugar, cortar la exploración de una rama de la planta que ya se sabe que es perdedora o ganadora, reduciendo así la memoria y tiempo necesarios. Pero más aún, si el estado inicial fuera marcado como ganador o perdedor antes de la composición completa de la planta, ni siquiera sería necesario completar el proceso de composición.
 
-En el listing \ref{lst:on-the-fly}
+En el listing \ref{lst:on-the-fly} mostramos la estructura básica de este método. Consiste en ir agregando una transición a la vez a la parte conocida de la planta, y en cada paso ver si esta nueva transición permite concluir que un estado es ganador o perdedor. Si algún nuevo estado se clasifica como ganador  o perdedor, se propaga esta información a sus antecesores, posiblemente marcándolos a su vez como perdedores o ganadores.
 
 \begin{lstlisting}[language={pseudocode},label={lst:on-the-fly},caption={Algoritmo Monolitico},float=ht]
 Algorithm genericOTF-Exploration($E, A_E^C$):
-
+   $\initial$ = $\<\init{e}^0,\ldots,\init{e}^n\>$
+   $\structure = initial$ //la parte conocida de la planta
+   while $initial \notin \Goals \cup \Errors$:
+     $(e,\l,e') = $proxTransicion($\structure$)
+     expandirES($\structure,(e,\l,e')$)
+     if $e' \in \Errors$:
+       propagarError($e'$)
+     else if $e' \in \Goals$:
+       propagarGoal($e'$)
+     else if isLoop($e,e'$):
+       if nuevoLoopGanador($e,e'$):
+         propagarGoal($e'$)
+       else if nuevoLoopPerdedor($e,e'$):
+         propagarError($e'$)
+         
+   if $initial \in \Goals$:
+     return armarControlador($\Goals$)
+   else:
+     return "UNREALIZABLE"  
 \end{lstlisting}
 
 Para incrementar las ramas podadas se utiliza una heurística de exploración Best First Search \cite{tesisDani} que busca ganar controlablemente o perder no controlablemente, para garantizar con la menor exploración posible que el estado actual es ganador o perdedor.
