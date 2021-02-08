@@ -66,10 +66,10 @@
 % TL %
 \begin{axis}[heat,yticklabels={0,1,2,3,4,5,6},title=\MA]
     \addplot3[mat] table[z index=2] {data/TL-dcs.dat}; \end{axis} &  % MA (2)
-\begin{axis}[heat,title=\MAnew]
-    \addplot3[mat] table[z index=2] {data/TL-dcs2.dat}; \end{axis} &  % MA
 \begin{axis}[heat,title=\RA] 
     \addplot3[mat] table[z index=3] {data/TL-dcs.dat}; \end{axis} & % RA (3)
+\begin{axis}[heat,title=\MAnew]
+    \addplot3[mat] table[z index=2] {data/TL-dcs2.dat}; \end{axis} &  % MA
 \begin{axis}[heat,title=\RAnew]
     \addplot3[mat] table[z index=3] {data/TL-dcs2.dat}; \end{axis} & % RA
 \begin{axis}[heat,title=\BFS]
@@ -77,10 +77,10 @@
 % DP %
 \begin{axis}[heat,yticklabels={0,1,2,3,4,5,6}]
     \addplot3[mat] table[z index=2] {data/DP-dcs.dat}; \end{axis} &  % MA (2)
-\begin{axis}[heat]
-    \addplot3[mat] table[z index=2] {data/DP-dcs2.dat}; \end{axis} &  % MA
 \begin{axis}[heat] 
     \addplot3[mat] table[z index=3] {data/DP-dcs.dat}; \end{axis} & % RA (3)
+\begin{axis}[heat]
+    \addplot3[mat] table[z index=2] {data/DP-dcs2.dat}; \end{axis} &  % MA
 \begin{axis}[heat]
     \addplot3[mat] table[z index=3] {data/DP-dcs2.dat}; \end{axis} & % RA
 \begin{axis}[heat]
@@ -88,10 +88,10 @@
 % CM %
 \begin{axis}[heat,yticklabels={0,1,2,3,4,5,6}]
     \addplot3[mat] table[z index=2] {data/CM-dcs.dat}; \end{axis} &  % MA (2)
-\begin{axis}[heat]
-    \addplot3[mat] table[z index=2] {data/CM-dcs2.dat}; \end{axis} &  % MA
 \begin{axis}[heat] 
     \addplot3[mat] table[z index=3] {data/CM-dcs.dat}; \end{axis} & % RA (3)
+\begin{axis}[heat]
+    \addplot3[mat] table[z index=2] {data/CM-dcs2.dat}; \end{axis} &  % MA
 \begin{axis}[heat]
     \addplot3[mat] table[z index=3] {data/CM-dcs2.dat}; \end{axis} & % RA
 \begin{axis}[heat]
@@ -99,10 +99,10 @@
 % AT %
 \begin{axis}[heat,yticklabels={0,1,2,3,4,5,6}]
     \addplot3[mat] table[z index=2] {data/AT-dcs.dat}; \end{axis} &  % MA (2)
-\begin{axis}[heat]
-    \addplot3[mat] table[z index=2] {data/AT-dcs2.dat}; \end{axis} &  % MA
 \begin{axis}[heat] 
     \addplot3[mat] table[z index=3] {data/AT-dcs.dat}; \end{axis} & % RA (3)
+\begin{axis}[heat]
+    \addplot3[mat] table[z index=2] {data/AT-dcs2.dat}; \end{axis} &  % MA
 \begin{axis}[heat]
     \addplot3[mat] table[z index=3] {data/AT-dcs2.dat}; \end{axis} & % RA
 \begin{axis}[heat]
@@ -110,10 +110,10 @@
 % BW %
 \begin{axis}[heat,yticklabels={0,1,2,3,4,5,6}]
     \addplot3[mat] table[z index=2] {data/BW-dcs.dat}; \end{axis} &  % MA (2)
-\begin{axis}[heat]
-    \addplot3[mat] table[z index=2] {data/BW-dcs2.dat}; \end{axis} &  % MA
 \begin{axis}[heat] 
     \addplot3[mat] table[z index=3] {data/BW-dcs.dat}; \end{axis} & % RA (3)
+\begin{axis}[heat]
+    \addplot3[mat] table[z index=2] {data/BW-dcs2.dat}; \end{axis} &  % MA
 \begin{axis}[heat]
     \addplot3[mat] table[z index=3] {data/BW-dcs2.dat}; \end{axis} & % RA
 \begin{axis}[heat]
@@ -122,9 +122,9 @@
 \begin{axis}[heat,yticklabels={0,1,2,3,4,5,6},xticklabels={0,1,2,3,4,5,6}]
     \addplot3[mat] table[z index=2] {data/TA-dcs.dat}; \end{axis} &  % MA (2)
 \begin{axis}[heat,xticklabels={0,1,2,3,4,5,6}]
-    \addplot3[mat] table[z index=2] {data/TA-dcs2.dat}; \end{axis} &  % MA (2)
-\begin{axis}[heat,xticklabels={0,1,2,3,4,5,6}]
     \addplot3[mat] table[z index=3] {data/TA-dcs.dat}; \end{axis} & % RA (3)
+\begin{axis}[heat,xticklabels={0,1,2,3,4,5,6}]
+    \addplot3[mat] table[z index=2] {data/TA-dcs2.dat}; \end{axis} &  % MA (2)
 \begin{axis}[heat,xticklabels={0,1,2,3,4,5,6}]
     \addplot3[mat] table[z index=3] {data/TA-dcs2.dat}; \end{axis} & % RA
 \begin{axis}[heat,xticklabels={0,1,2,3,4,5,6}]
@@ -140,6 +140,7 @@
 \node (bw) at (6.4,-3.6)  {\small BW};
 \node (ta) at (6.4,-5.9)  {\small TA};
 \end{tikzpicture}
+
 % COLOR BAR %
 \begin{tikzpicture}
 \begin{axis}[

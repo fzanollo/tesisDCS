@@ -50,41 +50,18 @@ nonblocking
 heuristic ||DirectedController = Plant~{Goal}.
 \end{lstlisting}
 
+\section{Heurísticas adicionales}
+\subsection{Dummy}
+Como dijimos en el capítulo \ref{chpt:background}, el algoritmo de DCS debe ser agnóstico a la heurística. Al comenzar nuestro trabajo en el proyecto y una vez que pudimos generar cierto conocimiento sobre el pseudocódigo nos percatamos de casos borde que no iban a ser bien resueltos. Sin embargo, al correr dichos casos el resultado era correcto, esto se debía a que la heurística era muy buena y lograba ir por un camino directo al Goal (o Error, depende el caso); entonces no caía en nuestra ``trampa''.
 
+En función de poner a prueba sólo el algoritmo de exploración desarrollamos una heurística de debugging o \textit{Dummy}. La misma ordena las transiciones a explorar alfabéticamente, dejando primero las no controlables pero sin mirar información sobre distancia a marcados o error. Decidimos dejar el ordenamiento de no controlables primero ya que esto no es heurístico, se sabe por especificación qué transiciones son controlables y cuáles no.
 
-\section{Heurística de debugging}
-Como dijimos en el capítulo anterior, el algoritmo de DCS debe ser agnóstico a la heurística. Al comenzar nuestro trabajo en el proyecto y una vez que pudimos generar un conocimiento sobre el pseudocódigo nos percatamos de ciertos casos borde que no iban a ser bien resueltos, o esto suponíamos. Sin embargo, al correr dichos casos el resultado era correcto, esto se debía a que la heurística era muy buena y llevaba al error directamente; entonces no caía en nuestra ``trampa''.
+A partir de entonces usamos los nombres de las transiciones para explorar nuestros casos de test de la forma que nos interesaba, ganando así control sobre los tests.
 
-En función de poner a prueba sólo el algoritmo de exploración desarrollamos una heurística de debugging o \textit{Dummy}. La misma ordena las transiciones a explorar alfabéticamente, dejando primero las no controlables pero no mira ninguna información sobre distancia a marcados o error. Decidimos dejar el ordenamiento de no controlables primero ya que esto no es heurístico, se sabe perfectamente qué transiciones son controlables y cuáles no.
+\subsection{BFS}
+Si bien el algoritmo debe ser agnóstico a la heurística, la misma puede (y seguramente lo haga) modificar los tiempos de ejecución. Ya que si llega tempranamente a alguna conclusión sobre un estado ésta información se puede propagar, cortando más ramas y/o más grandes.
 
-A partir de entonces usamos los nombres de las transiciones para explorar nuestros casos de test de la forma que nos interesaba. 
-
-\section{Suite de regresión}
-A continuación mostraremos algunos resultados obtenidos a partir de nuestra batería de tests. La misma cuenta con \totalTests tests, todos casos sumamente especiales o variaciones pequeñas de los mismos que son interesantes desde un punto de vista implementativo. En el capítulo \ref{chpt:implementation} se puede encontrar más detalle sobre ellos y cómo los desarrollamos, junto con ejemplos de especificación del modelo.
-
-Como podemos ver en la tabla \ref{tab:resultadosTest} los tests se comportan diferente según la heurística que se use, \textit{RA} o \textit{Dummy}. Exception refiere a un error implementativo que surgía en tiempo de ejecución, específicamente Concurrent Modification Exception, esto pasaba porque se modificaba a la vez que se recorría un conjunto de estados. \textit{Falsos  no controlables} son casos que deberían haber dado controlable y no fue así, la inversa para \textit{falsos controlables}.
-
-%TODO acomodar estos parrafos mejor y agregar más explicación sobre las heurísticas
-
-TIENE SENTIDO MOSTRAR ESTO? los tests se hicieron para cada versión particular, por eso algunos van a andar en el original y otros no. Tiene sentido ir mostrando el progreso y por qué rompían cada uno en cada versión aunque esto me parece un poco mucho. Un punto medio sería explicar el por qué de cada test y listo.
-
-Cabe destacar que, además, fallan en distintos tests. Hay 4 tests que dieron falsos no controlables con \textit{RA} pero funcionaron correctamente con \textit{Dummy}. Por su lado \textit{Dummy} falla en 4 tests ``nuevos'' en esta categoría.
-
-\begin{table}
-	\centering
-	\begin{tabular}{|l|c|c|c|}
-		\hline
-		& Exception & Falsos no controlables & Falsos controlables \\ \hline
-		RA & 7 & 7 & - \\ \hline
-		Dummy & 3 & 7 & 3 \\ 
-		\hline
-	\end{tabular}
-	\caption{Resumen fallos del suite}
-	\label{tab:resultadosTest}
-\end{table}
-
-
-
+La segunda heurística que desarrollamos es un simple BFS. La razón es para mostrar qué tanto se pueden mejorar los tiempos del algoritmo con una buena heurística. Esto se puede ver en detalle en el capítulo \ref{chpt:performance}, donde mostramos resultados de un mismo benchmark para las diferentes heurísticas.
 
 \section{Testing}
 Luego de haber mostrado la sintaxis con la cual desarrollamos nuestros tests vamos a hablar un poco de ellos y detalles sobre algunos a destacar. Si se desea ver la especificación de cada uno de los tests puede encontrarse en \href{https://bitbucket.org/lnahabedian/mtsa/src/master/maven-root/mtsa/src/test/resources/NonBlocking/}{el repositorio de MTSA}\footnote{https://bitbucket.org/lnahabedian/mtsa/src/master/maven-root/mtsa/src/test/resources/NonBlocking/}.
