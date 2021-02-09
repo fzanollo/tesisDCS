@@ -51,7 +51,7 @@
    while $C'\neq C$:
      $C' = C$
      $C=C \setminus \{ s \in C \mid$ 
-       isForcedToLose($s,C$) $\vee$
+       forcedTo($s, S_{\unexploredToBottom{\structure'}}\setminus (C \cup \Goals),\unexploredToBottom{\structure'}$) $\vee$
        cannotReachGoalIn($s, C$)$\}$
    $\Goals = \Goals \cup C$
    $\NONE = \NONE \setminus C$
@@ -62,7 +62,7 @@
    while $C' \neq C$:
      $C' = C$
      $C=C \setminus \{ s \in C \mid$ 
-     	$(\exists e \in \Errors \ldot $forcedTo($s,e,\unexploredToTop{\structure'}$)$)\ \vee$
+     	forcedTo($s,\Errors,\unexploredToTop{\structure'}$) $\vee$
      	cannotReachGoalIn($s, C$)$\}$
    $P = P \setminus C$
    $\Errors = \Errors\ \cup P$
@@ -78,7 +78,7 @@
      while $C'' \neq C:$
        $C'' = C$
        $C=C \setminus \{ s \in C \mid$ 
-               isForcedToLose($s,C$) $\vee$
+               forcedTo($s, S_{\unexploredToBottom{\structure'}}\setminus (C \cup \Goals),\unexploredToBottom{\structure'}$) $\vee$
                cannotBeReached($s,C$) $\}$
      $C = C \setminus \{ s \in C \mid $cannotReachGoalOrMarkedIn($s, C$)$\}$
    return C
@@ -125,13 +125,9 @@
    return $\{s \mid \exists w, w' \ldot \trimlst{e \runw{w}{\structure'} s} \wedge \trimlst{s \runw{w'}{\structure'} e'} \wedge$ 
           $\nexists s' \ldot (s' \in w(e) \vee s' \in w'(s)) \wedge s' \neq e' \wedge s' \in \Goals \cup \Errors \}$
 
- function forcedTo($s,e,Z$):
-   return $(\exists \l_u \in A_Z^U \ldot \trimlst{s \step{\l_u}{Z} e})\ \vee$
-          $(\forall \l_c \in A_Z^C \ldot \trimlst{s \step{\l_c}{Z} e'} \then e' = e)$ 
-          
- function isForcedToLose($s, C$):
-    return $\exists e \ldot$ forcedTo($s,e,\unexploredToBottom{\structure'}$)$\wedge \,
-    e\notin (C\cup\Goals)$
+ function forcedTo($s,Dest,Z$):
+   return $(\exists \l_u \in A_Z^U \ldot \exists e \in Dest \ldot \trimlst{s \step{\l_u}{Z} e})\ \vee$
+          $(\forall \l \in A_Z \  (\trimlst{s \step{\l}{Z} e} \Rightarrow e \in Dest))$    
     
  function cannotBeReached($s, C$):
     return $\nexists s' \in C , \exists \l \ldot s' \step{\l}{\structure'} s$
