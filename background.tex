@@ -150,6 +150,7 @@ En el listing \ref{lst:on-the-fly} mostramos la estructura básica de este méto
 \begin{lstlisting}[language={pseudocode},label={lst:on-the-fly},caption={Algoritmo Monolitico},float=ht]
 Algorithm genericOTF-Exploration($E, A_E^C$):
    $\initial$ = $\<\init{e}^0,\ldots,\init{e}^n\>$
+   $\Goals = \Errors = \emptyset$
    $\structure = initial$ //la parte conocida de la planta
    while $initial \notin \Goals \cup \Errors$:
      $(e,\l,e') = $proxTransicion($\structure$)
@@ -174,17 +175,11 @@ Para incrementar las ramas podadas se utiliza una heurística de exploración Be
 
 En el peor caso, no se pudo concluir nada antes de componer la planta en su totalidad, se perdió tiempo en los puntos fijos, intentando clasificar estados, y se realiza una última vez el algoritmo clásico con la planta totalmente explorada. Esto garantiza la completitud del algoritmo, como se detalla en mayor profundidad en el capítulo~\ref{chpt:dcs}.
 
+A continuación presentamos los puntos más delicados de la exploración on-the-fly, donde buscamos invariantes a cumplir para garantizar su correcto funcionamiento.
+
 En todos los gráficos siguientes vamos a utilizar las letras $c$, $u$, para denotar si una transición es controlable o no, respectivamente; en caso de no especificar letra para una transición es porque su controlabilidad no afecta el resultado del ejemplo.
 
-\subsection{marcado explícito errores}
-
-Gracias a esta suite de tests pudimos encontrar que la exploración fallaba en tres puntos importantes:
-\begin{itemize}
-	\item Falencias al encontrar errores
-	\item Propagación local
-	\item Falta de completitud en la exploración en casos donde era necesario seguir.
-	\item detección de estados ganadores poco robusta.
-\end{itemize}
+\subsection{Marcado explícito errores}
 
 % FALENCIAS AL ENCONTRAR ERRORES
 En cuanto a agregar estados al conjunto $\Errors$ la inadvertencia se debía a que no sacaba conclusión alguna al haber explorado todo un sub-autómata, por ende al propagar información desde otra rama se podría llegar a un resultado erróneo. 
