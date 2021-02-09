@@ -19,7 +19,7 @@ El problema puede escalar de forma muy rápida si se incrementa la cantidad de s
 
 Mostramos en la figura~\ref{fig:N1} un LTS (Labeled transition system) para cada uno de los componentes descriptos y el LTS compuesto para el caso en el que se sub-contrata un solo servicio.
 
-Puede verse que para el caso de solo un sub-servicio que debe ser contratado el problema es manejable. Los modelos gráficos de la planta y el controlador, generados automáticamente por MTSA se comprenden con un vistazo. Ya el caso con $N=2$ (fig~\ref{fig:N2}) si bien puede generarse una representación gráfica, requiere un trabajo considerable para comprender qué estado del problema representa cada estado del modelo. Simplemente aumentando a $N=5$ ya la planta compuesta cuenta con 1025 estados y 4085 transiciones, de las cuales nuestro algoritmo explora (381 \textcolor{red}{Rechequear}) estados para construir un controlador válido.
+Puede verse que para el caso de solo un sub-servicio que debe ser contratado el problema es manejable. Los modelos gráficos de la planta y el controlador, generados automáticamente por MTSA\footnote{Modal Transition System Analyser, \href{https://bitbucket.org/lnahabedian/mtsa/src/master/^}{https://bitbucket.org/lnahabedian/mtsa/src/master/}} se comprenden con un vistazo. Ya el caso con $N=2$ (fig~\ref{fig:N2}) si bien puede generarse una representación gráfica, requiere un trabajo considerable para comprender qué estado del problema representa cada estado del modelo. Simplemente aumentando a $N=5$ ya la planta compuesta cuenta con 1025 estados y 4085 transiciones. 
 
 \begin{figure}[htb]
 	\begin{center}
@@ -56,19 +56,24 @@ Puede verse que para el caso de solo un sub-servicio que debe ser contratado el 
 	\end{center}
 \end{figure}
 
-
 \begin{figure}[htb]
 	\includegraphics[width=\linewidth]{figures/ejemploServicios/N2Planta.png}  
 	\caption{Planta compuesta con 2 sub-servicios}
 	\label{fig:N2}
 \end{figure}
 
-\section{Contribuciones de la tesis}
 
+Los algoritmos tradicionales necesitan construir el sistema compuesto entero antes de empezar, es por ésta explosión de estados y transiciones que resulta muy costoso (aveces imposible), por ende los algoritmos de punto fijo pueden manejar hasta cierto tamaño de problemas. En el caso de on-the-fly al ser una exploración dirigida construye sólo lo necesario, sacando conclusiones en función de la información obtenida; en el peor caso puede contruir todo (si es que esto es posible).
 
+\section{Estructura de los capítulos}
 
+En lo siguiente empezamos contando antecedentes, algoritmos tradicionales, la idea básica de exploración on-the-fly y lemas a seguir en orden de conseguir corrección y completitud; ésto puede encontrarse en el capítulo \ref{chpt:background}.
 
+En el capítulo \ref{chpt:dcs} mostramos nuestra propuesta de algoritmo, demostramos corrección y completitud para el mismo y analizamos la complejidad computacional de su peor caso.
 
+Luego exponemos detalles sobre la implementación en el capítulo \ref{chpt:implementation}, MTSA, heurísticas diseñadas para testeo y detalles sobre la batería de test, desarrollada utilizando TDD (Test Driven Development).
+
+Como paso final en el capítulo \ref{chpt:performance} presentamos el benchmark utilizado y resultados de performance; tanto versus la versión anterior de DCS como versus otros algoritmos del estado del arte.
 
 
 
