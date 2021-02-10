@@ -17,14 +17,29 @@ MTSA es un proyecto con gran trayectoria y muchos avances en diversos frentes he
 
 Pese a estos desafíos, logramos las siguientes contribuciones: 
 \begin{itemize}
-	\item Una batería de tests de regresión como una adición permanente al proyecto de MTSA para garantizar la continua correctitud de su feature de síntesis de controladores con exploración heurística.
 	
 	\item Un nuevo algoritmo de exploración, cuya correctitud es agnóstica a la heurística utilizada.
 	
+	\item Hasta donde sabemos, este trabajo presenta la primera implementación para síntesis de directores.
+	
 	\item Una prueba de la correctitud y completitud del algoritmo presentado.
 	
-	\item Resultados experimentales para comprobar que las modificaciones a la exploración siguen manteniendo la buena performance de la técnica.
+	\item Un análisis de la complejidad de dicho algoritmo.
+	
+	\item Una batería de tests de regresión como una adición permanente al proyecto de MTSA para garantizar la continua correctitud de su feature de síntesis de controladores con exploración heurística.
+	
+	\item Dos nuevas heurísticas de exploración, para ayudar al testeo y comprobar el agnosticismo del algoritmo a la heurística.
+	
+	\item Resultados experimentales para comprobar que las modificaciones a la exploración siguen manteniendo la buena performance de la técnica y que el algoritmo está en nivel de competición con otras herramientas del estado del arte.
 \end{itemize}
+
+Como trabajo a futuro, presentamos las siguientes ideas: 
+\begin{itemize}
+	\item Generación automática de tests por medio de mutaciones, para facilitar el desarrollo de nuevos algoritmos de síntesis sin la carga de generar nuevos tests a mano. 
+	
+	\item Modificación del algoritmo de eploración on-the-fly para resolución de otros problemas, por ejemplo cambiando el objetivo de nonblocking por objetivos de tipo GR1. Acompañado del desarrollo de heurísticas correspondientes al nuevo problema.
+\end{itemize}
+
 
 %TODO TRABAJO A FUTURO
 % casos de tests generados automáticamente por medio de mutaciones?
