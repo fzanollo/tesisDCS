@@ -186,7 +186,7 @@ A continuación presentamos los puntos más delicados de la exploración on-the-
 
 En todos los gráficos siguientes vamos a utilizar las letras $c$, $u$, para denotar si una transición es controlable o no, respectivamente; en caso de no especificar letra para una transición es porque su controlabilidad no afecta el resultado del ejemplo.
 
-\subsection{Marcado explícito errores}
+\subsection{Marcado explícito errores}\label{marcarErrores}
 
 % FALENCIAS AL ENCONTRAR ERRORES
 Un estado deadlock (sin transiciones de salida) es obviamente un error, ya que si caemos en él no podemos alcanzar nunca un estado marcado. Ahora, ¿qué pasa si tenemos un conjunto de estados conectados entre sí pero sin conexión a otros fuera del conjunto?. Depende si existe un estado marcado dentro del conjunto o no, de no haberlo no tenemos forma de alcanzar uno (ya que no podemos salir del conjunto). 
@@ -201,7 +201,7 @@ Es un caso ``borde'' donde requerimos que un sub-autómata esté completamente e
 	\label{fig:falenciasErrores}
 \end{figure}
 
-\subsection{Propagación local vs por conjuntos}
+\subsection{Propagación local vs por conjuntos}\label{propagacionLocal}
 
 % PROPAGACION LOCAL
 Una vez obtenido un resultado necesitamos propagarlo hacia los estados ancestros; necesitamos saber, para cada estado, si es posible sacar una conclusión dada la nueva información. Muchas veces es imposible hacerlo teniendo una mirada local ya que se pierde información sobre lo que sucede dentro del ``conjunto'' de ancestros vecinos.
