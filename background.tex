@@ -182,26 +182,28 @@ En todos los gráficos siguientes vamos a utilizar las letras $c$, $u$, para den
 \subsection{Marcado explícito errores}
 
 % FALENCIAS AL ENCONTRAR ERRORES
-En cuanto a agregar estados al conjunto $\Errors$ la inadvertencia se debía a que no sacaba conclusión alguna al haber explorado todo un sub-autómata, por ende al propagar información desde otra rama se podría llegar a un resultado erróneo. 
+Un estado deadlock (sin transiciones de salida) es obviamente un error, ya que si caemos en él no podemos alcanzar nunca un estado marcado. Ahora, ¿qué pasa si tenemos un conjunto de estados conectados entre sí pero sin conexión a otros fuera del conjunto?. Depende si existe un estado marcado dentro del conjunto o no, de no haberlo no tenemos forma de alcanzar uno (ya que no podemos salir del conjunto). 
 
-Para comprender mejor observar la figura \ref{fig:falenciasErrores} donde desde el estado e tenemos dos sub-ramas a explorar. Si se mira primero la rama de abajo y no lo marcamos como error, a pesar de estar completamente explorado, entonces al mirar la de arriba diremos que es goal y propagaremos dicha información, equivocadamente, más allá de e. 
+Es el caso de la figura \ref{fig:falenciasErrores}, el conjunto o rama $B$ fue totalmente explorado y no contiene ningún estado marcado. En éste momento es importante que agreguemos todos los estados de $B$ a $\Errors$, de no hacerlo podríamos incurrir en un error al propagar goal desde otra rama. Es decir, si se mira primero la rama de abajo y no lo marcamos como error (a pesar de estar completamente explorado), entonces al mirar la de arriba diremos que es goal y propagaremos dicha información, equivocadamente, más allá de $e$. 
 
-Cabe destacar que esto era posible debido a que no se requería que un estado hijo tenga conclusión\footnote{Es decir, esté en el conjunto $\Goals$ o $\Errors$} para seguir propagando, es decir, bastaba con que haya sido explorado alguna vez y se asumía lo mejor.
+Es un caso ``borde'' donde requerimos que un sub-autómata esté completamente explorado, pero puede traer muchos problemas si no es bien tratado. La situación no sería posible si se requiere que un estado hijo tenga conclusión (i.e., esté en el conjunto $\Goals$ o $\Errors$) para poder propagar desde el padre (en este caso $e$ sería el padre y un estado de $B$ el hijo).
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=\linewidth/2]{figures/FalenciasErrores.pdf}
-	\caption{Caso no controlable que anteriormente propagaba Goal}
+	\caption{Caso sub-autómata completamente explorado (B), sin marcados dentro.}
 	\label{fig:falenciasErrores}
 \end{figure}
 
 \subsection{Propagación local vs por conjuntos}
 
 % PROPAGACION LOCAL
-Por otro lado, al propagar tenía una mirada local, perdiendo información sobre lo que sucede dentro del conjunto. Es así que no podía reconocer casos donde, por ejemplo: hay un loop controlable entre dos estados, el cual se explora primero, y uno de ellos va controlablemente a un error. En este caso es obvio que todo debe ser error pero según la mirada local ambos tienen \textit{una forma de escapar del error}, el otro estado del conjunto. Para una aclaración visual ver la fugura \ref{fig:propagarError}.
+Una vez obtenido un resultado necesitamos propagarlo hacia los estados ancestros; necesitamos saber, para cada estado, si es posible sacar una conclusión dada la nueva información. Muchas veces es imposible hacerlo teniendo una mirada local ya que se pierde información sobre lo que sucede dentro del ``conjunto'' de ancestros vecinos.
 
-Equivalentemente tampoco funciona reconociendo $\Goals$, en la figura \ref{fig:propagarGoal} se puede ver un ejemplo. El estado $2$ llega al estado marcado $3$, pero no puede forzarlo. Por ser non-blocking esto no nos molestaría y el modelo debería ser controlable. Pero si miramos localmente al propagar $Goal$ desde $3$, no sabemos dónde nos lleva la transición no controlable, y deberíamos suponer lo peor.
+Por ejemplo en el caso de la figura \ref{fig:propagarError}, hay un loop controlable entre dos estados, el cual se explora primero, y uno de ellos va controlablemente a un error. Es obvio que todo debe ser error pues si no habilitamos una controlable estaremos en deadlock; pero según la mirada local ambos ancestros ($1$ y $2$) tienen \textit{una forma de escapar del error}, el otro estado del conjunto. 
 
-En conclusión, es difícil decidir dónde hacer el corte. Son muchos casos y no se puede, localmente, distinguirlos a todos. Por ende es necesario un algoritmo más inteligente, con una mirada global del conjunto a propagar.
+Equivalentemente la mirada local tampoco funciona reconociendo $\Goals$, en la figura \ref{fig:propagarGoal} se puede ver un ejemplo. El estado $2$ llega al estado marcado $3$ pero no puede forzarlo, sin importar si la transición a $3$ es controlable o no ya que tiene transición no controlable a $1$. Como $1$ sólo puede volver a $2$ ésta situación no nos molestaría (por ser non-blocking) y el modelo debería ser controlable. Pero si miramos localmente al propagar $Goal$ desde $3$, \textit{no sabemos dónde nos lleva la transición no controlable}, y deberíamos suponer lo peor.
+
+Entonces una mirada local no funciona a la hora de propagar. Pero ¿qué conjunto de ancestros vecinos deberíamos tomar? es difícil decidir dónde hacer el corte; son muchos casos y no se puede, localmente, distinguirlos a todos. Por ende es necesario un algoritmo más inteligente, con una mirada global del conjunto de ancestros.
 \begin{figure}[htb]
 	\centering
 	\makebox[\linewidth][c]{%
@@ -222,12 +224,18 @@ En conclusión, es difícil decidir dónde hacer el corte. Son muchos casos y no
 	\label{fig:propagacionLocal}
 \end{figure}
 
-\subsection{Completitud de exploración}
+% \subsection{Completitud de exploración}
 
 % FALTA DE COMPLETITUD
-Respecto a la falta de completitud, queda claro que teniendo una conclusión para cada uno de los estados hijos del inicial podemos definir si el problema es o no controlable. 
-Lo que sucedía era que al tener conclusiones erróneas y problemas de propagación había ciertos casos donde, según el algoritmo de exploración el problema era controlable pero al llegar al constructor del controlador se daba cuenta que había estados a los cuales les faltaba exploración y que, de hecho, tenían transiciones no controlables a estados sin mirar. 
-Llegado ese punto devolvía que no había controlador, cuando de seguir explorando hubiese visto que lo que faltaba era algo ganador. Un ejemplo particular de esto puede verse en la figura \ref{fig:faltaCompletitud}, al terminar la exploración se concluyó que era controlable, sin embargo al querer construir el controlador se descubre que el estado $1$ tiene una no controlable por explorar, devolviendo entonces que no existe controlador. 
+% Con lo explicado hasta el momento queda claro que, teniendo una conclusión para cada uno de los estados hijos del inicial, podemos definir si el problema es o no controlable. Esto depende fuertemente que dichas conclusiones sean correctas y no haya problemas de propagación. De no ser así nos puede ocurrir que se termine la exploración prematuramente y se devuelvan resultados equivocados.
+
+% 
+% Un ejemplo particular puede verse en la figura \ref{fig:faltaCompletitud}. Si tuviésemos los errores explicados en las sub-secciones anteriores se terminaría la exploración al ver el estado
+% 
+% al terminar la exploración se concluyó que era controlable, sin embargo al querer construir el controlador se descubre que el estado $1$ tiene una no controlable por explorar, devolviendo entonces que no existe controlador. 
+% 
+% Lo que sucedía era que al tener conclusiones erróneas y problemas de propagación había ciertos casos donde, según el algoritmo de exploración el problema era controlable pero al llegar al constructor del controlador se daba cuenta que había estados a los cuales les faltaba exploración y que, de hecho, tenían transiciones no controlables a estados sin mirar. 
+% Llegado ese punto devolvía que no había controlador, cuando de seguir explorando hubiese visto que lo que faltaba era algo ganador. 
 
 \begin{figure}[htb]
 	\centering
