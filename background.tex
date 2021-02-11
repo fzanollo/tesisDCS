@@ -87,6 +87,15 @@ $
 
 En resumen, un supervisor $\sigma$ es controlable si solo deshabilita eventos controlables, y es safe y nonblocking si restringe el lenguaje generado a palabras que siempre puedan extenderse para llegar a un estado marcado. Notar que no es necesario efectivamente alcanzar un estado marcado, puede haber eventos no controlables que lo eviten, pero siempre debe haber una extensión válida para alcanzar tal estado marcado.
 
+Sabiendo que el objetivo del problema es sintetizar un controlador, queremos distinguir estados \textit{ganadores} (resp. \textit{perdedores}), aquellos estados que podemos incluir (resp. no podemos incluir) en un controlador. 
+
+\begin{notation}
+	Decimos que un estado $s$ es ganador["winning"] (resp. perdedor["losing"]) en el problema $\E = (E, A_E^C)$ 
+	si hay (resp. no hay) una solución para $(E_s, A_E^C)$ donde $E_s$ es el resultado de cambiar el estado inicial de $E$ a $s$.
+	Nos referimos como controlador para $s$ en $E$ a una solución de $(E_s, A_E^C)$.
+	Nos referimos a los estados ganadores y perdedores de $E$ cuando $A_E^C$ es inferible del contexto, también usamos $W_E$ y $L_E$ para denotar el conjunto de estados ganadores y perdedores de $\E$.
+\end{notation}
+
 Podemos pensar en un controlador non-blocking como un jugador optimista. Se encarga de no perder, y solo requiere conocer un futuro camino posible para llegar a un estado ganador.
 
 %Es clave entender que en el problema a tratar, la posición de "tablas" del ajedrez, en la que ambos jugadores repiten sus jugadas 50 veces, se considera ganadora si todavía hay opción de dar un jaque mate. Si repetimos nuestras jugadas y todavía tengo dos torres considero que gané el partido, porque eventualmente mi oponente podría cansarse y dejarme ganar. Si repetimos nuestras jugadas pero solo tengo mi rey, no hay forma de dar mate, no puedo extender esta "palabra", esta partida, de forma de dar mate, y considero que perdí.

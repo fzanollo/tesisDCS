@@ -1,10 +1,3 @@
-\begin{notation}
-Decimos que un estado $s$ es ganador["winning"] (resp. perdedor["losing"]) en el problema $\E = (E, A_E^C)$ 
-si hay (resp. no hay) una solución para $(E_s, A_E^C)$ donde $E_s$ es el resultado de cambiar el estado inicial de $E$ a $s$.
-Nos referimos como controlador para $s$ en $E$ a una solución de $(E_s, A_E^C)$.
-Nos referimos a los estados ganadores y perdedores de $E$ cuando $A_E^C$ es inferible del contexto, también usamos $W_E$ y $L_E$ para denotar el conjunto de estados ganadores y perdedores de $\E$.
-\end{notation}
-
 El algoritmo (ver Listing~\ref{lst:dcs}) explora incrementalmente el espacio de estados de $E$ utilizando una estructura de exploración parcial ($ES$), añadiéndole una transición por vez.
 
 \begin{notation}
