@@ -90,7 +90,7 @@ En resumen, un supervisor $\sigma$ es controlable si solo deshabilita eventos co
 Sabiendo que el objetivo del problema es sintetizar un controlador, queremos distinguir estados \textit{ganadores} (resp. \textit{perdedores}), aquellos estados que podemos incluir (resp. no podemos incluir) en un controlador. 
 
 \begin{notation}
-	Decimos que un estado $s$ es ganador["winning"] (resp. perdedor["losing"]) en el problema $\E = (E, A_E^C)$ 
+	Decimos que un estado $s$ es ganador["winning"] (resp. perdedor, errores, ["losing"]) en el problema $\E = (E, A_E^C)$ 
 	si hay (resp. no hay) una solución para $(E_s, A_E^C)$ donde $E_s$ es el resultado de cambiar el estado inicial de $E$ a $s$.
 	Nos referimos como controlador para $s$ en $E$ a una solución de $(E_s, A_E^C)$.
 	Nos referimos a los estados ganadores y perdedores de $E$ cuando $A_E^C$ es inferible del contexto, también usamos $W_E$ y $L_E$ para denotar el conjunto de estados ganadores y perdedores de $\E$.
@@ -163,13 +163,15 @@ Para combatir esto, la exploración on-the-fly clasifica estados como ganadores 
 
 En el listing \ref{lst:on-the-fly} mostramos la estructura básica de este método. Consiste en ir agregando una transición a la vez a la parte conocida de la planta, y en cada paso ver si esta nueva transición permite concluir que un estado es ganador o perdedor. Si algún nuevo estado se clasifica como ganador  o perdedor, se propaga esta información a sus antecesores, posiblemente marcándolos a su vez como perdedores o ganadores.
 
+En el peor caso, no se pudo concluir nada antes de componer la planta en su totalidad, se perdió tiempo en los puntos fijos, intentando clasificar estados, y se realiza una última vez el algoritmo clásico con la planta totalmente explorada. Esto garantiza la completitud del algoritmo, como se detalla en mayor profundidad en el capítulo~\ref{chpt:dcs}.
+
 \begin{lstlisting}[language={pseudocode},label={lst:on-the-fly},caption={Algoritmo Monolitico},float=ht]
 Algorithm genericOTF-Exploration($E, A_E^C$):
    $\initial$ = $\<\init{e}^0,\ldots,\init{e}^n\>$
    $\Goals = \Errors = \emptyset$
    $\structure = initial$ //la parte conocida de la planta
    while $initial \notin \Goals \cup \Errors$:
-     $(e,\l,e') = $proxTransicion($\structure$)
+     $(e,\l,e') = $proxTransicion($\structure, heuristica$)
      expandirES($\structure,(e,\l,e')$)
      if $e' \in \Errors$:
        propagarError($e'$)
@@ -189,7 +191,7 @@ Algorithm genericOTF-Exploration($E, A_E^C$):
 
 Para incrementar las ramas podadas se utiliza una heurística de exploración Best First Search \cite{tesisDani} que busca ganar controlablemente o perder no controlablemente, para garantizar con la menor exploración posible que el estado actual es ganador o perdedor.
 
-En el peor caso, no se pudo concluir nada antes de componer la planta en su totalidad, se perdió tiempo en los puntos fijos, intentando clasificar estados, y se realiza una última vez el algoritmo clásico con la planta totalmente explorada. Esto garantiza la completitud del algoritmo, como se detalla en mayor profundidad en el capítulo~\ref{chpt:dcs}.
+Una heurística no presenta garantía de resultados perfectos, más bien da una recomendación. Son ampliamante utilizadas al optimizar, pero es importante que la correctitud de los algoritmos no dependan de estas recomendaciones, ya que por su misma naturaleza no tienen garantías fuertes.
 
 A continuación presentamos los puntos más delicados de la exploración on-the-fly, donde buscamos invariantes a cumplir para garantizar su correcto funcionamiento.
 
@@ -284,7 +286,7 @@ Una distinción clave del algoritmo \textit{on-the-fly} es que está dividido en
 
 El proyecto \texttt{MTSA} inicialmente contaba con dos heurísticas \texttt{Best First Search} para exploración, \textit{Monotonic Abstraction} y \textit{Ready Abstraction}. Ambas cumplen su función en síntesis de controlador con exploración parcial, pero presentaban un problema.
 
-El algoritmo de exploración había sido desarrollado en conjunto con las heurísticas y si bien esto ayudaba a la eficiencia del mismo, no resultaba agnóstico a las mismas. El nuevo enfoque no depende de la forma de explorar, por ende, da una mayor libertad de investigar a futuro nuevos criterios de evaluación para mejorar la eficiencia de la técnica sin comprometer correctitud ni completitud. Esto fue útil durante el desarrollo del trabajo, ya que facilitó la inclusión de nuestras nuevas heurísticas (\texttt{Dummy} y \texttt{Breadth First Search}, ver sección \ref{chpt:heurist-nuevas}) para la experimentación.
+El algoritmo de exploración había sido desarrollado en conjunto con las heurísticas y si bien esto ayudaba a la eficiencia del mismo, no resultaba agnóstico a las mismas, dando resultados erróneos al cambiar las recomendaciones. El nuevo enfoque no depende de la forma de explorar, por ende, da una mayor libertad de investigar a futuro nuevos criterios de evaluación para mejorar la eficiencia de la técnica sin comprometer correctitud ni completitud. Esto fue útil durante el desarrollo del trabajo, ya que facilitó la inclusión de nuestras nuevas heurísticas (\texttt{Dummy} y \texttt{Breadth First Search}, ver sección \ref{chpt:heurist-nuevas}) para la experimentación.
 
 
 
