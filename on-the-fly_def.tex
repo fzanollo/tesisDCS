@@ -145,7 +145,7 @@ return $(\exists \l \ldot e \step{\l}{E} e' \wedge e' \in C) \wedge (\forall \l_
 
 \section{Agnosticismo a la heurística}
 
-Una distinción clave del algoritmo \textit{on-the-fly} es que está dividido en dos partes. Por un lado se tiene el algoritmo de exploración responsable de que al final se llegue al resultado correcto, por el otro tenemos una heurística que le brinda la próxima transición a explorar. Ese algoritmo de exploración no puede depender de la heurística, ya que la misma no garantiza siempre elegir el mejor camino posible, sino solo la mejor aproximación que encuentre. Uno de los focos de nuestro trabajo fue en esa correctitud independiente del orden de exploración de las transiciones.
+Una distinción clave del algoritmo \textit{on-the-fly} es que está dividido en dos partes. Por un lado se tiene el algoritmo de exploración responsable de que al final se llegue al resultado correcto, por el otro tenemos una heurística que le brinda la próxima transición a explorar. Ese algoritmo de exploración no puede depender de la heurística, ya que la misma no garantiza siempre elegir el mejor camino posible, sino solo la mejor aproximación que encuentre. Uno de los focos de nuestro trabajo fue en esa corrección independiente del orden de exploración de las transiciones.
 
 El proyecto \texttt{MTSA} inicialmente contaba con dos heurísticas \texttt{Best First Search} para exploración, \textit{Monotonic Abstraction} y \textit{Ready Abstraction}. 
 
