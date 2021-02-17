@@ -148,12 +148,34 @@ Caso parecido al test 26 pero ahora el estado en duda no es tan directo como ant
  \label{fig:test30}
 \end{figure}
 
-%TODO seguir por acá, el 35 va? falta el resto, tampoco poner demasiados, no?.
 \smallskip
-\textbf{Test 35} El tema es que arma un CCC y no chequea que sea válido bien, porque ya no hay loop con marcado. Entonces el build Controller se queja y da que no hay controlador. Pero si revisaba para el otro lado había un CCC válido
+\textbf{Test 35} Fig \ref{fig:test35} 
+Este test utiliza la heurística debugging y su funcionalidad de ordenar las transiciones alfabéticamente; recordar que las no-controlables se exploran primero. A la hora de armar por punto fijo un conjunto de estados ganadores hay que tener mucho cuidado de no quedarse sin estados marcados/a un paso de goal, ya que estos son los que le dan la capacidad de ganar al conjunto. El test 35 resalta ésta problemática, el conjunto ganador debe considerar finalmente ser válido (en este caso que todavía tenga el loop con un estado marcado).  Las transiciones controlables son \{e, a, i\}
+\begin{figure}[h]
+ \centering
+ \includegraphics[scale=0.7]{figures/tests/test35.png}
+ \caption{LTS del test 35}
+ \label{fig:test35}
+\end{figure}
 
-%TODO agregar tests que usen debuggins abs (i.e., que tengan nombres las transiciones) Ej que puede estar muy bien: TEST 41
+\smallskip
+\textbf{Test 41} Fig \ref{fig:test41}
+También se utiliza la heurística debugging, trata lo mismo que el test 35 pero en este caso el conjunto es ganador por tener un estado Goal a un paso (el estado $2$). El algoritmo debe ser capáz de diferenciar estos conjuntos como ganadores. La transición controlable es \{a04c31\}
+\begin{figure}[h]
+ \centering
+ \includegraphics[scale=0.7]{figures/tests/test41.png}
+ \caption{LTS del test 41}
+ \label{fig:test41}
+\end{figure}
 
-%TODO AGREGAR LOS TESTS QUE NOS HICIERON DAR CUENTA QUE EL PROPAGATE NO PODIA SER LOCAL Y HABIA QUE MARCAR ERRORES AL TERMINAR DE EXPLORAR ALGO
 
 %TODO agregar los tests nuevos test 47 o 48?
+\smallskip
+\textbf{Test 47} Fig \ref{fig:test47}
+No existe controlador. Luego de hacer el punto fijo para quedarse con los estados ganadores puede quedar más de un componente fuertemente conexo de estados. En dicho caso sólo los conjuntos que tengan marcados/ganadores a un paso son los que deberían ir a $\Goals$, ya que los estados de otros componentes no podrán llegar a ellos de manera segura.
+\begin{figure}[h]
+ \centering
+ \includegraphics[scale=0.7]{figures/tests/test47.png}
+ \caption{LTS del test 47}
+ \label{fig:test47}
+\end{figure}
