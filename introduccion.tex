@@ -13,50 +13,48 @@ En respuesta a esto, la idea de una exploración on-the-fly y de la síntesis de
 %Como contraste, la Síntesis de controladores toma como input las reglas del juego de ajedrez, por ejemplo, varios componentes (autómatas) separados, siendo cada uno los movimientos posibles para una pieza. Como resultado, daría un controlador, que en cada momento de la partida solo habilita algunas de las transiciones de los autómatas y garantiza que si se le hace caso ganará la partida. Es esencial notar que la técnica de este trabajo busca obtener una garantía muy fuerte, y el problema lo encuentra en la escalabilidad del problema, ya que hoy en día es imposible aplicarla a un juego del tamaño del ajedrez.
 
 \section{Caso de estudio}\label{chpt:casoAviones}
-A continuación se presenta un ejemplo para comprender el problema a resolver. Se trata de una versión simplificada del problema $Travel Agency$ utilizado para medir la performance del algoritmo.
+A continuación se presenta un ejemplo para comprender el problema a resolver. Se trata de una versión simplificada del problema $Travel Agency$ utilizado en el capítulo \ref{chpt:performance} para medir la performance del algoritmo.
 
-Se desea armar un sevicio de venta online de paquetes vacacionales que reservará de forma automática una variedad de servicios (alquiler de auto, hotel, pasaje de avión, etc.) asegurando que no se perderá nada de dinero a menos que se reserve el paquete completo.
+Se desea armar una agencia de venta online de paquetes vacacionales que reservará de forma automática una variedad de servicios (alquiler de auto, hotel, pasaje de avión, etc.) asegurando que no se perderá nada de dinero a menos que se reserve el paquete completo. Es decir, no se quiere perder dinero por la reserva del hotel si no va a ser posible comprar un pasaje de avión.
 
-Para cada servicio que se desea sub-contratar presentamos una versión simplificada en la cual se consulta si ese servicio está disponible. En caso de estar disponible queda reservado hasta la compra definitiva del paquete completo y la cancelación de la reserva si otro servicio no estaba disponible no implica un gasto.
+Para cada servicio que se desea sub-contratar se consulta si ese servicio está disponible. En caso de confirmar la disponibilidad, queda reservado hasta la compra definitiva del paquete completo. En caso de que otro servicio no esté dispoinble, se cancela esta reserva, lo cual no implica un gasto.
 
 El problema puede escalar de forma muy rápida si se incrementa la cantidad de servicios a contratar o la cantidad de pasos para reservar cada servicio (como se verá en la sección~\ref{chpt:performance}).
 
 Mostramos en la figura~\ref{fig:N1} un LTS (Labeled transition system) para cada uno de los componentes descriptos y el LTS compuesto para el caso en el que se sub-contrata un solo servicio.
 
-Puede verse que para el caso de solo un sub-servicio que debe ser contratado el problema es manejable. Los modelos gráficos de la planta y el controlador, generados automáticamente por MTSA\footnote{Modal Transition System Analyser, \href{https://bitbucket.org/lnahabedian/mtsa/src/master/^}{https://bitbucket.org/lnahabedian/mtsa/src/master/}} se comprenden con un vistazo. Ya el caso con $N=2$ (fig~\ref{fig:N2}) si bien puede generarse una representación gráfica, requiere un trabajo considerable para comprender qué estado del problema representa cada estado del modelo. Simplemente aumentando a $N=5$ ya la planta compuesta cuenta con 1025 estados y 4085 transiciones. 
-
 \begin{figure}[htb]
 	\begin{center}
-	\makebox[\linewidth][c]{%
-	\begin{subfigure}[t]{.5\textwidth}
-		\centering
-		\includegraphics[width=\linewidth]{figures/ejemploServicios/agencia.png}  
-		\caption{agencia}
-		\label{fig:agencia}
-	\end{subfigure}
-	\begin{subfigure}[t]{.5\textwidth}
-		\centering
-		\includegraphics[width=\linewidth]{figures/ejemploServicios/subServicio.png}  
-		\caption{un sub servicio}
-		\label{fig:subserv}
-	\end{subfigure}
-	}
-	\makebox[\linewidth][c]{%
-	\begin{subfigure}[t]{.5\textwidth}
-		\centering
-		\includegraphics[width=\linewidth]{figures/ejemploServicios/N1Planta.png}  
-		\caption{Planta compuesta}
-		\label{fig:N1Planta}
-	\end{subfigure}
-	\begin{subfigure}[t]{.5\textwidth}
-	\centering
-	\includegraphics[width=\linewidth]{figures/ejemploServicios/N1Controlador.png}  
-	\caption{Controlador resultante}
-	\label{fig:controladorN1}
-	\end{subfigure}
-	}
-	\caption{Caso con un solo sub-sevicio}
-	\label{fig:N1}
+		\makebox[\linewidth][c]{%
+			\begin{subfigure}[t]{.5\textwidth}
+				\centering
+				\includegraphics[width=\linewidth]{figures/ejemploServicios/agencia.png}  
+				\caption{agencia}
+				\label{fig:agencia}
+			\end{subfigure}
+			\begin{subfigure}[t]{.5\textwidth}
+				\centering
+				\includegraphics[width=\linewidth]{figures/ejemploServicios/subServicio.png}  
+				\caption{un sub servicio}
+				\label{fig:subserv}
+			\end{subfigure}
+		}
+		\makebox[\linewidth][c]{%
+			\begin{subfigure}[t]{.5\textwidth}
+				\centering
+				\includegraphics[width=\linewidth]{figures/ejemploServicios/N1Planta.png}  
+				\caption{Planta compuesta}
+				\label{fig:N1Planta}
+			\end{subfigure}
+			\begin{subfigure}[t]{.5\textwidth}
+				\centering
+				\includegraphics[width=\linewidth]{figures/ejemploServicios/N1Controlador.png}  
+				\caption{Controlador resultante}
+				\label{fig:controladorN1}
+			\end{subfigure}
+		}
+		\caption{Caso con un solo sub-sevicio}
+		\label{fig:N1}
 	\end{center}
 \end{figure}
 
@@ -66,6 +64,15 @@ Puede verse que para el caso de solo un sub-servicio que debe ser contratado el 
 	\label{fig:N2}
 \end{figure}
 
+En el ejemplo, la figura \ref{fig:agencia} representa a la agencia, que comienza en el estado inicial (0), y lo que quiere es confirmar la compra. Mientras siga consultando la disponibilidad del servicio con \textit{query.0} y cancelando la compra, su estado no cambia. 
+
+Ahora, el componente del subservicio (figura \ref{fig:subserv}) también tiene el evento \textit{compra}, pero antes de poder confirmarse la compra del subservicio debe previamente haber recibido la consulta (\textit{query.0}) y confirmado su disponibilidad tomando el evento \textit{valido.0}. En caso de no estar disponible (\textit{noValido.0}) solo permite la cancelación de la compra, yendo del estado 3 al 0.
+
+Recordemos que queremos representar un sistema complejo con interacción de múltiples componentes. Esta sincronización se ve reflejada en la figura \ref{fig:N1Planta}, que muestra la planta que representa al sistema con los dos componentes. 
+
+Finalmente, \ref{fig:controladorN1} muestra un posible controlador para este problema. Destacamos que el evento controlable \textit{cancelacion}, no está habilitado si se confirmó la validez del subservicio, y el controlador es de hecho un director (definido en la sección \ref{chpt:director}). 
+
+Puede verse que para el caso de solo un sub-servicio que debe ser contratado el problema es manejable. Los modelos gráficos de la planta y el controlador, generados automáticamente por MTSA\footnote{Modal Transition System Analyser, \href{https://bitbucket.org/lnahabedian/mtsa/src/master/^}{https://bitbucket.org/lnahabedian/mtsa/src/master/}} se comprenden con un vistazo. Ya el caso con $N=2$ (fig~\ref{fig:N2}) si bien puede generarse una representación gráfica, requiere un trabajo considerable para comprender qué estado del problema representa cada estado del modelo. Simplemente aumentando a $N=5$ ya la planta compuesta cuenta con 1025 estados y 4085 transiciones, imposibilitando mostrarlo en una figura. 
 
 Los algoritmos tradicionales necesitan construir el sistema compuesto entero antes de empezar, es por ésta explosión de estados y transiciones que resulta muy costoso (aveces imposible), por ende los algoritmos de punto fijo pueden manejar hasta cierto tamaño de problemas. En el caso de on-the-fly al ser una exploración dirigida construye sólo lo necesario, sacando conclusiones en función de la información obtenida; en el peor caso puede contruir todo (si es que esto es posible).
 

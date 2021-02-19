@@ -5,8 +5,23 @@
 \chapter*{\runtitulo}
 
 \noindent 
-El presente proyecto de tesis consistió en un estudio y extensión del método previamente propuesto por Daniel Ciolek en su tesis de doctorado \cite{tesisDani}. Más precisamente, se trató de analizar carencias del algoritmo de exploración on-the-fly para problemas de Supervisory Control, cuya propiedad central era de tipo Non-blocking y, posteriormente analizados los problemas, afrontarlos con una nueva especificación e implementación del algoritmo. La funcionalidad fue incorporada al software MTSA\footnote{Modal Transition System Analyser, \href{https://bitbucket.org/lnahabedian/mtsa/src/master/^}{https://bitbucket.org/lnahabedian/mtsa/src/master/}}. Finalmente, se adaptó el algoritmo para construir directores en lugar de supervisores maximales, presentando así la primera implementación de síntesis de directores.
+
+Esta tesis presenta la primera implementación de síntesis de directores para resolver problemas de Discrete Event Control con la propiedad central de tipo Non-blocking.
+
+Con el enfoque de exploración on-the-fly de forma best-first-search guiada por distintas heurísticas, se busca reducir la parte de la planta a componer. El método aprovecha la naturaleza composicional del problema y su input compacto, minimizando la explosión exponencial al componer la planta total.
+
+La implementación fue incorporada al software MTSA\footnote{Modal Transition System Analyser, \href{https://bitbucket.org/lnahabedian/mtsa/src/master/^}{https://bitbucket.org/lnahabedian/mtsa/src/master/}}, junto con una batería de tests para conservar su correctitud ante futuros cambios.
+ 
+
+
+%El presente proyecto de tesis consistió en un estudio y extensión del método previamente propuesto en \cite{tesisDani}. Más precisamente, se diseñó un algoritmo de exploración on-the-fly para problemas de Discrete Event Control, cuya propiedad central era de tipo Non-blocking. 
+%
+%La funcionalidad fue incorporada al software MTSA\footnote{Modal Transition System Analyser, \href{https://bitbucket.org/lnahabedian/mtsa/src/master/^}{https://bitbucket.org/lnahabedian/mtsa/src/master/}}. 
+%
+%Finalmente, se adaptó el algoritmo para construir directores en lugar de supervisores maximales, presentando así la primera implementación de síntesis de directores.
 
 \bigskip
 
-\noindent\textbf{Palabras claves:} Discrete Event Systems, Supervisory Control (no menos de 5!!).
+\noindent\textbf{Palabras claves:} Sistemas de Eventos Discretos, Síntesis de Controladores, Control Dirigido, Control Supervisado, Síntesis on-the-fly, LTS.
+
+
