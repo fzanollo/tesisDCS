@@ -103,10 +103,9 @@
 \begin{lstlisting}[language={pseudocode},label={lst:dcs.aux},caption={auxiliary procedures.},float=ht, frame=single]
  procedure expandNext($\heuristic$):
    let $\trimlst{(e,\l,e') \ldot e\in S_\structure \wedge e\step{\l}{E} e' \wedge   
-  \neg e\step{\l}{\structure} e' \wedge }$ 
-           $\trimlst{(\forall s,\l',s') \ldot  s\in S_\structure \wedge s\step{\l}{E} s' \wedge   
-    \neg s\step{\l}{\structure} s' \implies}$ 
-                  $\trimlst{\heuristic(e, \l, e') >=\heuristic(s, \l',   s'))}$
+       \neg e\step{\l}{\structure} e' \wedge e \in \NONE \wedge}$ 
+       $\trimlst{\forall (s,\l',s') \ldot  s\in S_\structure \wedge s\step{\l}{E} s' \wedge \neg s\step{\l}{\structure} s' \wedge s \in \NONE}$ 
+         $\implies \trimlst{\heuristic(e, \l, e') >=\heuristic(s, \l',   s'))}$
    if isDeadlock($e'$):
      $\Errors$ = $\Errors \cup \{e'\}$
    if $e'\notin \Errors \cup \Goals$:

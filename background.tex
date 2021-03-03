@@ -25,6 +25,12 @@ A continuación definimos formalmente el problema composicional de síntesis de 
 	
 \end{notation}
 
+
+\begin{notation}
+	Decimos que un estado $s$ es alcanzado por una palabra $w$ en una corrida comenzando en el estado $s'$, anotado como $s \in w(s')$, cuando $\exists w_0 \ldot \exists w_1 \ldot w = w_0.w_1$ 
+	y $s' \runw{w_0}{E} s$
+\end{notation}
+
 Los autómatas definen un lenguaje, un conjunto de palabras, que aceptan. Dado un conjunto de eventos $A$, notamos con $A^*$ al conjunto de palabras finitas de eventos de $A$. El lenguaje generado por un autómata $T$ (notado como $\L(T)$) es el conjunto de palabras formadas por sus eventos que cumplen $\D_T$. Formalmente, si $w \in A_T^*$, entonces $w \in \L(T)$ si y solo si existe una corrida para $w$ comenzando desde el estado inicial $\init{t}$ de $T$, que notamos $\init{t} \runw{w}{T} t_{k+1}$.
 
 Generalmente los estados marcados se utilizan para indicar el logro de una tarea. Por lo tanto, consideramos como lenguaje \textit{marcado} (o \textit{aceptado}) por $T$ (lo cual notamos $\L_m(T)$) al conjunto de palabras cuya corrida termina en un estado marcado. Formalmente, sea $w \in \L(T)$, entonces $w \in \L_m(T)$ si y solo si hay una corrida de $w$ que comienza en el estado inicial $\init{t}$ y alcanza un estado marcado $t_m \in M_T$, que notamos $\init{t} \runw{w}{T} t_m$.

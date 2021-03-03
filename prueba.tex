@@ -1,55 +1,3 @@
-El algoritmo (ver Listing~\ref{lst:dcs}) explora incrementalmente el espacio de estados de $E$ utilizando una estructura de exploración parcial ($ES$), añadiéndole una transición por vez.
-
-\begin{notation}
-	Decimos que un estado $s$ es alcanzado por una palabra $w$ en una corrida comenzando en el estado $s'$, anotado como $s \in w(s')$, cuando $\exists w_0 \ldot \exists w_1 \ldot w = w_0.w_1$ 
-	y $s' \runw{w_0}{E} s$
-\end{notation}
-
-\begin{definition}
-[Exploración Parcial] \label{def:unexploredTo}
-Sea $E = (S_E,$ $A_E, \D_E, \init{e}, M_E)$. Decimos que $ES$ es una exploración parcial de $E$ ($ES \subseteq E$) si $S_\structure \subseteq 
-S_E$ y $\structure = (S_\structure,A_E, \D_\structure,\init{e},M_E 
-\cap S_\structure)$, donde $ \D_\structure \subseteq (\D_E \cap 
-(S_\structure \times A_E \times S_\structure))$. Escribimos $ES \subset E$ cuando $S_\structure \subset S_E$.
-\end{definition}
-
-Para explicar el algoritmo y argumentar su correctitud y completitud introducimos dos nuevos problemas de control para exploraciones parciales. Uno toma una visión optimista de la región no explorada ($\top$) asumiendo que todas las transiciones no exploradas llevan a un estado ganador. El otro toma una visión pesimista ($\bot$) asumiendo que las transiciones no exploradas llevan a estados perdedores.
-
-\begin{definition}
-[Problemas de Control $\top$ y $\bot$] \label{def:unexploredTo}
-
-Sean $\E = (E, A_E^C)$, $E = (S_E,A_E,\D_E,\init{e},M_E)$ y $\structure = 
-(S_\structure,A_E, \D_\structure,\init{e},M_E \cap S_\structure)$, y $\structure 
-\subseteq E$.
-\\
-Definimos $\E_\top$ como $(\unexploredToTop{\structure}, A_E^C)$ donde 
-$\unexploredToTop{\structure} = (S_\structure \cup \, \{\top\},A_E,\D_\top, 
-\init{e}, 
-(M_E \cap S_\structure)\, \cup \, \{\top\})$ y $\, \D_\top \, = \, \D_\structure 
-\, 
-\cup\, \{(s,\l, \top) 
-\;$ $ | \; \exists s' \ldot (s, \l, s') \in (\D_E \setminus \D_\structure)\} \cup \{(\top, \l, \top) \, | \, \l \in A_E\}$ \\
-Definimos $\E_\bot$ como $(\unexploredToBottom{\structure}, A_E^C)$ donde 
-$\unexploredToBottom{\structure} = (S_\structure \, \cup \, 
-\{\bot\},A_E,\D_\bot, 
-\init{e}, M_E \cap S_\structure)$ y $\D_\bot = \D_\structure \, \cup \, \{(s,\l, 
-\bot) \, | \, $ $ \exists s' \ldot (s, \l, s') \in (\D_E \setminus \D_\structure)\}$ 
-\end{definition}
-
-Usamos estos problemas de control para decidir tempranamente si un estado $s$ es ganador o perdedor en $E$ basado en lo que exploramos previamente en $\structure$. Si $s$ es ganador en $\unexploredToBottom{\structure}$ esto significa que sin importar a dónde lleven las transiciones no exploradas, $s$ también va a ser ganador en $E$. Similarmente, $s$ es perdedor en $E$ si es perdedor en $\unexploredToTop{\structure}$.
-El Lema~\ref{lem:WESandLesMonotonicity} refuerza este razonamiento.
-
-
-\begin{lemma}\textbf{\emph{(Monotonicidad de $\WES$ y $\LES$)}}
-\label{lem:WESandLesMonotonicity}
-Sean $\structure$ y $\structure'$ dos exploraciones parciales de $E$ tal que $\structure 
-\subset \structure'$ entonces $\WES \subseteq \WESS$ y $\LES \subseteq 
-\LESS$.
-\end{lemma}
-
-El algoritmo agrega iterativamente una transición de $E$ a $\structure$ a la vez y asegura que al final de cada iteración, los estados en $\structure$ están correcta y completamente clasificados en ganadores y perdedores si hay suficiente información de $E$ en $\structure$. Los conjuntos de estados $Errors$, 
-$Goals$ y $\NONE$ se usan para este propósito.
-
 \begin{property}[Invariante]
 \label{def:invariant}
 El loop principal del Algorithm~\ref{lst:dcs} tiene el siguiente invariante: 
@@ -69,7 +17,7 @@ $s\in\Errors\uplus\Goals\uplus\NONE$
 % \end{tabbing}
 \end{property}
 
-La explicación del Algorithm~\ref{lst:dcs} que detallamos a continuación sirve también como un esquema de demostración para la propiedad~\ref{def:invariant}.   
+La explicación del algoritmo ~\ref{lst:dcs} que detallamos a continuación sirve también como un esquema de demostración para la propiedad~\ref{def:invariant}.   
 
 Para empezar, notar que la función \texttt{expandNext} 
 (line~\ref{line:expand}) retorna una nueva transición $e \step{\l}{E} e'$ 
