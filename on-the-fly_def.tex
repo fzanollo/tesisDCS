@@ -102,7 +102,7 @@ Algorithm genericOTF-Exploration($E, A_E^C$):
      return "UNREALIZABLE"  
 \end{lstlisting}
 
-Para incrementar las ramas podadas se utiliza una heurística de exploración Best First Search \cite{tesisDani} que busca ganar controlablemente o perder no controlablemente, para garantizar con la menor exploración posible que el estado actual es ganador o perdedor.
+Para explorar en el orden más conveniente, y componer una menor parte de la planta, se utiliza una heurística de exploración Best First Search \cite{tesisDani}. La misma busca ganar controlablemente o perder no controlablemente, para garantizar con la menor exploración posible que el estado actual es ganador o perdedor.
 
 Una heurística no presenta garantía de resultados perfectos, más bien da una recomendación. Son ampliamante utilizadas al optimizar, pero es importante que la correctitud de los algoritmos no dependan de estas recomendaciones, ya que por su misma naturaleza no tienen garantías fuertes.
 
@@ -116,6 +116,14 @@ El inconveniente con la versión anterior del algoritmo de exploración es que h
 
 
 \section{Caso de estudio como ejemplo}
+
+Para ilustrar el funcionamiento y ventajas de la exploración on-the-fly, mostramos una ejecución posible del programa sobre la planta del caso de estudio presentado en la figura \ref{fig:N1Planta} de la sección \ref{chpt:casoAviones}.
+
+
+
+
+
+
 
 
 
