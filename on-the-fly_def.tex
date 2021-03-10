@@ -115,9 +115,59 @@ El proyecto \texttt{MTSA} inicialmente contaba con dos heurísticas \texttt{Best
 El inconveniente con la versión anterior del algoritmo de exploración es que había sido desarrollado en conjunto con las heurísticas. Si bien esto ayudaba a la eficiencia del mismo, generaba una dependencia del orden de observación de las transiciones, dando resultados erróneos al cambiar las recomendaciones. El nuevo enfoque no depende de la forma de explorar, por ende, da una mayor libertad de investigar a futuro nuevos criterios de evaluación para mejorar la eficiencia de la técnica sin comprometer corrección ni completitud. Esto fue útil durante el desarrollo del trabajo, ya que facilitó la inclusión de nuestras nuevas heurísticas (\texttt{Dummy} y \texttt{Breadth First Search}, ver sección \ref{chpt:heurist-nuevas}) para la experimentación.
 
 
-\section{Caso de estudio como ejemplo}
+\section{Ejemplo de ejecución}
 
-Para ilustrar el funcionamiento y ventajas de la exploración on-the-fly, mostramos una ejecución posible del programa sobre la planta del caso de estudio presentado en la figura \ref{fig:N1Planta} de la sección \ref{chpt:casoAviones}.
+Para ilustrar el funcionamiento y ventajas de la exploración on-the-fly, mostramos una ejecución posible sobre una planta ejemplo. Supongamos que dados ciertos autómatas calculamos su composición y llegamos a la planta de la figura \ref{fig:ej:plantaCompleta}. Las transiciones se van a explorar en orden de menor a mayor, en el diagrama las (u)/(c) son no controlables/controlables respectivamente y el estado marcado tiene doble círculo. No especificamos la controlabilidad de todas las transiciones de manera de hacer más legible el gráfico y además porque, mirando las definidas, no nos modifica la conclusión el hecho de que sean o no controlables. %TODO ok esto no? es confuso? lo sacamos?  
+
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.6]{figures/ejemplo_on-the-fly/0.pdf}
+ \caption{Planta compuesta completa}
+ \label{fig:ej:plantaCompleta}
+\end{figure}
+
+Al iniciar el algoritmo no vemos la planta completa sino sólo el primer estado \cyan{0}, desde el mismo expandimos la primer transición, en este caso \textit{1}. Como llega a un estado sin explorar \cyan{1}, y que no es deadlock, no hay información para conseguir. Entonces mientras lleguemos a ``algo nuevo'' no tenemos nada para hacer más que seguir explorando.
+Incluso si llegamos a un estado explorado (no deadlock) no va a haber nueva información si no tenemos un loop. Veremos más en detalle y con demostración por qué esto es así en el capítulo \ref{chpt:dcs}; pero la intuición es que no va a haber nuevos ganadores puesto que un ganador necesita llegar a un marcado infinitas veces, por ende necesita como mínimo que haya un loop. Entonces hasta ahora llevamos explorado lo mostrado en la figura \ref{fig:ej:exploracion1}.
+
+\begin{figure}[h]
+ \centering
+ \includegraphics[scale=0.6]{figures/ejemplo_on-the-fly/1.pdf}
+ \caption{Primeros pasos de exploración}
+ \label{fig:ej:exploracion1}
+\end{figure}
+
+Si seguimos explorando por la transición \textit{5} cerramos un loop [\cyan{1}, \cyan{3}], pero \cyan{3} puede ser forzado a algo no explorado usando la transición no controlable \textit{8}, entonces todavía no podemos sacar conclusión alguna. Exploramos hasta figura \ref{fig:ej:exploracion2}.
+
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.6]{figures/ejemplo_on-the-fly/2.pdf}
+ \caption{Hay loop sin conclusiones nuevas}
+ \label{fig:ej:exploracion2}
+\end{figure}
+
+Continuamos y llegamos a un estado marcado \cyan{4}, si fuese sólo alcanzar un marcado podríamos decir que es ganador pero necesitamos siempre poder llegar a uno (incluso desde sí mismo), por ende ahora sigue sin ser nada. Luego vemos \textit{7}, cerrando loop [\cyan{2}, \cyan{4}]. Éste loop tiene un estado marcado y \cyan{2} no puede ser forzado a otra cosa, ya que el resto de sus transiciones son controlables; por ende obtenemos nuestros primeros ganadores (\cyan{2} y \cyan{4}). A continuación debemos propagar esta nueva información llegando a marcar \cyan{1} como ganador, porque puede controlablemente llegar al loop [\cyan{2}, \cyan{4}]. Lamentablemente todavía no hay conclusión sobre el estado inicial debido a que puede ser forzado a algo sin explorar. Ver figura \ref{fig:ej:exploracion3}.
+
+\begin{figure}[h]
+ \centering
+ \includegraphics[scale=0.6]{figures/ejemplo_on-the-fly/3.pdf}
+ \caption{Se encuentra Goal [2, 4] y propaga (1)}
+ \label{fig:ej:exploracion3}
+\end{figure}
+
+Proseguimos con \textit{8} y llegamos a explorar el estado \cyan{5}, que es un deadlock por ende es error directamente. Propagando esta información marcamos los estados \cyan{3} y \cyan{0} como errores, llegando así a una conclusión sobre el inicial. Entonces ya no nos es necesario seguir explorando y se retorna que \textit{no existe controlador para la planta}. El estado de exploración final de la planta se ve en la figura \ref{fig:ej:exploracion4}.
+
+\begin{figure}
+ \centering
+ \includegraphics[scale=0.6]{figures/ejemplo_on-the-fly/4.pdf}
+ \caption{Se encuentra Error (5) y propaga hasta inicial (3, 0), dejando de explorar}
+ \label{fig:ej:exploracion4}
+\end{figure}
+
+Notar que no vemos las demás transiciones de \cyan{2} ni \cyan{3} ya que, en el caso de \cyan{2} gana por alguna y el resto son controlables, y en el caso de \cyan{3} pierde por una no controlable. Es decir, \cyan{2} puede controlablemente ganar y \cyan{3} es forzado a perder sin importar la forma del resto.
+
+Observación opcional: Si la transición \textit{8} fuese controlable podríamos evitar el error y seguiríamos explorando, encontrando el estado \cyan{6}, su conexión al loop ganador y propagando ganador hasta el estado inicial. Notar que ésta sería una planta \textit{diferente}, controlable a diferencia de la propuesta en el ejemplo.
+
+
 
 
 
