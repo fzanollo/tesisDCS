@@ -56,7 +56,7 @@ $\square$
 	\WES$ contradiciendo la hipótesis. )\\
 
 
-Si un estado $s$ no se encuentra en $\WES \cup \LES$ es porque tiene un controlador $\sigma$ en $\unexploredToTop{\structure}$ pero no tiene uno para $\unexploredToBottom{\structure}$. Esto depende únicamente de los descendientes de $s$, dado que éstos son los únicos estados que $\sigma$ puede alcanzar. Si $s$ no es un predecesor de $e'$, y $e \step{l}{\structure'} e'$ es la única diferencia entre $\structure$ y $\structure'$ entonces los descendientes de $s$ son los mismos, por lo que los posibles controladores no tuvieron ningún cambio, y $s$ sigue siendo NONE.
+Si un estado $s$ no se encuentra en $\WES \cup \LES$ es porque tiene un controlador $\sigma$ en $\unexploredToTop{\structure}$ pero no tiene uno para $\unexploredToBottom{\structure}$. Esto depende únicamente de los descendientes de $s$, dado que estos son los únicos estados que $\sigma$ puede alcanzar. Si $s$ no es un predecesor de $e'$, y $e \step{l}{\structure'} e'$ es la única diferencia entre $\structure$ y $\structure'$ entonces los descendientes de $s$ son los mismos, por lo que los posibles controladores no tuvieron ningún cambio, y $s$ sigue siendo NONE.
 
 Lo que no es tan claro, es que $s$ no tiene nuevos controladores posibles si tiene un camino que puede alcanzar $e'$ pero solo pasando por al menos un estado de $\WES \cup \LES$. Asumiendo que debe pasar por estados en $\WES \cup \LES$ mostramos que:
 
@@ -120,7 +120,7 @@ Ahora asumimos $e' \not\in \LESS \setminus \LES$. Notar que como $e' \notin \LES
 	(Idea: Para probar que $e' \in \WESS \setminus \WES$ implica \texttt{canBeWinningLoop($\SCC$)}, asumimos \\ $\neg$\texttt{canBeWinningLoop($\SCC$)} y mostramos que $e' \notin \WESS 
 	\setminus \WES$. Para esto, basta con ver que si
 	$\neg$\texttt{canBeWinningLoop($\SCC$)} entonces para alcanzar un estado marcado desde $e'$ se debe salir de $\SCC$ a un estado $s \notin \SCC \cup \WES$ lo que implica $s \notin \WESS$ 
-	ya que $s$ no tiene ningún camino de estados none que llegue a $e \step{\l}{} e'$  (Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}).
+	ya que $s$ no tiene ningún camino de estados $\NONE$ que llegue a $e \step{\l}{} e'$  (Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}).
 	Como $s$ no tiene controlador en $\unexploredToBottom{\structure'}$, es imposible que $e'$ tenga uno. 
 	
 	Para probar que \texttt{canBeWinningLoop($\SCC$)} implica $e' \notin \LESS$ construimos un controlador $\sigma'$ para $e'$ en $\unexploredToTop{\structure'}$ de la siguiente forma:
@@ -178,7 +178,7 @@ Si $p' \in \SCC$, entonces $w.l'$ puede extenderse para llegar a cualquier $s$ e
 
 
 En primer lugar, sabemos que cada estado $s' \notin \SCC$ tal que $\exists s \in \SCC \ldot s 
-\step{l}{} s'$, puede o ser y seguir siendo un estado perdedor ($s' \in LES \wedge s' \in LESS$) o es y seguirá siendo $\NONE$ (porque $s$ no es un predecesor$-NONE$ de un estado en $\SCC$, de otra forma $s$ estaría en $\SCC$). 
+\step{l}{} s'$, puede o ser y seguir siendo un estado perdedor ($s' \in \LES \wedge s' \in \LESS$) o es y seguirá siendo $\NONE$ (porque $s$ no es un predecesor$-\NONE$ de un estado en $\SCC$, de otra forma $s$ estaría en $\SCC$). 
 
 Esto significa que ningún estado $s' \notin \SCC \wedge s' \notin \LES$ puede ser forzado a un estado en $\LESS$. Entonces, si alcanzamos un estado $\NONE$ sabemos que tiene un controlador válido $\sigma_{s'}$ en $\unexploredToTop{\structure'}$.
 

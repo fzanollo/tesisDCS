@@ -19,7 +19,7 @@ Para realizar las pruebas de performance decidimos usar el mismo conjunto de pro
     \item [Travel Agency] Modela una página on-line de ventas de paquetes de viajes. El sistema depende de $n$ servicios de terceros para realizar las reservas (ej. alquiler de auto, compra de pasajes, etc). Los protocolos para utilizar los servicios pueden variar de manera no controlable; una variante es la selección de hasta $k$ atributos (ej. destino del vuelo, clase y fechas). El objetivo del sistema es orquestar los servicios de manera de obtener un paquete de vacaciones completo de ser posible, evitando pagar por paquetes incompletos.
 \end{description}
 
-\section{Comparación con versión previa de \DCS}
+\section{Comparación con versión previa de DCS}
 Como ya dijimos, el foco del trabajo no estuvo solo en corregir los errores encontrados en el algoritmo sino también en brindar una mayor seguridad sobre la corrección y completitud de la exploración on the fly. Esto debía hacerse sin perder la buena performance que aportaba la técnica, permitiendo aplicarla a casos de mayor tamaño. Aclaramos que el benchmark se corrió en un equipo de las mismas características para ambas versiones de \DCS.
 
 La comparación se realizó para las dos heurísticas desarrolladas en \cite{tesisDani}, Monotonic Abstraction y Ready Abstraction. Agregamos además una de las heurísticas naif, Breadth First Search, que desarrollamos para depurar el código; esto es en función de mostrar la posible ganancia obtenida a través de una buena heurística.
@@ -29,14 +29,14 @@ La comparación se realizó para las dos heurísticas desarrolladas en \cite{tes
     \hspace*{-20mm}
     \begin{subfigure}{0.7\textwidth}
         \includegraphics[width=\linewidth]{figures/benchmark/dcs_vs.pdf}\label{fig:dcs:results:detailed}
-        \caption{\DCS detailed benchmark results.}
+        \caption{resultados de comparación DCS en detalle.}
     \end{subfigure}%
     \begin{subfigure}{0.5\textwidth}
         \includegraphics[width=0.9\linewidth]{figures/benchmark/dcs_instances.pdf}\label{fig:dcs:results:instances}
         \includegraphics[width=\linewidth]{figures/benchmark/dcs_time.pdf}\label{fig:dcs:results:time}
-        \caption{Total solved instances (top) and execution time (bottom) with \DCS.}
+        \caption{Instancias resueltas totales (arriba) y tiempo de ejecución (abajo) con \DCS.}
     \end{subfigure}
-\caption{Benchmark results.}
+\caption{Resultados de comparación entre DCS.}
 \label{fig:dcs:results}
 \end{figure}
 
@@ -58,13 +58,13 @@ Aunque la nueva versión esté un poco más lejos de \MYND, en calidad de cantid
     \hspace*{-20mm}
     \begin{subfigure}{0.7\textwidth}
         \includegraphics[width=\linewidth]{figures/benchmark/tools_vs.pdf}\label{fig:tools:results:detailed}
-        \caption{\DCS detailed benchmark results.}
+        \caption{detalle de comparación entre herramientas.}
     \end{subfigure}%
     \begin{subfigure}{0.5\textwidth}
         \includegraphics[width=0.9\linewidth]{figures/benchmark/tools_instances.pdf}\label{fig:tools:results:instances}
         \includegraphics[width=\linewidth]{figures/benchmark/tools_time.pdf}\label{fig:tools:results:time}
-        \caption{Total solved instances (top) and execution time (bottom) with \DCS.}
+        \caption{Instancias resueltas totales (arriba) y tiempo de ejecución (abajo) para cada herramienta.}
     \end{subfigure}
-\caption{Benchmark results.}
+\caption{Resultados de comparación entre herramientas.}
 \label{fig:tools:results}
 \end{figure}

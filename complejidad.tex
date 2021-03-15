@@ -65,7 +65,7 @@ Aunque $|S_E| \geq |X_m - X_t|$, el número de estados marcados no terminales pu
 Por lo tanto, en el peor caso, $O(|S_E|) = O(|X_m - X_t|)$. Lo que permite la afirmación de que la última iteración de nuestro algoritmo tiene una complejidad peor caso comparable a la complejidad de 
 \cite{Huang:2007:Optimal}.
 Sin embargo, nuestro trabajo sufre una penalidad a nivel de complejidad a raíz de intentar resolver el problema antes de conocer la composición completa de la planta. En \DCS el loop es ejecuta hasta
-|$T_E$| veces, cada vez que a $\structure$ se le agrega una transición. Éste es el costo en complejidad a pagar por la construcción on-the-fly. 
+|$T_E$| veces, cada vez que a $\structure$ se le agrega una transición. Este es el costo en complejidad a pagar por la construcción on-the-fly. 
 Los resultados experimentales muestran que esta complejidad teórica adicional puede compensarse con el tiempo ganado al evitar la construcción completa del state space, y en consecuencia tener iteraciones menos costosas sobre un espacio menor. 
 
 

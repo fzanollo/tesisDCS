@@ -32,7 +32,7 @@ Puede haber muchas variantes de cada una de estas partes, cómo se expande, cóm
 
 A medida que exploramos mantenemos dos conjuntos de estados de $\structure$ ($\Goals$ y $\Errors$) para los cuáles ya se tiene una conclusión, es decir, se sabe que son ganadores (o perdedores) en $E$.
 
-Como se demostrará en el capítulo \ref{chpt:dcs}, al expandir $\structure$ con una transición a la vez $(e,\l,e')$, a menos que $e'$ ya fuera un ganador/perdedor entonces sólo puede haber nueva información si existe un loop entre $e$ y $e'$. Es más, si hay un nuevo estado ganador/perdedor, entonces $e$ seguramente es también un nuevo ganador/perdedor, y todos los nuevos estados clasificados son antecesores de $e$. Ésto permite optimizar la detección de nuevos ganadores/perdedores en lugar de ejecutar un algoritmo clásico sobre todo $\structure$.
+Como se demostrará en el capítulo \ref{chpt:dcs}, al expandir $\structure$ con una transición a la vez $(e,\l,e')$, a menos que $e'$ ya fuera un ganador/perdedor entonces solo puede haber nueva información si existe un loop entre $e$ y $e'$. Es más, si hay un nuevo estado ganador/perdedor, entonces $e$ seguramente es también un nuevo ganador/perdedor, y todos los nuevos estados clasificados son antecesores de $e$. Ésto permite optimizar la detección de nuevos ganadores/perdedores en lugar de ejecutar un algoritmo clásico sobre todo $\structure$.
 
 
 
