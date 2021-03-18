@@ -19,7 +19,7 @@ Para realizar las pruebas de performance decidimos usar el mismo conjunto de pro
     \item [Travel Agency] Modela una página on-line de ventas de paquetes de viajes. El sistema depende de $n$ servicios de terceros para realizar las reservas (ej. alquiler de auto, compra de pasajes, etc). Los protocolos para utilizar los servicios pueden variar de manera no controlable; una variante es la selección de hasta $k$ atributos (ej. destino del vuelo, clase y fechas). El objetivo del sistema es orquestar los servicios de manera de obtener un paquete de vacaciones completo de ser posible, evitando pagar por paquetes incompletos.
 \end{description}
 
-\section{Comparación con versión previa de DCS}
+\section{Comparación entre resultados de DCS}
 Como ya dijimos, el foco del trabajo no estuvo solo en corregir los errores encontrados en el algoritmo sino también en brindar una mayor seguridad sobre la corrección y completitud de la exploración on the fly. Esto debía hacerse sin perder la buena performance que aportaba la técnica, permitiendo aplicarla a casos de mayor tamaño. Aclaramos que el benchmark se corrió en un equipo de las mismas características para ambas versiones de \DCS.
 
 La comparación se realizó para las dos heurísticas desarrolladas en \cite{tesisDani}, Monotonic Abstraction y Ready Abstraction. Agregamos además una de las heurísticas naif, Breadth First Search, que desarrollamos para depurar el código; esto es en función de mostrar la posible ganancia obtenida a través de una buena heurística.
@@ -40,7 +40,7 @@ La comparación se realizó para las dos heurísticas desarrolladas en \cite{tes
 \label{fig:dcs:results}
 \end{figure}
 
-En la figura~\ref{fig:dcs:results} se pueden observar los resultados con respecto a DCS anterior. Antes que nada podemos concluir que hay una ganancia al utilizar mejores heurísticas, ya que BFS pierde contra RA tanto en cantidad de instancias como tiempo. Sorprendentemente a pesar de ser muy naif termina compitiendo contra MA. Esto tiene su explicación en el cambio de objetivo, ya que MA fue presentada en \textcolor{red}{[REF reachability en paper]} para \textit{reachability}.
+En la figura~\ref{fig:dcs:results} se pueden observar los resultados con respecto al algoritmo de DCS en \cite{tesisDani}. Antes que nada podemos concluir que hay una ganancia al utilizar mejores heurísticas, ya que BFS pierde contra RA tanto en cantidad de instancias como tiempo. Sorprendentemente a pesar de ser muy naif termina compitiendo contra MA. Esto tiene su explicación en el cambio de objetivo, ya que MA fue presentada en \textcolor{red}{[REF reachability en paper]} para \textit{reachability}.
 
 Nuestra versión (dcs2) mantiene la performance en la mayoría de los casos de estudio. En TA hay algunas instancias nuevas que dan timeout, pero el resto concluyen rápidamente. El único caso donde pierde notoriamente es BW, pero mirando otras herramientas (con la excepción de \MYND) vemos que en general tienen problemas con los casos más grandes de BW. Nuestra suposición es que la implementación DCS anterior clasificaba estados como $\Goals$ de manera anticipada y posiblemente erronea, quizás casos como el de \ref{test:goals:falsopositivo}. Esto puede hacer que se llegue a una conclusión apurada que posiblemente devuelva un controlador incorrecto, pero que en el benchmark parezca resolver más instancias.
 

@@ -33,7 +33,7 @@ Imposible = (canelacion -> Unqueried).
 ...
 \end{lstlisting}
 
-En el listing~\ref{ejController} vemos un ejemplo de cómo definir un controlador, en este caso lo llamamos $Goal$. En el área de \textit{Automated planning} el objetivo es alcanzar algún estado \textit{final}, es decir, los estados son los marcados; sin embargo en el contexto MTSA y al representar el problema con LTSs solo podemos marcar transiciones. La interpretación final es que las transiciones señaladas como \textit{marcadas} llevan a estados marcados y estos serán nuestros objetivos. En el ejemplo se declara la transición $compra$ como marcada, señalando la compra sin errores de un paquete. En este punto aclaramos, únicamente para facilitar cualquier intento de reproducción, que al utilizar transiciones marcadas, se puede generar un desdoblamiento de los estados. Como ejemplo notar que el estado \texttt{Agencia} va a tener (internamente) para la herramienta 2 versiones, una marcada alcanzada por $compra$ y otra no marcada alcanzada por $cancelacion$ y $query[servicio]$.
+En el listing~\ref{ejController} vemos un ejemplo de una especificación de un problema de control, a la cual asignamos el nombre $Goal$. En el área de \textit{Automated planning} el objetivo es alcanzar algún estado \textit{final}, es decir, los estados son los marcados; sin embargo en el contexto MTSA y al representar el problema con LTSs solo podemos marcar transiciones. La interpretación final es que las transiciones señaladas como \textit{marcadas} llevan a estados marcados y estos serán nuestros objetivos. En el ejemplo se declara la transición $compra$ como marcada, señalando la compra sin errores de un paquete. En este punto aclaramos, únicamente para facilitar cualquier intento de reproducción, que al utilizar transiciones marcadas, se puede generar un desdoblamiento de los estados. Como ejemplo notar que el estado \texttt{Agencia} va a tener (internamente) para la herramienta 2 versiones, una marcada alcanzada por $compra$ y otra no marcada alcanzada por $cancelacion$ y $query[servicio]$.
 
 Luego definimos el conjunto de transiciones controlables, en este caso $cancelacion, compra$ y $ query[Servicio]$. Por último debemos agregar la palabra clave \texttt{nonblocking}, en caso contrario se intentará, por defecto, resolver otro problema de control fuera del alcance de este trabajo.
 
@@ -52,16 +52,16 @@ heuristic ||DirectedController = Plant~{Goal}.
 
 \section{Heurísticas adicionales}\label{chpt:heurist-nuevas}
 \subsection{Dummy/Debugging}
-Como dijimos en el capítulo \ref{chpt:background}, el algoritmo de DCS debe ser agnóstico a la heurística. Al comenzar nuestro trabajo en el proyecto y una vez que pudimos generar cierto conocimiento sobre el pseudocódigo existente nos percatamos de casos borde que no iban a ser bien resueltos. Sin embargo, al correr dichos casos el resultado era correcto, esto se debía a que la heurística era muy buena y lograba ir por un camino directo al Goal (o Error, depende el caso); entonces no caía en nuestra ``trampa''.
+Como dijimos en el capítulo \ref{chpt:background}, el algoritmo de DCS debe ser agnóstico a la heurística. Al comenzar nuestro trabajo en el proyecto y una vez que pudimos generar cierto conocimiento sobre el pseudocódigo existente nos percatamos de casos borde que podían no ser bien resueltos. Sin embargo, al correr dichos casos el resultado era correcto, esto se debía a que la heurística era muy buena y lograba ir por un camino directo al Goal (o Error, depende el caso); entonces no caía en nuestra ``trampa''.
 
 En función de poner a prueba sólo el algoritmo de exploración desarrollamos una heurística de debugging o \textit{Dummy}. La misma ordena las transiciones a explorar alfabéticamente, dejando primero las no controlables pero sin mirar información sobre distancia a marcados o error. Decidimos dejar el ordenamiento de no controlables primero ya que esto no es heurístico, se sabe por especificación qué transiciones son controlables y cuáles no.
 
 A partir de entonces usamos los nombres de las transiciones para explorar nuestros casos de test de la forma que nos interesaba, ganando así control sobre los tests.
 
-\subsection{BFS}
+\subsection{Breadth First Search}
 Si bien el algoritmo debe ser agnóstico a la heurística, la misma puede (y seguramente lo haga) modificar los tiempos de ejecución. Ya que si llega antes a alguna conclusión sobre un estado ésta información se puede propagar, cortando más ramas y/o más grandes.
 
-La segunda heurística que desarrollamos es un simple BFS. La razón es para mostrar qué tanto se pueden mejorar los tiempos del algoritmo con una buena heurística. Esto se puede ver en detalle en el capítulo \ref{chpt:performance}, donde mostramos resultados de un mismo benchmark para las diferentes heurísticas.
+La segunda heurística que desarrollamos es un simple Breadth First Search (BFS). La razón es para mostrar qué tanto se pueden mejorar los tiempos del algoritmo con una buena heurística. Esto se puede ver en detalle en el capítulo \ref{chpt:performance}, donde mostramos resultados de un mismo benchmark para las diferentes heurísticas.
 
 \section{Testing}
 Luego de haber mostrado la sintaxis con la cual desarrollamos nuestros tests vamos a hablar un poco de ellos y detalles sobre algunos a destacar. El listing \ref{ejTest1} muestra un ejemplo de sintaxis completo (test 1). Si se desea ver la especificación de cada uno de los tests puede encontrarse en el repositorio de MTSA\footnote{\href{https://bitbucket.org/lnahabedian/mtsa/src/master/maven-root/mtsa/src/test/resources/NonBlocking/}{https://bitbucket.org/lnahabedian/mtsa/src/master/maven-root/mtsa/src/test/resources/NonBlocking/}}.
@@ -87,7 +87,7 @@ heuristic ||C = Plant~{Goal}.
 En total tenemos una batería de \totalTests\ tests. Los cuales no fueron desarrollados uno detrás del otro sino que utilizamos una técnica llamada TDD (Test Driven Development). Desde el pseudocódigo e implementación existente de DCS iniciamos la batería de tests con algunos casos borde que resolvía mal.
 Luego entramos en un ciclo donde fuimos generando versiones que corregían los casos y más tests que rompían otras partes del algoritmo. Además en ciertos puntos críticos decidimos refactorizar completamente partes amplias de la implementación, fuera de las refactorizaciones chicas al pasar los tests.
 
-Dentro de la batería queremos destacar algunos de especial interés, agrupados según qué problema específico atacan. Antes necesitamos explicar un poco de notación, las transiciones empezadas con $u$/$c$ son no-controlables/controlables respectivamente, los estados marcados son los que tienen doble borde; en ciertos tests con transiciones nombradas diferente vamos a aclarar en la explicación cuáles son las controlables.
+Dentro de la batería queremos destacar algunos de especial interés, agrupados según qué problema específico atacan. Antes necesitamos explicar un poco de notación: las transiciones empezadas con $u$/$c$ son no-controlables/controlables respectivamente, los estados marcados son los que tienen doble borde, y los triángulos son conjuntos de estados totalmente explorados. En ciertos tests con transiciones nombradas de forma diferente vamos a aclarar en la explicación cuáles son las controlables.
 \bigskip
 
 \FloatBarrier

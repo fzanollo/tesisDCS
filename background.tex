@@ -68,7 +68,7 @@ Este último concepto es relevante para la definición de la composición parale
 
 Hay ciertas características de la composición paralela a destacar. En primer lugar, la última regla realiza la sincronización entre componentes. Segundo, que el número de estados en $T_0 \| ... \| T_n$ puede crecer exponencialmente con respecto al número de autómatas a componer. Tercero, que el lenguaje aceptado por la composición contiene las palabras que alcanzan estados marcados en todos los componentes \textit{simultaneamente}.
 
-\section{Controlador objetivo}
+\section{Controlador}
 
 Dado un (conjunto de) autómata(s) y una partición de sus eventos en dos subconjuntos: $controlables$ y $no controlables$, lo que buscamos es un $controlador$ (director) que restrinja el vocabulario aceptado de forma de mantener un camino posible a los estados marcados del autómata.
 
@@ -139,7 +139,7 @@ Notar que en ~\cite{Huang:2008:DCD} se prueba que un director existe si y solo s
 
 \section{Algoritmo monolítico} \label{chpt:algoMono}
 
-Una solución a este problema, anteriormente estudiada~\cite{Ehlers:EECS-2013-162} se basa en un menor punto fijo. Simplemente se comienza con el conjunto de los estados que no tienen ningún camino para alcanzar un estado marcado. Luego en cada iteración se agrega al conjunto de los estados perdedores todos aquellos que en un paso son forzados al conjunto de la iteración anterior. 
+Una solución a este problema, anteriormente estudiada~\cite{Ehlers:EECS-2013-162} se basa en un menor punto fijo. Simplemente se comienza con el conjunto de los estados que no tienen ningún camino para alcanzar un estado marcado. Luego en cada iteración se agrega al conjunto de los estados perdedores todos aquellos que en un paso son forzados al conjunto de la iteración anterior, ya sea porque tienen una transición no controlable hacia dicho conjunto, o porque ninguna de sus transiciones lo evita. 
 
 Si al concluir el punto fijo el estado inicial no se encuentra en el conjunto entonces existe un controlador para el problema en cuestión y para construirlo se deben evitar las transiciones controlables que llevan al conjunto de estados perdedores.
 
@@ -153,8 +153,12 @@ Algorithm classicalSolver($E, A_E^C$):
 		$B' = B$
 		$B = B \cup \{s \in S_E \mid $forcedTo($s,e,E$)$\wedge e \in B \}$
 	return $\initial \notin B$
+	
+function forcedTo($s,Dest,Z$):
+	return  $(\exists \l_u \in A_Z^U \ldot \exists e \in Dest \ldot \trimlst{s \step{\l_u}{Z} e})\ \vee$
+		$(\forall \l \in A_Z \  (\trimlst{s \step{\l}{Z} e} \Rightarrow e \in Dest))$    
 \end{lstlisting}
 
 Nuestro problema surge de que para el primer paso, encontrar el conjunto $B$ inicial de estados que no alcanzan un marcado, necesitaríamos conocer los caminos que puede tomar cualquier estado, lo cual implica componer toda la planta.
 
-Sin embargo, utilizamos la idea del punto fijo que detecta errores en la función \texttt{findNewGoalsIn} ya que en ese momento no lo podemos evitar, y simplemente asumimos que lo no explorado no puede llegar a un estado marcado. Esto se discutirá en mayor profundidad en el capítulo~\ref{chpt:dcs}.
+Sin embargo, utilizamos un punto fijo que detecta errores en la función \texttt{findNewGoalsIn} ya que en ese momento no lo podemos evitar, y simplemente asumimos que lo no explorado no puede llegar a un estado marcado. Esto se discutirá en mayor profundidad en el capítulo~\ref{chpt:dcs}.

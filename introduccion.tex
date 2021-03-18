@@ -3,7 +3,7 @@
 El ser humano siempre buscó la manera de automatizar las tareas pesadas o tediosas, la ciencia de la computación surgió en parte a causa de ello pero ¿Es posible automatizar aún más? 
 Hacer que una computadora ``se programe'' a sí misma dado un problema a resolver es en cierta medida una utopía, sin embargo hay muchas ramas de la computación que atacan ésta idea. Ya sea Machine Learning, Inteligencia Artificial o, en el caso del presente trabajo, Síntesis Automática de Controladores.
 
-\textit{Síntesis} porque no es un humano quien desarrolla manualmente el código \textit{solución} del problema sino que se le brinda a un programa las reglas y objetivos a cumplir, dejando ``a criterio del mismo'' el cómo hacerlo. Lo que devuelve el programa es una \textit{estrategia} que garantiza ganar (si existe forma, caso contrario avisa la inexistencia de solución), a esta estrategia se la conoce con el nombre de \textit{Controlador}.
+\textit{Síntesis} porque no es un humano quien desarrolla manualmente el código \textit{solución} del problema sino que se le brinda a un programa las reglas y objetivos a cumplir\footnote{en otros trabajos \cite{}, la \textit{síntesis} se realiza en base a pre y post condiciones para el programa, en lugar de reglas y objetivos como se utiliza en este contexto.}, dejando ``a criterio del mismo'' el cómo hacerlo. Lo que devuelve el programa es una \textit{estrategia} que garantiza ganar (si existe forma, caso contrario avisa la inexistencia de solución), a esta estrategia se la conoce con el nombre de \textit{Controlador}.
 
 Un ejemplo de aplicación es controlar aviones para demarcar incendios forestales \textcolor{red}{[REF Seba]}, donde a veces incluso es necesario que el programa pueda adaptarse en medio de su ejecución. %TODO explicamos algo más?
 
@@ -15,14 +15,14 @@ Si bien este trabajo desarrolla resultados nuevos combinando enfoques de las tre
  En DEC el problema es modelado utilizando autómatas finitos, también conocidos como máquinas de estados finitos. 
 Un autómata finito, está conformado por estados y transiciones entre estos estados. Podemos pensar los estados como puntos y las transiciones como flechas de un sólo sentido que los unen. Se los llama estados ya que representan un momento particular en el objeto que se quiere modelar, por ejemplo en el caso del avión un estado podría ser ``aterrizado'' y otro ``en vuelo''. Las transiciones en nuestro caso son vistas como acciones, algunas las podemos controlar y otras están fuera de nuestro alcance; volviendo al ejemplo del avión una acción controlable podría ser ``encender el motor'' y una no controlable sería ``quedarse sin combustible''.
 
-Además existen estados distinguidos dentro del autómata: el inicial (estado en cuál empezamos) y los estados objetivos (a los cuáles se quiere llegar). En nuestro caso a éstos últimos los llamamos \textit{estados marcados} y no sólo queremos alcanzarlos sino ser capaces de hacerlo infinitas veces y de manera segura. Segura en el sentido de siempre tener una secuencia de acciones para llegar. ¡No podemos quedarnos sin transiciones ni usarlas en el sentido contrario!
+Además existen estados distinguidos dentro del autómata: el inicial (estado en cuál empezamos) y los estados objetivos (a los cuáles se quiere llegar). En nuestro caso a éstos últimos los llamamos \textit{estados marcados} y no sólo queremos que el sistema (el avion) pueda alcanzarlos, sino que sea capaz de hacerlo infinitas veces y de manera segura. Segura en el sentido de siempre tener una secuencia de acciones para llegar, evitando estados peligrosos (por ejemplo, ``quedarse sin batería``). ¡No podemos quedarnos sin transiciones ni usarlas en el sentido contrario!
 
-Por último, modelar un sistema complejo utilizando un solo autómata puede ser complicado y hasta imposible. Es por esto que se suele modelar sus partes como autómatas y componerlos para formar el sistema. La composición debe respetar ciertas reglas y al finalizar, un estado del sistema representaría un conjunto de estados de los componentes. %TODO explicamos las reglas? ponemos un ejemplo de a qué nos referimos?
+Por último, modelar un sistema complejo utilizando un solo autómata puede ser complicado y hasta imposible. Es por esto que se suele modelar sus partes como autómatas y componerlos para formar el modelo completo del sistema a controlar. La composición debe respetar ciertas reglas y al finalizar, un estado del sistema compuesto representa la combinación de estados en que está cada componente.
 
 %tradicionalmente se compone todo y se explora fácil. Nosotros exploramos on-the-fly. Como se ve en caso de estudio, el tamaño de la planta crece muy rápido, por eso la técnica todavía no es popular para problemas grandes. Eso lo tratamos de mitigar con on-the-fly
-Tradicionalmente se toman estos autómatas componentes y se realiza la composición, obteniendo el autómata del sistema que luego será analizado por el programa para obtener el controlador. El problema es que en ciertos casos la cantidad de estados y transiciones resultantes del sistema es demasiado grande, haciendo imposible su análisis y en ocasiones hasta es imposible terminar de componer.
+Tradicionalmente se toman estos autómatas componentes y se realiza la composición, obteniendo el autómata completo que luego será analizado por el programa para obtener el controlador. El problema es que en ciertos casos la cantidad de estados y transiciones resultantes del sistema es demasiado grande, haciendo imposible su análisis y en ocasiones hasta es imposible terminar de componer.
 
-Es en este contexto que surge el enfoque de la exploración on-the-fly o ``en el mientras''. La idea es tratar de sacar conclusiones mientras se va calculando la composición para, de esta manera, evitar en lo posible construir todo el sistema. Para evidenciar la dificultad de la cual se está hablando presentaremos un caso de estudio, sus componentes y el sistema resultante de la composición.
+Es en este contexto que surge el enfoque de la exploración on-the-fly o ``en el mientras''. La idea es tratar de sacar conclusiones mientras se va calculando la composición para, de esta manera, evitar en lo posible construir todo el modelo. Para evidenciar la dificultad de la cual se está hablando presentaremos un caso de estudio, sus componentes y el sistema resultante de la composición.
 
 
 \section{Caso de estudio}\label{chpt:casoAviones}
@@ -34,7 +34,7 @@ Para cada servicio que se desea sub-contratar se consulta si ese servicio está 
 
 El problema puede escalar de forma muy rápida si se incrementa la cantidad de servicios a contratar o la cantidad de pasos para reservar cada servicio (como se verá en la sección~\ref{chpt:performance}).
 
-Mostramos en la figura~\ref{fig:N1} un LTS (Labeled transition system) para cada uno de los componentes descriptos y el LTS compuesto para el caso en el que se sub-contrata un solo servicio.
+Mostramos en la figura~\ref{fig:N1} un LTS (labeled transition system) para cada uno de los componentes descriptos y el LTS compuesto para el caso en el que se sub-contrata un solo servicio.
 
 \begin{figure}[htb]
 	\begin{center}
@@ -99,7 +99,7 @@ Ya con las intuiciones del algoritmo introducidas, el capítulo \ref{chpt:dcs} m
 
 Luego exponemos detalles sobre la implementación en el capítulo \ref{chpt:implementation}, MTSA, heurísticas diseñadas para testeo y detalles sobre la batería de test, desarrollada utilizando TDD (Test Driven Development).
 
-Como paso final en el capítulo \ref{chpt:performance} presentamos el benchmark utilizado y resultados de performance; tanto versus la versión anterior de DCS como versus otros algoritmos del estado del arte.
+Como paso final en el capítulo \ref{chpt:performance} presentamos el benchmark utilizado y resultados de performance; tanto entre distintos resultados de DCS como versus otros algoritmos del estado del arte.
 
 Finalmente, listamos las conclusiones y aportes del trabajo presentado.
 

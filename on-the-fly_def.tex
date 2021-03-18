@@ -1,4 +1,4 @@
-El problema de síntesis de controlador ya tiene una solución clásica, por lo que la dificultad del trabajo no consistió en desarrollar un algoritmo que detectara estados ganadores y perdedores de un LTS totalmente explorado. 
+El problema de síntesis de controlador ya tiene una solución clásica, por lo que la dificultad del trabajo no consistió en desarrollar un algoritmo que detectara estados ganadores y perdedores de una composición de LTS totalmente explorada. 
 
 El conflicto reside en que al componer distintos DES, la cantidad de estados de la composición es exponencial respecto de los estados en los componentes. Esto es de suma relevancia ya que la solución clásica, que compone toda la planta para luego explorarla, tiene un límite de escalabilidad en el cual la composición de la planta llega al límite de tiempo o memoria, y nunca se llega a la exploración.
 
@@ -32,7 +32,7 @@ Puede haber muchas variantes de cada una de estas partes, cómo se expande, cóm
 
 A medida que exploramos mantenemos dos conjuntos de estados de $\structure$ ($\Goals$ y $\Errors$) para los cuáles ya se tiene una conclusión, es decir, se sabe que son ganadores (o perdedores) en $E$.
 
-Como se demostrará en el capítulo \ref{chpt:dcs}, al expandir $\structure$ con una transición a la vez $(e,\l,e')$, a menos que $e'$ ya fuera un ganador/perdedor entonces solo puede haber nueva información si existe un loop entre $e$ y $e'$. Es más, si hay un nuevo estado ganador/perdedor, entonces $e$ seguramente es también un nuevo ganador/perdedor, y todos los nuevos estados clasificados son antecesores de $e$. Ésto permite optimizar la detección de nuevos ganadores/perdedores en lugar de ejecutar un algoritmo clásico sobre todo $\structure$.
+Como se demostrará en el capítulo \ref{chpt:dcs}, al expandir $\structure$ con una transición $(e,\l,e')$ a la vez, a menos que $e'$ ya fuera un ganador/perdedor entonces solo puede haber nueva información si existe un loop entre $e$ y $e'$. Es más, si hay un nuevo estado ganador/perdedor, entonces $e$ seguramente es también un nuevo ganador/perdedor, y todos los nuevos estados clasificados son antecesores de $e$. Ésto permite optimizar la detección de nuevos ganadores/perdedores en lugar de ejecutar un algoritmo clásico sobre todo $\structure$.
 
 
 
@@ -104,7 +104,7 @@ Algorithm genericOTF-Exploration($E, A_E^C$):
 
 Para explorar en el orden más conveniente, y componer una menor parte de la planta, se utiliza una heurística de exploración Best First Search \cite{tesisDani}. La misma busca ganar controlablemente o perder no controlablemente, para garantizar con la menor exploración posible que el estado actual es ganador o perdedor.
 
-Una heurística no presenta garantía de resultados perfectos, más bien da una recomendación. Son ampliamante utilizadas al optimizar, pero es importante que la correctitud de los algoritmos no dependan de estas recomendaciones, ya que por su misma naturaleza no tienen garantías fuertes.
+Una heurística no presenta garantía de explorar en la dirección correcta, más bien da una recomendación. Son ampliamante utilizadas al optimizar, pero es importante que la correctitud de los algoritmos no dependan de estas recomendaciones, ya que por su misma naturaleza no tienen garantías fuertes.
 
 \section{Agnosticismo a la heurística}
 
@@ -165,7 +165,7 @@ Proseguimos con \textit{8} y llegamos a explorar el estado \cyan{5}, que es un d
 
 Notar que no vemos las demás transiciones de \cyan{2} ni \cyan{3} ya que, en el caso de \cyan{2} gana por alguna y el resto son controlables, y en el caso de \cyan{3} pierde por una no controlable. Es decir, \cyan{2} puede controlablemente ganar y \cyan{3} es forzado a perder sin importar la forma del resto.
 
-Observación opcional: Si la transición \textit{8} fuese controlable podríamos evitar el error y seguiríamos explorando, encontrando el estado \cyan{6}, su conexión al loop ganador y propagando ganador hasta el estado inicial. Notar que ésta sería una planta \textit{diferente}, controlable a diferencia de la propuesta en el ejemplo.
+Si la transición \textit{8} fuese controlable podríamos evitar el error y seguiríamos explorando, encontrando el estado \cyan{6}, su conexión al loop ganador y propagando ganador hasta el estado inicial. Notar que ésta sería una planta \textit{diferente}, controlable a diferencia de la propuesta en el ejemplo.
 
 
 

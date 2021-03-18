@@ -1,6 +1,6 @@
 \lstset{escapeinside={(*@}{@*)}}
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt}
-\begin{lstlisting}[language={pseudocode},label={lst:dcs},caption={On-the-fly Directed Exploration Procedure.},float=ht, frame=single]
+\begin{lstlisting}[language={pseudocode},label={lst:dcs},caption={Algoritmo de exploración dirigida on-the-fly.},float=ht, frame=single]
  function DCS($\E {=} (E, A_E^C)$,$\:\heuristic$):
    $\initial$ = $\<\init{e}^0,\ldots,\init{e}^n\>$
    $\structure = \trimlst{(\{ \initial \}, A_E, \emptyset, \initial, M_E \cap \{\initial\})}$
@@ -45,7 +45,7 @@
 %invariante del ciclo:  Inv($states(\structure), \structure)$
 
 \lstset{numbers=none, numberstyle=\tiny, stepnumber=1, numbersep=5pt}
-\begin{lstlisting}[language={pseudocode},label={lst:dcs.propagate},caption={Status propagation procedures.},float=ht, frame=single]
+\begin{lstlisting}[language={pseudocode},label={lst:dcs.propagate},caption={Algoritmos de propagación.},float=ht, frame=single]
  function propagateGoal($newGoals$):
    $C' = \emptyset$; $C$ = ancestorsNone($newGoals$)
    while $C'\neq C$:
@@ -70,7 +70,7 @@
 \end{lstlisting}
 
 
-\begin{lstlisting}[language={pseudocode},label={lst:dcs.gather},caption={Status confirmation.},float=ht, frame=single]
+\begin{lstlisting}[language={pseudocode},label={lst:dcs.gather},caption={Confirmación de clasificaciones},float=ht, frame=single]
  function findNewGoalsIn($\SCC$):
    $C = \SCC$; $C' = \emptyset$
    while $C' \neq  C:$
@@ -100,7 +100,7 @@
 %        $\heuristic$($e, \l, e'$) $>=$ $\heuristic$($s, \l', s'$))
 
 % AUX FUNCTIONS
-\begin{lstlisting}[language={pseudocode},label={lst:dcs.aux},caption={auxiliary procedures.},float=ht, frame=single]
+\begin{lstlisting}[language={pseudocode},label={lst:dcs.aux},caption={Métodos auxiliares},float=ht, frame=single]
  procedure expandNext($\heuristic$):
    let $\trimlst{(e,\l,e') \ldot e\in S_\structure \wedge e\step{\l}{E} e' \wedge   
        \neg e\step{\l}{\structure} e' \wedge e \in \NONE \wedge}$ 
@@ -150,7 +150,7 @@
     return $\nexists l \ldot s \step{\l}{E} s'$
 \end{lstlisting}
 
-\begin{lstlisting}[language={pseudocode},label={lst:dcs.aux},caption={ranking procedures.},float=ht, frame=single]
+\begin{lstlisting}[language={pseudocode},label={lst:dcs.aux},caption={Métodos de ranking},float=ht, frame=single]
  function rankStates($\structure$)
     $r = 0$; $W' = \Witness$; $W = \emptyset$
     while $W' \neq  W:$
