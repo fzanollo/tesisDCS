@@ -1,0 +1,35 @@
+const N = 1
+range Servicio = 0..(N-1)
+
+Agencia = SinProblemas,
+    SinProblemas = (
+      agencia.cancelacion -> ERROR |
+      agencia.exito -> Objetivo |
+      query.falla[Servicio] -> HayProblema |
+      query[Servicio] -> SinProblemas ),
+    HayProblema = (
+      agencia.cancelacion -> Agencia),
+    Objetivo = (
+      reinicio -> SinProblemas).
+
+SubServicio(Id=0) = Unqueried,
+    Unqueried = (
+      agencia.cancelacion -> Unqueried |
+      agencia.exito -> ERROR |
+	    query[Id] -> Queried),
+    Queried = (
+      query.exito[Id] -> Disponible | agencia.cancelacion -> Unqueried | query.falla[Id] -> Imposible),
+    Disponible = (
+      {agencia.exito,agencia.cancelacion} -> Unqueried),
+    Imposible = (
+      agencia.exito -> ERROR | agencia.cancelacion -> Unqueried).
+
+||Plant = (Agencia || forall [s:Servicio] SubServicio(s)).
+
+controllerSpec Goal = {
+	marking = {agencia.exito}
+	controllable = {agencia.cancelacion, agencia.exito, query[Servicio]}
+	nonblocking
+}
+
+heuristic ||DirectedController = Plant~{Goal}.

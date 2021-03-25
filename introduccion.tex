@@ -25,7 +25,7 @@ Tradicionalmente se toman estos autómatas componentes y se realiza la composici
 Es en este contexto que surge el enfoque de la exploración on-the-fly o ``en el mientras''. La idea es tratar de sacar conclusiones mientras se va calculando la composición para, de esta manera, evitar en lo posible construir todo el modelo. Para evidenciar la dificultad de la cual se está hablando presentaremos un caso de estudio, sus componentes y el sistema resultante de la composición.
 
 
-\section{Caso de estudio}\label{chpt:casoAviones}
+\section{Ejemplo}\label{chpt:casoAviones}
 A continuación se presenta un ejemplo para comprender el problema a resolver. Se trata de una versión simplificada del problema $Travel Agency$ utilizado en el capítulo \ref{chpt:performance} para medir la performance del algoritmo.
 
 Se desea armar una agencia de venta online de paquetes vacacionales que reservará de forma automática una variedad de servicios (alquiler de auto, hotel, pasaje de avión, etc.) asegurando que no se perderá nada de dinero a menos que se reserve el paquete completo. Es decir, no se quiere perder dinero por la reserva del hotel si no va a ser posible comprar un pasaje de avión.
@@ -39,27 +39,27 @@ Mostramos en la figura~\ref{fig:N1} un LTS (labeled transition system) para cada
 \begin{figure}[htb]
 	\begin{center}
 		\makebox[\linewidth][c]{%
-			\begin{subfigure}[t]{.5\textwidth}
+			\begin{subfigure}[t]{.6\textwidth}
 				\centering
-				\includegraphics[width=\linewidth]{figures/ejemploServicios/agencia.png}  
-				\caption{agencia}
+				\includegraphics[width=\linewidth]{figures/ejemploServicios/N1Agencia.png}  
+				\caption{la agencia}
 				\label{fig:agencia}
 			\end{subfigure}
-			\begin{subfigure}[t]{.5\textwidth}
+			\begin{subfigure}[t]{.6\textwidth}
 				\centering
-				\includegraphics[width=\linewidth]{figures/ejemploServicios/subServicio.png}  
-				\caption{un sub servicio}
+				\includegraphics[width=\linewidth]{figures/ejemploServicios/N1SubServicio.png}  
+				\caption{el sub servicio a contratar}
 				\label{fig:subserv}
 			\end{subfigure}
 		}
 		\makebox[\linewidth][c]{%
-			\begin{subfigure}[t]{.5\textwidth}
+			\begin{subfigure}[t]{.6\textwidth}
 				\centering
 				\includegraphics[width=\linewidth]{figures/ejemploServicios/N1Planta.png}  
 				\caption{Planta compuesta}
 				\label{fig:N1Planta}
 			\end{subfigure}
-			\begin{subfigure}[t]{.5\textwidth}
+			\begin{subfigure}[t]{.6\textwidth}
 				\centering
 				\includegraphics[width=\linewidth]{figures/ejemploServicios/N1Controlador.png}  
 				\caption{Controlador resultante}
@@ -75,6 +75,12 @@ Mostramos en la figura~\ref{fig:N1} un LTS (labeled transition system) para cada
 	\includegraphics[width=\linewidth]{figures/ejemploServicios/N2Planta.png}  
 	\caption{Planta compuesta con 2 sub-servicios}
 	\label{fig:N2}
+\end{figure}
+
+\begin{figure}[htb]
+	\includegraphics[width=\linewidth]{figures/ejemploServicios/N2Controlador.png}  
+	\caption{Controlador para el problema con 2 sub-servicios}
+	\label{fig:N2-control}
 \end{figure}
 
 En el ejemplo, la figura \ref{fig:agencia} representa a la agencia, que comienza en el estado inicial (0), y lo que quiere es confirmar la compra. Mientras siga consultando la disponibilidad del servicio con \textit{query.0} y cancelando la compra, su estado no cambia. 
