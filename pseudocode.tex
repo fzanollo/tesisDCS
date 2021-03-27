@@ -1,7 +1,7 @@
 \lstset{escapeinside={(*@}{@*)}}
 \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt}
 \begin{lstlisting}[language={pseudocode},label={lst:dcs},caption={Algoritmo de exploración dirigida on-the-fly.},float=ht, frame=single]
- function DCS($\E {=} (E, A_E^C)$,$\:\heuristic$):
+ function SCD($\E {=} (E, A_E^C)$,$\:\heuristic$):
    $\initial$ = $\<\init{e}^0,\ldots,\init{e}^n\>$
    $\structure = \trimlst{(\{ \initial \}, A_E, \emptyset, \initial, M_E \cap \{\initial\})}$
    $\Goals = \Errors = \Witness = \emptyset$

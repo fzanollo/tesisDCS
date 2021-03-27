@@ -37,9 +37,9 @@ En el listing~\ref{ejController} vemos un ejemplo de una especificación de un p
 
 Luego definimos el conjunto de transiciones controlables, en este caso $cancelacion, compra$ y $ query[Servicio]$. Por último debemos agregar la palabra clave \texttt{nonblocking}, en caso contrario se intentará, por defecto, resolver otro problema de control fuera del alcance de este trabajo.
 
-En la última línea utilizamos la palabra clave \texttt{heuristic} para aclarar que queremos utilizar el algoritmo de DCS, luego nombramos como $DirectedController$ al controlador que devuelve nuestro algoritmo cuando lo definimos como el LTS $Compuesto$ ($Plant$)\footnote{Cabe destacar que a esta altura la composición todavía no fue calculada} que cumple con la especificación $Goal$.
+En la última línea utilizamos la palabra clave \texttt{heuristic} para aclarar que queremos utilizar el algoritmo de SCD, luego nombramos como $DirectedController$ al controlador que devuelve nuestro algoritmo cuando lo definimos como el LTS $Compuesto$ ($Plant$)\footnote{Cabe destacar que a esta altura la composición todavía no fue calculada} que cumple con la especificación $Goal$.
 
-\begin{lstlisting}[language = mtsa, caption=Ejemplo de Controller y DCS, label=ejController]
+\begin{lstlisting}[language = mtsa, caption=Ejemplo de Controller y SCD, label=ejController]
 ...
 controllerSpec Goal = {
 marking = {compra}
@@ -52,7 +52,7 @@ heuristic ||DirectedController = Plant~{Goal}.
 
 \section{Heurísticas adicionales}\label{chpt:heurist-nuevas}
 \subsection{Dummy/Debugging}
-Como dijimos en el capítulo \ref{chpt:background}, el algoritmo de DCS debe ser agnóstico a la heurística. Al comenzar nuestro trabajo en el proyecto y una vez que pudimos generar cierto conocimiento sobre el pseudocódigo existente nos percatamos de casos borde que podían no ser bien resueltos. Sin embargo, al correr dichos casos el resultado era correcto, esto se debía a que la heurística era muy buena y lograba ir por un camino directo al Goal (o Error, depende el caso); entonces no caía en nuestra ``trampa''.
+Como dijimos en el capítulo \ref{chpt:background}, el algoritmo de \DCS debe ser agnóstico a la heurística. Al comenzar nuestro trabajo en el proyecto y una vez que pudimos generar cierto conocimiento sobre el pseudocódigo existente nos percatamos de casos borde que podían no ser bien resueltos. Sin embargo, al correr dichos casos el resultado era correcto, esto se debía a que la heurística era muy buena y lograba ir por un camino directo al Goal (o Error, depende el caso); entonces no caía en nuestra ``trampa''.
 
 En función de poner a prueba sólo el algoritmo de exploración desarrollamos una heurística de debugging o \textit{Dummy}. La misma ordena las transiciones a explorar alfabéticamente, dejando primero las no controlables pero sin mirar información sobre distancia a marcados o error. Decidimos dejar el ordenamiento de no controlables primero ya que esto no es heurístico, se sabe por especificación qué transiciones son controlables y cuáles no.
 
@@ -84,7 +84,7 @@ nonblocking
 heuristic ||C = Plant~{Goal}.
 \end{lstlisting}
 
-En total tenemos una batería de \totalTests\ tests. Los cuales no fueron desarrollados uno detrás del otro sino que utilizamos una técnica llamada TDD (Test Driven Development). Desde el pseudocódigo e implementación existente de DCS iniciamos la batería de tests con algunos casos borde que resolvía mal.
+En total tenemos una batería de \totalTests\ tests. Los cuales no fueron desarrollados uno detrás del otro sino que utilizamos una técnica llamada TDD (Test Driven Development). Desde el pseudocódigo e implementación existente de SCD iniciamos la batería de tests con algunos casos borde que resolvía mal.
 Luego entramos en un ciclo donde fuimos generando versiones que corregían los casos y más tests que rompían otras partes del algoritmo. Además en ciertos puntos críticos decidimos refactorizar completamente partes amplias de la implementación, fuera de las refactorizaciones chicas al pasar los tests.
 
 Dentro de la batería queremos destacar algunos de especial interés, agrupados según qué problema específico atacan. Antes necesitamos explicar un poco de notación: las transiciones empezadas con $u$/$c$ son no-controlables/controlables respectivamente, los estados marcados son los que tienen doble borde, y los triángulos son conjuntos de estados totalmente explorados. En ciertos tests con transiciones nombradas de forma diferente vamos a aclarar en la explicación cuáles son las controlables.
