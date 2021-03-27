@@ -5,10 +5,10 @@ Hacer que una computadora ``se programe'' a sí misma dado un problema a resolve
 
 \textit{Síntesis} porque no es un humano quien desarrolla manualmente el código \textit{solución} del problema sino que se le brinda a un programa las reglas y objetivos a cumplir\footnote{en otros trabajos \cite{}, la \textit{síntesis} se realiza en base a pre y post condiciones para el programa, en lugar de reglas y objetivos como se utiliza en este contexto.}, dejando ``a criterio del mismo'' el cómo hacerlo. Lo que devuelve el programa es una \textit{estrategia} que garantiza ganar (si existe forma, caso contrario avisa la inexistencia de solución), a esta estrategia se la conoce con el nombre de \textit{Controlador}.
 
-Un ejemplo de aplicación es controlar aviones para demarcar incendios forestales \textcolor{red}{[REF Seba]}, donde a veces incluso es necesario que el programa pueda adaptarse en medio de su ejecución. %TODO explicamos algo más?
+Un ejemplo de aplicación es controlar aviones para demarcar incendios forestales \textcolor{red}{[REF Seba]}, donde a veces incluso es necesario que el programa pueda adaptarse en medio de su ejecución.
 
 %Existen varias ramas que investigan esto de formas similares. Una mini explicación de cada una?
-El problema de síntesis fue estudiado dentro de distintas áreas como: Control de Eventos Discretos \cite{Ramadge:1987:SC}, Síntesis Reactiva \cite{Pnueli:1989:RS} y Planning automático \cite{Nau:2004:AP}. %TODO explicar algo de cada una? (poco)
+El problema de síntesis fue estudiado dentro de distintas áreas como: Control de Eventos Discretos \cite{Ramadge:1987:SC}, Síntesis Reactiva \cite{Pnueli:1989:RS} y Planning automático \cite{Nau:2004:AP}. 
 Si bien este trabajo desarrolla resultados nuevos combinando enfoques de las tres áreas, nos basamos principalmente en Control de Eventos Discretos (Discrete Event Control ó DEC).
 
 %DEC modela como un autómata (estados del programa donde uno se mueve dirigido con eventos, ver caso de estudio) donde busca estados ganadores?
@@ -19,10 +19,22 @@ Además existen estados distinguidos dentro del autómata: el inicial (estado en
 
 Por último, modelar un sistema complejo utilizando un solo autómata puede ser complicado y hasta imposible. Es por esto que se suele modelar sus partes como autómatas y componerlos para formar el modelo completo del sistema a controlar. La composición debe respetar ciertas reglas y al finalizar, un estado del sistema compuesto representa la combinación de estados en que está cada componente.
 
-%tradicionalmente se compone todo y se explora fácil. Nosotros exploramos on-the-fly. Como se ve en caso de estudio, el tamaño de la planta crece muy rápido, por eso la técnica todavía no es popular para problemas grandes. Eso lo tratamos de mitigar con on-the-fly
 Tradicionalmente se toman estos autómatas componentes y se realiza la composición, obteniendo el autómata completo que luego será analizado por el programa para obtener el controlador. El problema es que en ciertos casos la cantidad de estados y transiciones resultantes del sistema es demasiado grande, haciendo imposible su análisis y en ocasiones hasta es imposible terminar de componer.
 
-Es en este contexto que surge el enfoque de la exploración on-the-fly o ``en el mientras''. La idea es tratar de sacar conclusiones mientras se va calculando la composición para, de esta manera, evitar en lo posible construir todo el modelo. Para evidenciar la dificultad de la cual se está hablando presentaremos un caso de estudio, sus componentes y el sistema resultante de la composición.
+%-----
+Es en este contexto que surge el enfoque de la exploración on-the-fly o ``en el mientras''. La idea es tratar de sacar conclusiones mientras se va calculando la composición para, de esta manera, evitar en lo posible construir todo el modelo. El enfoque fue presentado por primera vez en la tesis doctoral de Daniel Ciolek \cite{tesisDani}; pero al desarrollar la exploración junto con las heurísticas se obtuvo un algoritmo dependiente de las mismas, con fallas en las conclusiones tomadas al explorar y sin la posibilidad de adaptarse a heurísticas diferentes. El enfoque principal de este trabajo fue corregir dichas fallas, obteniendo un algoritmo de exploración completo, correcto y capaz de soportar cualquier variación en la heurística. 
+
+Para evidenciar la dificultad de la cual hablamos a la hora de componer el modelo completo presentaremos un caso de estudio, sus componentes y el sistema resultante de la composición.
+
+En el siguiente capítulo, cap.\ref{chpt:background}, presentamos los antecedentes, definiciones necesarias y un algoritmo tradicional monolítico. Luego en el capítulo \ref{chpt:on-the-fly}, presentamos la idea básica de exploración on-the-fly junto con una descripción de nuestro enfoque en particular, como forma introductoria a la demostración formal.
+
+Ya con las intuiciones del algoritmo introducidas, el capítulo \ref{chpt:dcs} muestra nuestra propuesta de algoritmo de exploración en detalle, con el pseudocódigo, demostración de corrección y completitud para el mismo y análisis de la complejidad computacional de su peor caso.
+
+Seguidamente, en el capítulo \ref{chpt:implementation}, exponemos detalles sobre la implementación, MTSA, heurísticas diseñadas para testeo y detalles sobre la batería de test, desarrollada utilizando TDD (Test Driven Development).
+
+Como paso final en cap.\ref{chpt:performance} presentamos el benchmark utilizado y resultados de performance; tanto entre distintos resultados de DCS como versús otros algoritmos del estado del arte.
+
+Finalmente, en cap.\ref{chpt:conclusiones} listamos las conclusiones y aportes del trabajo presentado.
 
 
 \section{Ejemplo}\label{chpt:casoAviones}
@@ -95,22 +107,7 @@ Puede verse que para el caso de solo un sub-servicio que debe ser contratado el 
 
 Destacamos del problema con 2 sub-servicios, que el controlador (figura \ref{fig:N2-control}) no solo imposibilita alcanzar el estado error, si no que también reduce las posibilidades en mayor medida. Por ejemplo, en la planta, desde el estado 0, ambos eventos controlables \textit{query.0} y \textit{query.1} son válidos, pero el controlador permite solo \textit{query.1}, esto es acorde a la definición de director (def \ref{def:director}, sección \ref{chpt:director}).
 
-Los algoritmos tradicionales necesitan construir la planta compuesto entero antes de empezar a construir un controlador. Dada la explosión de estados y transiciones esto resulta muy costoso (a veces imposible), por ende las técnicas del aŕea enfrentan serios inconvenientes al escalar el tamaño de los problemas a resolver. La exploración on-the-fly dirigida busca construir sólo la parte  necesaria de la planta, sacando conclusiones en función de la información obtenida; en el peor caso, termina contruyendo toda la planta y construyendo el controlador de forma tradicional.
-
-\section{Estructura de los capítulos}
-
-A continuación presentamos los antecedentes, definiciones necesarias y un algoritmo tradicional monolítico; ésto puede encontrarse en el capítulo \ref{chpt:background}.
-
-En el capítulo \ref{chpt:on-the-fly}, presentamos la idea básica de exploración on-the-fly junto con una descripción de nuestro enfoque en particular, como forma introductoria al siguiente capítulo.
-
-Ya con las intuiciones del algoritmo introducidas, el capítulo \ref{chpt:dcs} muestra nuestra propuesta de algoritmo en detalle, con el pseudocódigo, demostración corrección y completitud para el mismo y análisis de la complejidad computacional de su peor caso.
-
-Luego exponemos detalles sobre la implementación en el capítulo \ref{chpt:implementation}, MTSA, heurísticas diseñadas para testeo y detalles sobre la batería de test, desarrollada utilizando TDD (Test Driven Development).
-
-Como paso final en el capítulo \ref{chpt:performance} presentamos el benchmark utilizado y resultados de performance; tanto entre distintos resultados de DCS como versus otros algoritmos del estado del arte.
-
-Finalmente, listamos las conclusiones y aportes del trabajo presentado.
-
+Los algoritmos tradicionales necesitan construir la planta compuesta entera antes de empezar a construir un controlador. Dada la explosión de estados y transiciones esto resulta muy costoso (a veces imposible), por ende las técnicas del área enfrentan serios inconvenientes al escalar el tamaño de los problemas a resolver. La exploración on-the-fly dirigida busca construir sólo la parte  necesaria de la planta, sacando conclusiones en función de la información obtenida; en el peor caso, termina contruyendo toda la planta y obtiene el controlador de forma tradicional.
 
 
 

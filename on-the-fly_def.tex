@@ -126,7 +126,7 @@ Para ilustrar el funcionamiento y ventajas de la exploración on-the-fly, mostra
  \label{fig:ej:plantaCompleta}
 \end{figure}
 
-Al iniciar el algoritmo no vemos la planta completa sino sólo el primer estado \cyan{0}, desde el mismo expandimos la primer transición, en este caso \textit{1}. Como llega a un estado sin explorar \cyan{1}, y que no es deadlock, no hay información para conseguir. Entonces mientras lleguemos a ``algo nuevo'' no tenemos nada para hacer más que seguir explorando.
+Al iniciar el algoritmo no vemos la planta completa sino sólo el primer estado \textbf{0}, desde el mismo expandimos la primer transición, en este caso \textit{1}. Como llega a un estado sin explorar \textbf{1}, y que no es deadlock, no hay información para conseguir. Entonces mientras lleguemos a ``algo nuevo'' no tenemos nada para hacer más que seguir explorando.
 Incluso si llegamos a un estado explorado (no deadlock) no va a haber nueva información si no tenemos un loop. Veremos más en detalle y con demostración por qué esto es así en el capítulo \ref{chpt:dcs}; pero la intuición es que no va a haber nuevos ganadores puesto que un ganador necesita llegar a un marcado infinitas veces, por ende necesita como mínimo que haya un loop. Entonces hasta ahora llevamos explorado lo mostrado en la figura \ref{fig:ej:exploracion1}.
 
 \begin{figure}[h]
@@ -136,7 +136,7 @@ Incluso si llegamos a un estado explorado (no deadlock) no va a haber nueva info
  \label{fig:ej:exploracion1}
 \end{figure}
 
-Si seguimos explorando por la transición \textit{5} cerramos un loop [\cyan{1}, \cyan{3}], pero \cyan{3} puede ser forzado a algo no explorado usando la transición no controlable \textit{8}, entonces todavía no podemos sacar conclusión alguna. Exploramos hasta figura \ref{fig:ej:exploracion2}.
+Si seguimos explorando por la transición \textit{5} cerramos un loop [\textbf{1}, \textbf{3}], pero \textbf{3} puede ser forzado a algo no explorado usando la transición no controlable \textit{8}, entonces todavía no podemos sacar conclusión alguna. Exploramos hasta figura \ref{fig:ej:exploracion2}.
 
 \begin{figure}
  \centering
@@ -145,27 +145,27 @@ Si seguimos explorando por la transición \textit{5} cerramos un loop [\cyan{1},
  \label{fig:ej:exploracion2}
 \end{figure}
 
-Continuamos y llegamos a un estado marcado \cyan{4}, si fuese sólo alcanzar un marcado podríamos decir que es ganador pero necesitamos siempre poder llegar a uno (incluso desde sí mismo), por ende ahora sigue sin ser nada. Luego vemos \textit{7}, cerrando loop [\cyan{2}, \cyan{4}]. Éste loop tiene un estado marcado y \cyan{2} no puede ser forzado a otra cosa, ya que el resto de sus transiciones son controlables; por ende obtenemos nuestros primeros ganadores (\cyan{2} y \cyan{4}). A continuación debemos propagar esta nueva información llegando a marcar \cyan{1} como ganador, porque puede controlablemente llegar al loop [\cyan{2}, \cyan{4}]. Lamentablemente todavía no hay conclusión sobre el estado inicial debido a que puede ser forzado a algo sin explorar. Ver figura \ref{fig:ej:exploracion3}.
+Continuamos y llegamos a un estado marcado \textbf{4}, si fuese sólo alcanzar un marcado podríamos decir que es ganador pero necesitamos siempre poder llegar a uno (incluso desde sí mismo), por ende ahora sigue sin ser nada. Luego vemos la transición \textit{7}, cerrando loop [\textbf{2}, \textbf{4}]. Éste loop tiene un estado marcado y \textbf{2} no puede ser forzado a otra cosa, ya que el resto de sus transiciones son controlables; por ende obtenemos nuestros primeros ganadores (\textbf{2} y \textbf{4}). A continuación debemos propagar esta nueva información llegando a marcar \textbf{1} como ganador, porque puede controlablemente llegar al loop [\textbf{2}, \textbf{4}]. Lamentablemente todavía no hay conclusión sobre el estado inicial debido a que puede ser forzado a algo sin explorar. Ver figura \ref{fig:ej:exploracion3}.
 
 \begin{figure}[h]
  \centering
  \includegraphics[scale=0.6]{figures/ejemplo_on-the-fly/3.pdf}
- \caption{Se encuentra Goal [2, 4] y propaga (1)}
+ \caption{Se encuentra Goal(G) y propaga(GP)}
  \label{fig:ej:exploracion3}
 \end{figure}
 
-Proseguimos con \textit{8} y llegamos a explorar el estado \cyan{5}, que es un deadlock por ende es error directamente. Propagando esta información marcamos los estados \cyan{3} y \cyan{0} como errores, llegando así a una conclusión sobre el inicial. Entonces ya no nos es necesario seguir explorando y se retorna que \textit{no existe controlador para la planta}. El estado de exploración final de la planta se ve en la figura \ref{fig:ej:exploracion4}.
+Proseguimos con la transición \textit{8} y llegamos a explorar el estado \textbf{5}, que es un deadlock por ende es error directamente. Propagando esta información marcamos los estados \textbf{3} y \textbf{0} como errores, llegando así a una conclusión sobre el inicial. Entonces ya no nos es necesario seguir explorando y se retorna que \textit{no existe controlador para la planta}. El estado de exploración final de la planta se ve en la figura \ref{fig:ej:exploracion4}.
 
 \begin{figure}
  \centering
  \includegraphics[scale=0.6]{figures/ejemplo_on-the-fly/4.pdf}
- \caption{Se encuentra Error (5) y propaga hasta inicial (3, 0), dejando de explorar}
+ \caption{Se encuentra Error(E) y propaga(EP) hasta inicial, dejando de explorar}
  \label{fig:ej:exploracion4}
 \end{figure}
 
-Notar que no vemos las demás transiciones de \cyan{2} ni \cyan{3} ya que, en el caso de \cyan{2} gana por alguna y el resto son controlables, y en el caso de \cyan{3} pierde por una no controlable. Es decir, \cyan{2} puede controlablemente ganar y \cyan{3} es forzado a perder sin importar la forma del resto.
+Notar que no vemos las demás transiciones de los estados \textbf{2} ni \textbf{3} ya que, en el caso de \textbf{2} gana por alguna y el resto son controlables, y en el caso de \textbf{3} pierde por una no controlable. Es decir, \textbf{2} puede controlablemente ganar y \textbf{3} es forzado a perder sin importar la forma del resto.
 
-Si la transición \textit{8} fuese controlable podríamos evitar el error y seguiríamos explorando, encontrando el estado \cyan{6}, su conexión al loop ganador y propagando ganador hasta el estado inicial. Notar que ésta sería una planta \textit{diferente}, controlable a diferencia de la propuesta en el ejemplo.
+Si la transición \textit{8} fuese controlable podríamos evitar el error y seguiríamos explorando, encontrando el estado \textbf{6}, su conexión al loop ganador y propagando ganador hasta el estado inicial. Notar que ésta sería una planta \textit{diferente}, controlable a diferencia de la propuesta en el ejemplo.
 
 
 
