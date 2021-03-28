@@ -5,9 +5,10 @@ La complejidad del algoritmo en el Listing~\ref{lst:dcs} está acotada por
 	$|T_{E}|$), que $|T_{E}| \leq|S_{E}|\times|A_E|$ y que la complejidad de una iteración del loop está acotada por $O(|S_{ES}|^2 \times |A_{E}|) \leq O(|S_{E}|^2 \times 
 	|A_{E}|) $.
 
-La complejidad de cada iteración está acotada por la de \texttt{findNewGoalsIn}, la función más compleja de todas las llamadas durante cada iteración: $\texttt{propagateError}, \texttt{propagateGoal}, 
-	\texttt{canReach}$, \texttt{getMaxLoop}, \texttt{canBeWinningLoop}, 
-	\texttt{findNewGoalsIn}, and \texttt{findNewErrorsIn}.
+La complejidad de cada iteración está acotada por la de \texttt{findNewGoalsIn}, la función más compleja de todas las llamadas durante cada iteración: \texttt{propagateError}, \texttt{canReach},
+\texttt{propagateGoal}, 
+	 \texttt{getMaxLoop}, \texttt{canBeWinningLoop}, 
+	\texttt{findNewGoalsIn}, y \texttt{findNewErrorsIn}.
 	
 A continuación presentamos un análisis detallado de la complejidad de cada sub-rutina: 
 
