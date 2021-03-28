@@ -40,19 +40,19 @@ La comparación se realizó para las dos heurísticas desarrolladas en \cite{tes
 \label{fig:dcs:results}
 \end{figure}
 
-En la figura~\ref{fig:dcs:results} se pueden observar los resultados con respecto al algoritmo de \DCS en \cite{tesisDani}. Antes que nada podemos concluir que hay una ganancia al utilizar mejores heurísticas, ya que BFS pierde contra RA tanto en cantidad de instancias como tiempo. Sorprendentemente a pesar de ser muy naif termina compitiendo contra MA. Esto tiene su explicación en el cambio de objetivo, ya que MA fue presentada en \textcolor{red}{[REF reachability en paper]} para \textit{reachability}.
+En la figura~\ref{fig:dcs:results} se pueden observar los resultados con respecto al algoritmo de \DCS en \cite{tesisDani}. Antes que nada podemos concluir que hay una ganancia al utilizar mejores heurísticas, ya que BFS pierde contra RA tanto en cantidad de instancias como tiempo. Sorprendentemente a pesar de ser muy naif termina compitiendo contra MA. Esto tiene su explicación en el cambio de objetivo, ya que MA fue presentada en \cite{Ciolek:2016:DCS} para \textit{reachability}, en lugar de \textit{non-blocking}.
 
-Nuestra versión (SCD2) mantiene la performance en la mayoría de los casos de estudio. En TA hay algunas instancias nuevas que dan timeout, pero el resto concluyen rápidamente. El único caso donde pierde notoriamente es BW, pero mirando otras herramientas (con la excepción de \MYND) vemos que en general tienen problemas con los casos más grandes de BW. Nuestra suposición es que la implementación \DCS anterior clasificaba estados como $\Goals$ de manera anticipada y posiblemente erronea, quizás casos como el de \ref{test:goals:falsopositivo}. Esto puede hacer que se llegue a una conclusión apurada que posiblemente devuelva un controlador incorrecto, pero que en el benchmark parezca resolver más instancias.
+Nuestra versión (SCD2) mantiene la performance en la mayoría de los casos de estudio. En TA hay algunas instancias nuevas que dan timeout, pero el resto concluyen rápidamente. El único caso donde pierde notoriamente es BW, pero mirando otras herramientas (con la excepción de \MYND) vemos que en general tienen problemas con los casos más grandes de BW. Nuestra suposición es que la implementación \DCS anterior clasificaba estados como $\Goals$ de manera anticipada y posiblemente erronea, quizás casos como los vistos en la sección \ref{chpt:testing}. Esto puede hacer que se llegue a una conclusión apurada que posiblemente devuelva un controlador incorrecto, pero que en el benchmark parezca resolver más instancias.
 
 \section{Comparación con otros programas}
 
 En la comparación entre distintas herramientas es importante destacar que se hacen de forma ilustrativa para justificar que este trabajo presenta una herramienta del estado del arte. No debe usarse esta comparación para justificar que una herramienta es mejor que otra. En especial, cabe recordar que las herramientas no sintetizan soluciones con las mismas características. Supremica garantiza que su controlador es maximalmente permisivo, lo cual puede incurrir en un mayor costo computacional. 
 
-Adicionalmente, al comparar MTSA contra otras herramientas el benchmark es traducido a la sintaxis aceptada por MBP, MYND y SUPREMICA. La traducción se realiza de forma automática y fue probada correcta en \textcolor{red}{[REF reachability paper]}, sin embargo, la construcción automática de especificaciones puede omitir ciertas optimizaciones de modelado conocidas por los expertos del área. En \textcolor{red}{[REF reachability paper]} se muestra que las traducciones no implican un aumento exponencial de estados, pero eso no descarta que la traducción pueda afectar los desempeños de las otras herramientas.
+Adicionalmente, al comparar MTSA contra otras herramientas el benchmark es traducido a la sintaxis aceptada por MBP~\cite{Gromyko:2006:TCS}, MYND~\cite{Mattmuller:2010:MYND} y SUPREMICA~\cite{Mohajerani:2014:Supremica}. La traducción se realiza de forma automática y fue probada correcta en \cite{Ciolek:2016:DCS}, sin embargo, la construcción automática de especificaciones puede omitir ciertas optimizaciones de modelado conocidas por los expertos del área. En \cite{Ciolek:2016:DCS} se muestra que las traducciones no implican un aumento exponencial de estados, pero eso no descarta que la traducción pueda afectar los desempeños de las otras herramientas.
 
 Si bien el algoritmo presentado parece perder un poco de escalabilidad en ciertos casos, en la figura \ref{fig:tools:results} podemos ver que sigue estando en una posición competitiva con respecto a otras herramientas del estado del arte. Para que sea más simple la comparación decidimos mostrar solo RA, ya que es la heurística de mejor desempeño, y ambas versiones de \DCS. 
 
-Aunque la nueva versión esté un poco más lejos de \MYND, en calidad de cantidad de intancias y tiempo supera ampliamente el resto de las opciones, referirse a fig \ref{fig:tools:results:instances} y \ref{fig:tools:results:time}.
+Aunque la nueva versión esté un poco más lejos de \MYND, en calidad de cantidad de intancias y tiempo supera ampliamente el resto de las opciones, referirse a fig \ref{fig:tools:results:time}.
 \begin{figure}[th]
     \centering
     \hspace*{-20mm}
@@ -61,9 +61,10 @@ Aunque la nueva versión esté un poco más lejos de \MYND, en calidad de cantid
         \caption{detalle de comparación entre herramientas.}
     \end{subfigure}%
     \begin{subfigure}{0.5\textwidth}
-        \includegraphics[width=0.9\linewidth]{figures/benchmark/tools_instances.pdf}\label{fig:tools:results:instances}
-        \includegraphics[width=\linewidth]{figures/benchmark/tools_time.pdf}\label{fig:tools:results:time}
+        \includegraphics[width=0.9\linewidth]{figures/benchmark/tools_instances.pdf}
+        \includegraphics[width=\linewidth]{figures/benchmark/tools_time.pdf}
         \caption{Instancias resueltas totales (arriba) y tiempo de ejecución (abajo) para cada herramienta.}
+        \label{fig:tools:results:time}
     \end{subfigure}
 \caption{Resultados de comparación entre herramientas.}
 \label{fig:tools:results}
