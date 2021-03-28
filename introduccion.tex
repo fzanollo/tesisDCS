@@ -1,7 +1,7 @@
 %empezar con (por arriba) qué es sintesis y para que sirve. X ej para situaciones que no se puede programar o adaptar programas en el momento (vuelo de aviones?). (verificación de software?)
 
 El ser humano siempre buscó la manera de automatizar las tareas pesadas o tediosas, la ciencia de la computación surgió en parte a causa de ello pero ¿Es posible automatizar aún más? 
-Hacer que una computadora ``se programe'' a sí misma dado un problema a resolver es en cierta medida una utopía, sin embargo hay muchas ramas de la computación que atacan ésta idea. Ya sea Machine Learning, Inteligencia Artificial o, en el caso del presente trabajo, Síntesis Automática de Controladores.
+Hacer que una computadora ``se programe'' a sí misma dado un problema a resolver es en cierta medida una utopía, sin embargo hay muchas ramas de la computación que atacan esta idea. Ya sea Machine Learning, Inteligencia Artificial o, en el caso del presente trabajo, Síntesis Automática de Controladores.
 
 \textit{Síntesis} porque no es un humano quien desarrolla manualmente el código \textit{solución} del problema sino que se le brinda a un programa las reglas y objetivos a cumplir\footnote{en otros trabajos \cite{}, la \textit{síntesis} se realiza en base a pre y post condiciones para el programa, en lugar de reglas y objetivos como se utiliza en este contexto.}, dejando ``a criterio del mismo'' el cómo hacerlo. Lo que devuelve el programa es una \textit{estrategia} que garantiza ganar (si existe forma, caso contrario avisa la inexistencia de solución), a esta estrategia se la conoce con el nombre de \textit{Controlador}.
 
@@ -15,14 +15,14 @@ Si bien este trabajo desarrolla resultados nuevos combinando enfoques de las tre
  En DEC el problema es modelado utilizando autómatas finitos, también conocidos como máquinas de estados finitos. 
 Un autómata finito, está conformado por estados y transiciones entre estos estados. Podemos pensar los estados como puntos y las transiciones como flechas de un sólo sentido que los unen. Se los llama estados ya que representan un momento particular en el objeto que se quiere modelar, por ejemplo en el caso del avión un estado podría ser ``aterrizado'' y otro ``en vuelo''. Las transiciones en nuestro caso son vistas como acciones, algunas las podemos controlar y otras están fuera de nuestro alcance; volviendo al ejemplo del avión una acción controlable podría ser ``encender el motor'' y una no controlable sería ``quedarse sin combustible''.
 
-Además existen estados distinguidos dentro del autómata: el inicial (estado en cuál empezamos) y los estados objetivos (a los cuáles se quiere llegar). En nuestro caso a éstos últimos los llamamos \textit{estados marcados} y no sólo queremos que el sistema (el avion) pueda alcanzarlos, sino que sea capaz de hacerlo infinitas veces y de manera segura. Segura en el sentido de siempre tener una secuencia de acciones para llegar, evitando estados peligrosos (por ejemplo, ``quedarse sin batería``). ¡No podemos quedarnos sin transiciones ni usarlas en el sentido contrario!
+Además existen estados distinguidos dentro del autómata: el inicial (estado en cual empezamos) y los estados objetivos (a los cuales se quiere llegar). En nuestro caso a estos últimos los llamamos \textit{estados marcados} y no sólo queremos que el sistema (el avión) pueda alcanzarlos, sino que sea capaz de hacerlo infinitas veces y de manera segura. Segura en el sentido de siempre tener una secuencia de acciones para llegar, evitando estados peligrosos (por ejemplo, ``quedarse sin batería``). ¡No podemos quedarnos sin transiciones ni usarlas en el sentido contrario!
 
 Por último, modelar un sistema complejo utilizando un solo autómata puede ser complicado y hasta imposible. Es por esto que se suele modelar sus partes como autómatas y componerlos para formar el modelo completo del sistema a controlar. La composición debe respetar ciertas reglas y al finalizar, un estado del sistema compuesto representa la combinación de estados en que está cada componente.
 
 Tradicionalmente se toman estos autómatas componentes y se realiza la composición, obteniendo el autómata completo que luego será analizado por el programa para obtener el controlador. El problema es que en ciertos casos la cantidad de estados y transiciones resultantes del sistema es demasiado grande, haciendo imposible su análisis y en ocasiones hasta es imposible terminar de componer.
 
 %-----
-Es en este contexto que surge el enfoque de la exploración on-the-fly o ``en el mientras''. La idea es tratar de sacar conclusiones mientras se va calculando la composición para, de esta manera, evitar en lo posible construir todo el modelo. El enfoque fue presentado por primera vez en la tesis doctoral de Daniel Ciolek \cite{tesisDani}; pero al desarrollar la exploración junto con las heurísticas se obtuvo un algoritmo dependiente de las mismas, con fallas en las conclusiones tomadas al explorar y sin la posibilidad de adaptarse a heurísticas diferentes. El enfoque principal de este trabajo fue corregir dichas fallas, obteniendo un algoritmo de exploración completo, correcto y capaz de soportar cualquier variación en la heurística. El resultado principal de este trabajo es el algoritmo de \textit{Síntesis de Controladores Dirigida} (SCD, o DCS en ingles).
+Es en este contexto que surge el enfoque de la exploración on-the-fly o ``en el mientras''. La idea es tratar de sacar conclusiones mientras se va calculando la composición para, de esta manera, evitar en lo posible construir todo el modelo. El enfoque fue presentado por primera vez en la tesis doctoral de Daniel Ciolek \cite{tesisDani}; pero al desarrollar la exploración junto con las heurísticas se obtuvo un algoritmo dependiente de las mismas, con fallas en las conclusiones tomadas al explorar y sin la posibilidad de adaptarse a heurísticas diferentes. El enfoque principal de este trabajo fue corregir dichas fallas, obteniendo un algoritmo de exploración completo, correcto y capaz de soportar cualquier variación en la heurística. El resultado principal de este trabajo es el algoritmo de \textit{Síntesis de Controladores Dirigida} (SCD, o DCS en inglés).
 
 Para evidenciar la dificultad de la cual hablamos a la hora de componer el modelo completo presentaremos a continuación un ejemplo, con sus componentes y el sistema resultante de la composición.
 
@@ -30,9 +30,9 @@ En el siguiente capítulo, cap.\ref{chpt:background}, presentamos los antecedent
 
 Ya con las intuiciones del algoritmo introducidas, el capítulo \ref{chpt:dcs} muestra nuestra propuesta de algoritmo de exploración en detalle, con el pseudocódigo, demostración de corrección y completitud para el mismo y análisis de la complejidad computacional de su peor caso.
 
-Seguidamente, en el capítulo \ref{chpt:implementation}, exponemos detalles sobre la implementación, MTSA, heurísticas diseñadas para testeo y detalles sobre la batería de test, desarrollada utilizando TDD (Test Driven Development).
+Seguidamente, en el capítulo \ref{chpt:implementation}, exponemos detalles sobre la implementación, MTSA, heurísticas diseñadas para testeo y detalles sobre la batería de tests, desarrollada utilizando TDD (Test Driven Development).
 
-Como paso final en cap.\ref{chpt:performance} presentamos el benchmark utilizado y resultados de performance; tanto entre distintos resultados de SCD como versús otros algoritmos del estado del arte.
+Como paso final en cap.\ref{chpt:performance} presentamos el benchmark utilizado y resultados de performance; tanto entre distintos resultados de SCD como versus otros algoritmos del estado del arte.
 
 Finalmente, en cap.\ref{chpt:conclusiones} listamos las conclusiones y aportes del trabajo presentado.
 
@@ -42,7 +42,7 @@ A continuación se presenta un ejemplo para comprender el problema a resolver. S
 
 Se desea armar una agencia de venta online de paquetes vacacionales que reservará de forma automática una variedad de servicios (alquiler de auto, hotel, pasaje de avión, etc.) asegurando que no se perderá nada de dinero a menos que se reserve el paquete completo. Es decir, no se quiere perder dinero por la reserva del hotel si no va a ser posible comprar un pasaje de avión.
 
-Para cada servicio que se desea sub-contratar se consulta (query) si ese servicio está disponible. En caso de tener éxito y confirmar la disponibilidad, se espera a confirmar el resto para comprar todos al  mismo tiempo. En caso de que algún otro servicio no esté dispoinble, se cancela la compra y se vuelve al estado inicial, lo cual no implica un gasto. Esta sincronización de solo darse la compra en caso de poder contratar todos los servicios se da ya que el evento \textit{agencia.exito} (que representa la confirmación de la compra) se encuentra en todos los componentes, por lo que no puede darse a menos que todos lo tengan habilitado (esto se comprenderá mejor con la definición \ref{def:parcomp}, en el capítulo \ref{chpt:background}).
+Para cada servicio que se desea sub-contratar se consulta (query) si ese servicio está disponible. En caso de tener éxito y confirmar la disponibilidad, se espera a confirmar el resto para comprar todos al  mismo tiempo. En caso de que algún otro servicio no esté disponible, se cancela la compra y se vuelve al estado inicial, lo cual no implica un gasto. Esta sincronización de solo darse la compra en caso de poder contratar todos los servicios se da ya que el evento \textit{agencia.exito} (que representa la confirmación de la compra) se encuentra en todos los componentes, por lo que no puede darse a menos que todos lo tengan habilitado (esto se comprenderá mejor con la definición \ref{def:parcomp}, en el capítulo \ref{chpt:background}).
 
 El problema puede escalar de forma muy rápida si se incrementa la cantidad de servicios a contratar o la cantidad de pasos para reservar cada servicio (como se verá en la sección~\ref{chpt:performance}), por lo que para este ejemplo ilustrativo asumimos que no hacen falta múltiples pasos para reservar un servicio, y solo mostramos el problema con 1 y 2 sub-servicios.
 
@@ -78,7 +78,7 @@ Mostramos en la figura~\ref{fig:N1} una representación gráfica de los LTS (lab
 				\label{fig:controladorN1}
 			\end{subfigure}
 		}
-		\caption{Caso con un solo sub-sevicio}
+		\caption{Caso con un solo sub-servicio}
 		\label{fig:N1}
 	\end{center}
 \end{figure}
