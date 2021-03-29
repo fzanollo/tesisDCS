@@ -30,9 +30,9 @@ Algorithm basicOTF-Exploration($E, A_E^C$):
 
 Puede haber muchas variantes de cada una de estas partes, cómo se expande, cómo se computan nuevos ganadores y perdedores, etc. En particular, nuestro enfoque se muestra en el listing \ref{lst:on-the-fly} y consiste en ir agregando una transición a la vez a la parte conocida de la planta, y en cada paso ver si esta nueva transición permite concluir que un estado es ganador o perdedor. Si algún nuevo estado se clasifica como ganador  o perdedor, se propaga esta información a sus antecesores, posiblemente marcándolos a su vez como ganadores o perdedores, respectivamente.
 
-A medida que exploramos mantenemos dos conjuntos de estados de $\structure$ ($\Goals$ y $\Errors$) para los cuáles ya se tiene una conclusión, es decir, se sabe que son ganadores (o perdedores) en $E$.
+A medida que exploramos mantenemos dos conjuntos de estados de $\structure$ ($\Goals$ y $\Errors$) para los cuales ya se tiene una conclusión, es decir, se sabe que son ganadores (o perdedores) en $E$.
 
-Como se demostrará en el capítulo \ref{chpt:dcs}, al expandir $\structure$ con una transición $(e,\l,e')$ a la vez, a menos que $e'$ ya fuera un ganador/perdedor entonces solo puede haber nueva información si existe un loop entre $e$ y $e'$. Es más, si hay un nuevo estado ganador/perdedor, entonces $e$ seguramente es también un nuevo ganador/perdedor, y todos los nuevos estados clasificados son antecesores de $e$. Ésto permite optimizar la detección de nuevos ganadores/perdedores en lugar de ejecutar un algoritmo clásico sobre todo $\structure$.
+Como se demostrará en el capítulo \ref{chpt:dcs}, al expandir $\structure$ con una transición $(e,\l,e')$ a la vez, a menos que $e'$ ya fuera un ganador/perdedor entonces solo puede haber nueva información si existe un loop entre $e$ y $e'$. Es más, si hay un nuevo estado ganador/perdedor, entonces $e$ seguramente es también un nuevo ganador/perdedor, y todos los nuevos estados clasificados son antecesores de $e$. Esto permite optimizar la detección de nuevos ganadores/perdedores en lugar de ejecutar un algoritmo clásico sobre todo $\structure$.
 
 
 
@@ -126,7 +126,7 @@ Para ilustrar el funcionamiento y ventajas de la exploración on-the-fly, mostra
  \label{fig:ej:plantaCompleta}
 \end{figure}
 
-Al iniciar el algoritmo no vemos la planta completa sino sólo el primer estado \textbf{0}, desde el mismo expandimos la primer transición, en este caso \textit{1}. Como llega a un estado sin explorar \textbf{1}, y que no es deadlock, no hay información para conseguir. Entonces mientras lleguemos a ``algo nuevo'' no tenemos nada para hacer más que seguir explorando.
+Al iniciar el algoritmo no vemos la planta completa sino solo el primer estado \textbf{0}, desde el mismo expandimos la primer transición, en este caso \textit{1}. Como llega a un estado sin explorar \textbf{1}, y que no es deadlock, no hay información para conseguir. Entonces mientras lleguemos a ``algo nuevo'' no tenemos nada para hacer más que seguir explorando.
 Incluso si llegamos a un estado explorado (no deadlock) no va a haber nueva información si no tenemos un loop. Veremos más en detalle y con demostración por qué esto es así en el capítulo \ref{chpt:dcs}; pero la intuición es que no va a haber nuevos ganadores puesto que un ganador necesita llegar a un marcado infinitas veces, por ende necesita como mínimo que haya un loop. Entonces hasta ahora llevamos explorado lo mostrado en la figura \ref{fig:ej:exploracion1}.
 
 \begin{figure}[h]
@@ -145,7 +145,7 @@ Si seguimos explorando por la transición \textit{5} cerramos un loop [\textbf{1
  \label{fig:ej:exploracion2}
 \end{figure}
 
-Continuamos y llegamos a un estado marcado \textbf{4}, si fuese sólo alcanzar un marcado podríamos decir que es ganador pero necesitamos siempre poder llegar a uno (incluso desde sí mismo), por ende ahora sigue sin ser nada. Luego vemos la transición \textit{7}, cerrando loop [\textbf{2}, \textbf{4}]. Éste loop tiene un estado marcado y \textbf{2} no puede ser forzado a otra cosa, ya que el resto de sus transiciones son controlables; por ende obtenemos nuestros primeros ganadores (\textbf{2} y \textbf{4}). A continuación debemos propagar esta nueva información llegando a marcar \textbf{1} como ganador, porque puede controlablemente llegar al loop [\textbf{2}, \textbf{4}]. Lamentablemente todavía no hay conclusión sobre el estado inicial debido a que puede ser forzado a algo sin explorar. Ver figura \ref{fig:ej:exploracion3}.
+Continuamos y llegamos a un estado marcado \textbf{4}, si fuese solo alcanzar un marcado podríamos decir que es ganador pero necesitamos siempre poder llegar a uno (incluso desde sí mismo), por ende ahora sigue sin ser nada. Luego vemos la transición \textit{7}, cerrando loop [\textbf{2}, \textbf{4}]. Este loop tiene un estado marcado y \textbf{2} no puede ser forzado a otra cosa, ya que el resto de sus transiciones son controlables; por ende obtenemos nuestros primeros ganadores (\textbf{2} y \textbf{4}). A continuación debemos propagar esta nueva información llegando a marcar \textbf{1} como ganador, porque puede controlablemente llegar al loop [\textbf{2}, \textbf{4}]. Lamentablemente todavía no hay conclusión sobre el estado inicial debido a que puede ser forzado a algo sin explorar. Ver figura \ref{fig:ej:exploracion3}.
 
 \begin{figure}[h]
  \centering

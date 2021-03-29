@@ -6,13 +6,13 @@
 El algoritmo fue implementado en el lenguaje Java, agregando a la funcionalidad del programa Modal Transition System Analyser (MTSA)\cite{mtsaRepo}.
 
 \section{MTSA}
-El software utilizado cuenta con una gran cantidad de funcionalidad. Principalmente nos interesa la forma de escribir Labelled Transition Systems (LTS), esto se puede hacer mediante Finite State Process (FSP). En el listing~\ref{ejLTS} volvemos al caso de estudio presentado en~\ref{chpt:casoAviones} esta vez escrito en la herrmienta MTSA.
+El software utilizado cuenta con una gran cantidad de funcionalidad. Principalmente nos interesa la forma de escribir Labelled Transition Systems (LTS), esto se puede hacer mediante Finite State Process (FSP). En el listing~\ref{ejLTS} volvemos al caso de estudio presentado en~\ref{chpt:casoAviones} esta vez escrito en la herramienta MTSA.
 
 En primer lugar definimos las constantes que determinan la cantidad de sub-servicios a contratar. Luego definimos la componente \texttt{Agencia}, con un único estado que vuelve a sí mismo con las siguientes transiciones: \texttt{cancelacion, compra, query[servicio]}, este último se lee como cualquier transición \texttt{query[i]} si $i \in Servicio$.
 
 Con la definición de los sub-servicios se puede ver una definición genérica compacta de múltiples componentes idénticas del problema, tantas como elementos haya en \texttt{Servicio}, cada una con su \texttt{id}, comenzado en 0, que es utilizado para definir transiciones únicas para cada componente. También se ve que para un componente más complejo simplemente se declaran más estados, cada uno con su nombre en mayúscula, sin necesidad de aclarar que pertenecen a un componente. Si se quiere que un estado tenga 2 transiciones que lleven a estados distintos se logra con el operador \texttt{|} (como ejemplo, ver el estado \texttt{Queried}).
 
-Finalmente mostramos cómo se pueden componer las distintas LTSs con el comando \texttt{||}, con el cual nuestra planta compuesta tendrá tanto a la agencia como a los subservicios.
+Finalmente mostramos cómo se pueden componer las distintas LTSs con el comando \texttt{||}, con el cual nuestra planta compuesta tendrá tanto a la agencia como a los sub-servicios.
 
 \begin{lstlisting}[language = mtsa, caption=Ejemplo de LTS y composición, label=ejLTS]
 const N = 1
@@ -54,17 +54,17 @@ heuristic ||DirectedController = Plant~{Goal}.
 \subsection{Dummy/Debugging}
 Como dijimos en el capítulo \ref{chpt:background}, el algoritmo de \DCS debe ser agnóstico a la heurística. Al comenzar nuestro trabajo en el proyecto y una vez que pudimos generar cierto conocimiento sobre el pseudocódigo existente nos percatamos de casos borde que podían no ser bien resueltos. Sin embargo, al correr dichos casos el resultado era correcto, esto se debía a que la heurística era muy buena y lograba ir por un camino directo al Goal (o Error, depende el caso); entonces no caía en nuestra ``trampa''.
 
-En función de poner a prueba sólo el algoritmo de exploración desarrollamos una heurística de debugging o \textit{Dummy}. La misma ordena las transiciones a explorar alfabéticamente, dejando primero las no controlables pero sin mirar información sobre distancia a marcados o error. Decidimos dejar el ordenamiento de no controlables primero ya que esto no es heurístico, se sabe por especificación qué transiciones son controlables y cuáles no.
+En función de poner a prueba solo el algoritmo de exploración desarrollamos una heurística de debugging o \textit{Dummy}. La misma ordena las transiciones a explorar alfabéticamente, dejando primero las no controlables pero sin mirar información sobre distancia a marcados o error. Decidimos dejar el ordenamiento de no controlables primero ya que esto no es heurístico, se sabe por especificación qué transiciones son controlables y cuáles no.
 
 A partir de entonces usamos los nombres de las transiciones para explorar nuestros casos de test de la forma que nos interesaba, ganando así control sobre los tests.
 
 \subsection{Breadth First Search}
-Si bien el algoritmo debe ser agnóstico a la heurística, la misma puede (y seguramente lo haga) modificar los tiempos de ejecución. Ya que si llega antes a alguna conclusión sobre un estado ésta información se puede propagar, cortando más ramas y/o más grandes.
+Si bien el algoritmo debe ser agnóstico a la heurística, la misma puede (y seguramente lo haga) modificar los tiempos de ejecución. Ya que si llega antes a alguna conclusión sobre un estado esta información se puede propagar, cortando más ramas y/o más grandes.
 
 La segunda heurística que desarrollamos es un simple Breadth First Search (BFS). La razón es para mostrar qué tanto se pueden mejorar los tiempos del algoritmo con una buena heurística. Esto se puede ver en detalle en el capítulo \ref{chpt:performance}, donde mostramos resultados de un mismo benchmark para las diferentes heurísticas.
 
 \section{Testing}\label{chpt:testing}
-Luego de haber mostrado la sintaxis con la cual desarrollamos nuestros tests vamos a hablar un poco de ellos y detalles sobre algunos a destacar. El listing \ref{ejTest1} muestra un ejemplo de sintaxis completo (test 1). Si se desea ver la especificación de cada uno de los tests puede encontrarse en el repositorio de MTSA\footnote{\href{https://bitbucket.org/lnahabedian/mtsa/src/master/maven-root/mtsa/src/test/resources/NonBlocking/}{https://bitbucket.org/lnahabedian/mtsa/src/master/maven-root/mtsa/src/test/resources/NonBlocking/}}.
+Luego de haber mostrado la sintaxis con la cual desarrollamos nuestros tests vamos a hablar un poco de ellos y algunos detalles a destacar. El listing \ref{ejTest1} muestra un ejemplo de sintaxis completo (test 1). Si se desea ver la especificación de cada uno de los tests puede encontrarse en el repositorio de MTSA\footnote{\href{https://bitbucket.org/lnahabedian/mtsa/src/master/maven-root/mtsa/src/test/resources/NonBlocking/}{https://bitbucket.org/lnahabedian/mtsa/src/master/maven-root/mtsa/src/test/resources/NonBlocking/}}.
 
 \begin{lstlisting}[language = mtsa, caption=Test 1 a modo de ejemplo, label=ejTest1] 
 Ejemplo = A1,
@@ -87,7 +87,7 @@ heuristic ||C = Plant~{Goal}.
 En total tenemos una batería de \totalTests\ tests. Los cuales no fueron desarrollados uno detrás del otro sino que utilizamos una técnica llamada TDD (Test Driven Development). Desde el pseudocódigo e implementación existente de SCD iniciamos la batería de tests con algunos casos borde que resolvía mal.
 Luego entramos en un ciclo donde fuimos generando versiones que corregían los casos y más tests que rompían otras partes del algoritmo. Además en ciertos puntos críticos decidimos refactorizar completamente partes amplias de la implementación, fuera de las refactorizaciones chicas al pasar los tests.
 
-Dentro de la batería queremos destacar algunos de especial interés, agrupados según qué problema específico atacan. Antes necesitamos explicar un poco de notación: las transiciones empezadas con $u$/$c$ son no-controlables/controlables respectivamente, los estados marcados son los que tienen doble borde, y los triángulos son conjuntos de estados totalmente explorados. En ciertos tests con transiciones nombradas de forma diferente vamos a aclarar en la explicación cuáles son las controlables.
+Dentro de la batería queremos destacar algunos de especial interés, agrupados según que problema específico atacan. Antes necesitamos explicar un poco de notación: las transiciones empezadas con $u$/$c$ son no-controlables/controlables respectivamente, los estados marcados son los que tienen doble borde, y los triángulos son conjuntos de estados totalmente explorados. En ciertos tests con transiciones nombradas de forma diferente vamos a aclarar en la explicación cuáles son las controlables.
 \bigskip
 
 \FloatBarrier
@@ -99,7 +99,7 @@ Un estado deadlock (sin transiciones de salida) es obviamente un error, ya que s
 
 La figura \ref{fig:falenciasErrores} ejemplifica este caso, el conjunto o rama $B$ fue totalmente explorado y no contiene ningún estado marcado. En este momento es importante que agreguemos todos los estados de $B$ a $\Errors$, de no hacerlo podríamos incurrir en una falla al propagar goal desde otra rama. Es decir, si se mira primero la rama de abajo y no lo marcamos como error (a pesar de estar completamente explorado), entonces al mirar la de arriba diremos que es goal y propagaremos dicha información, equivocadamente, más allá de $e$. 
 
-Éste problema se evita respetando el invariante presentado en la propiedad \ref{def:invariant}, ya que si una rama $B$ cuya raíz es $s$ está totalmente explorada, entonces $E_s \subseteq E$ es la reducción del problema que decide si $s$ es un estado ganador o perdedor. Además, como está totalmente explorada $\unexploredToBottom{E_s} = \unexploredToTop{E_s}$, por lo que $W_{\unexploredToBottom{E_s}} \cup L_{\unexploredToTop{E_s}} = S_{E_{s}}$ y no puede darse el caso de la figura \ref{fig:falenciasErrores} en el que los estados de la rama no fueron clasificados.
+Este problema se evita respetando el invariante presentado en la propiedad \ref{def:invariant}, ya que si una rama $B$ cuya raíz es $s$ está totalmente explorada, entonces $E_s \subseteq E$ es la reducción del problema que decide si $s$ es un estado ganador o perdedor. Además, como está totalmente explorada $\unexploredToBottom{E_s} = \unexploredToTop{E_s}$, por lo que $W_{\unexploredToBottom{E_s}} \cup L_{\unexploredToTop{E_s}} = S_{E_{s}}$ y no puede darse el caso de la figura \ref{fig:falenciasErrores} en el que los estados de la rama no fueron clasificados.
 
 \begin{figure}[htb]
 	\centering
@@ -138,7 +138,7 @@ Una vez obtenido un resultado necesitamos propagarlo hacia los estados ancestros
 
 Por ejemplo en el caso de la figura \ref{fig:propagarError}, hay un loop controlable entre dos estados, el cual se explora primero, y uno de ellos va controlablemente a un error. Debe habilitarse alguna controlable saliente del estado 2 (caso contrario sería un deadlock), pero ninguna lleva a un estado ganador, por ende la planta es no controlable. Sin embargo, según la mirada local nunca se concluiría que los estados [1, 2] son errores, porque ambos tienen \textit{una forma de escapar del error}, el otro estado del loop, y no se sabe que ese otro estado está en la misma situación. 
 
-Equivalentemente la mirada local tampoco funciona propagando $\Goals$, en la figura \ref{fig:propagarGoal} se puede ver un ejemplo. El estado $2$ llega al estado marcado $3$ pero no puede forzarlo, sin importar si la transición a $3$ es controlable o no ya que tiene una transición no controlable a $1$. Como $1$ solo puede volver a $2$ ésta situación no nos molestaría (por ser non-blocking) y el modelo debería ser controlable. Ahora si miramos localmente al propagar $Goal$ desde $3$ \textit{no sabemos dónde nos lleva la transición no controlable de 2 a 1}, y deberíamos suponer lo peor, sin poder marcar a 2 como ganador.
+Equivalentemente la mirada local tampoco funciona propagando $\Goals$, en la figura \ref{fig:propagarGoal} se puede ver un ejemplo. El estado $2$ llega al estado marcado $3$ pero no puede forzarlo, sin importar si la transición a $3$ es controlable o no ya que tiene una transición no controlable a $1$. Como $1$ solo puede volver a $2$ esta situación no nos molestaría (por ser non-blocking) y el modelo debería ser controlable. Ahora si miramos localmente al propagar $Goal$ desde $3$ \textit{no sabemos dónde nos lleva la transición no controlable de 2 a 1}, y deberíamos suponer lo peor, sin poder marcar a 2 como ganador.
 
 Entonces una mirada local no funciona a la hora de propagar. Pero ¿qué conjunto de ancestros vecinos deberíamos tomar? Es difícil decidir dónde hacer el corte; son muchos casos y no se puede, localmente, distinguirlos a todos. Por ende es necesario una propagación más inteligente, con una mirada global del conjunto de ancestros.
 

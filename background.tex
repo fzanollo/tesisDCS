@@ -20,7 +20,7 @@ A continuación definimos formalmente el problema composicional de síntesis de 
 
 \begin{notation}[Pasos y corridas] \label{not:paso}
 	
-	$\!\!$Notamos $(t,\l,t') {\in}\!\! \D_T$ como $t \step{\l}{T} t'$ y lo llamamos \k{paso}.
+	$\!\!$ Notamos $(t,\l,t') {\in}\!\! \D_T$ como $t \step{\l}{T} t'$ y lo llamamos \k{paso}.
 	A su vez, una \k{corrida} de una palabra $w = \l_0,\ldots,\l_k$ en $T$, es una secuencia de pasos tal que $t_i \step{\l_i}{T} t_{i+1}$ para todo $0 \leq i \leq k$, notado como $t_0 \runw{w}{T} t_{k+1}$.
 	
 \end{notation}
@@ -35,7 +35,7 @@ Los autómatas definen un lenguaje, un conjunto de palabras, que aceptan. Dado u
 
 Generalmente los estados marcados se utilizan para indicar el logro de una tarea. Por lo tanto, consideramos como lenguaje \textit{marcado} (o \textit{aceptado}) por $T$ (lo cual notamos $\L_m(T)$) al conjunto de palabras cuya corrida termina en un estado marcado. Formalmente, sea $w \in \L(T)$, entonces $w \in \L_m(T)$ si y solo si hay una corrida de $w$ que comienza en el estado inicial $\init{t}$ y alcanza un estado marcado $t_m \in M_T$, que notamos $\init{t} \runw{w}{T} t_m$.
 
-Este último concepto es relevante para la definición de la composición paralela. Es un parte fundamental del trabajo para definir las palabras aceptadas por el problema \texttt{nonblocking} ya que el lenguaje aceptado por la planta compuesta es el mismo que el aceptado por cada uno de los componentes por separado.
+Este último concepto es relevante para la definición de la composición paralela. Es una parte fundamental del trabajo para definir las palabras aceptadas por el problema \texttt{nonblocking} ya que el lenguaje aceptado por la planta compuesta es el mismo que el aceptado por cada uno de los componentes por separado.
 
 \begin{definition} [Composición Paralela] \label{def:parcomp}
 	La \k{composición paralela} $(\|)$ de dos autómatas $T$ y $Q$ es un operador simétrico y asociativo que produce un autómata $T \| Q = (S_T {\times} S_Q, A_T {\cup} 
@@ -72,7 +72,7 @@ Hay ciertas características de la composición paralela a destacar. En primer l
 
 Dado un (conjunto de) autómata(s) y una partición de sus eventos en dos subconjuntos: $controlables$ y $no controlables$, lo que buscamos es un $controlador$ (director) que restrinja el vocabulario aceptado de forma de mantener un camino posible a los estados marcados del autómata.
 
-Un controlador observa las transiciones no controlables y deshabilita alguna transiciones controlables para generar una planta restringida. Una palabra $w$ pertenece al lenguaje generado por $T$ restringido por una función del controlador $\sigma : A_T^* \into 2^{A_T}$ (anotado como $\L^\sigma(T)$) si cada prefijo de $w$ ``sobrevive'' a $\sigma$.
+Un controlador observa las transiciones no controlables y deshabilita algunas transiciones controlables para generar una planta restringida. Una palabra $w$ pertenece al lenguaje generado por $T$ restringido por una función del controlador $\sigma : A_T^* \into 2^{A_T}$ (anotado como $\L^\sigma(T)$) si cada prefijo de $w$ ``sobrevive'' a $\sigma$.
 Formalmente, sea $w = \l_0,\ldots,\l_k$ una palabra en $\L(T)$, entonces $w \in \L^\sigma(T)$ si y solo si para todo $0 \leq i \leq k$:
 $
 \init{t} \run{\,\l_0}{\l_i}{T} t_{i+1} \wedge \l_i \in \sigma(\l_0,\ldots,\l_{i-1})

@@ -1,6 +1,6 @@
 \begin{property}[Invariante]
 \label{def:invariant}
-El loop principal del Algorithm~\ref{lst:dcs} tiene el siguiente invariante: 
+El loop principal del Algoritmo~\ref{lst:dcs} tiene el siguiente invariante: 
 $\structure \subseteq E \ \wedge $ $\forall s \in \structure \ldot (s\in\Goals 
 \Leftrightarrow 
 s \in 
@@ -20,13 +20,13 @@ $s\in\Errors\uplus\Goals\uplus\NONE$
 La explicación del algoritmo ~\ref{lst:dcs} que detallamos a continuación sirve también como un esquema de demostración para la propiedad~\ref{def:invariant}.   
 
 Para empezar, notar que la función \texttt{expandNext} 
-(line~\ref{line:expand}) retorna una nueva transición $e \step{\l}{E} e'$ 
+(linea~\ref{line:expand}) retorna una nueva transición $e \step{\l}{E} e'$ 
 garantizando que $e$ ya se encontraba en $\structure$ y $e \in \NONE$. 
 Esto significa que en cada iteración, hay algo de información nueva disponible para un estado que actualmente no está clasificado en ganador ni perdedor.
 
 Si el estado $e'$ ya es clasificado como ganador en
-$\unexploredToBottom{\structure}$ (line~\ref{line:isWinning}) o
-perdedor en $\unexploredToTop{\structure}$ (line~\ref{line:isLosing}) 
+$\unexploredToBottom{\structure}$ (linea~\ref{line:isWinning}) o
+perdedor en $\unexploredToTop{\structure}$ (linea~\ref{line:isLosing}) 
 entonces esta información necesita ser propagada a los estados en $\NONE$ para ver si pueden convertirse en ganadores en 
 $\unexploredToBottom{\structure'}$ o perdedores en
 $\unexploredToTop{\structure'}$. Tanto \texttt{propagateGoal} como
@@ -36,7 +36,7 @@ $\unexploredToTop{\structure}$ pero solo sobre predecesores de $e'$ que están e
 El Lema~\ref{lem:newWinnersLosersAreNonePredecessors} asegura la completitud de esta propagación restringida.
 
 %Hack de titulo de lemma porque si no, no corta linea.
-\begin{lemma}\textbf{\emph{(Ganadores/Perdedores nuevos tienen camino de estados-\textit{None} a transición nueva)}}
+\begin{lemma}\textbf{\emph{(Ganadores/Perdedores nuevos tienen camino de estados-\textit{None} a \\ transición nueva)}}
 \label{lem:newWinnersLosersAreNonePredecessors}
 Sea la transición $e \step{\l}{\structure} e'$ la única diferencia entre dos exploraciones parciales, $\structure$ y $\structure'$, de $E$. Si $s \notin (\WES \cup \LES)$ y $s \in (\WESS \cup \LESS)$, entonces hay $s_0, \ldots, s_n \notin (\WES \cup \LES)$ tal que $s = s_0 \wedge
 s_0 \step{\l_0}{\structure}\ldots s_{n} \step{\l}{\structure} e'$.
@@ -60,7 +60,7 @@ $\unexploredToTop{\structure}$) y viceversa.
 %$e' \notin \WESS \cup \LESS$
 %\end{lemma}
 %
-Más aún, que no haya nueva información para $e'$ implica que no hay nuevos ganadores o perdedores (Lemma~\ref{lem:E'isNoneThenAllIsNone})
+Más aún, que no haya nueva información para $e'$ implica que no hay nuevos ganadores o perdedores (Lema~\ref{lem:E'isNoneThenAllIsNone})
 
 \begin{lemma}\textbf{\emph{(Nuevos ganadores/perdedores solo si $e'$ es un nuevo ganador/perdedor)}}
 \label{lem:E'isNoneThenAllIsNone}
@@ -70,14 +70,14 @@ Sea $e \step{\l}{} e'$ la única diferencia entre dos exploraciones parciales, $
 \end{lemma}
 
 
-Si se cerró un nuevo loop(line~\ref{line:isLoop}), por Lemma~\ref{lem:E'isNoneThenAllIsNone} alcanza con analizar si $e' 
-\in \WESS \uplus \LESS$, y por Lemma~\ref{lem:newWinnersLosersAreNonePredecessors} propagar cualquier información nueva de $e'$ a sus predecesores. 
+Si se cerró un nuevo loop (linea~\ref{line:isLoop}), por Lema~\ref{lem:E'isNoneThenAllIsNone} alcanza con analizar si $e' 
+\in \WESS \uplus \LESS$, y por Lema~\ref{lem:newWinnersLosersAreNonePredecessors} propagar cualquier información nueva de $e'$ a sus predecesores. 
 
 En la linea~\ref{line:getMaxLoop} computamos $\SCC$, el conjunto de estados que pertenecen a un loop que pasa por $e \step{\l}{\structure'} e'$ y nunca por $\WES \cup \LES$. 
-Intuitivamente, cualquier controlador para $e'$ va a depender de alguno de estos loops. O, en términos del Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, para que $e'$ cambie su estado, debe ser a través de un camino de estados $\NONE$. 
+Intuitivamente, cualquier controlador para $e'$ va a depender de alguno de estos loops. O, en términos del Lema~\ref{lem:newWinnersLosersAreNonePredecessors}, para que $e'$ cambie su estado, debe ser a través de un camino de estados $\NONE$. 
 
 En la linea~\ref{line:CanBeWinning} usamos \texttt{canBeWinningLoop}($\SCC$) para chequear si existe algún estado marcado en $\SCC$ o si es posible escapar de $\SCC$ y alcanzar un \textit{goal} en un paso. Esto distingue entre dos posibles opciones: $e' \in \WESS$ o $e' \in \LESS$ (ver 
-Lemma~\ref{lem:canBeWinningLoopWorks}). 
+Lema~\ref{lem:canBeWinningLoopWorks}). 
 
 \begin{lemma}\textbf{\emph{(Condición necesaria/suficiente para ganar/perder)}}
 \label{lem:canBeWinningLoopWorks}
@@ -92,13 +92,13 @@ entonces \emph{\texttt{canBeWinningLoop}($\SCC$)}. Además, si \\
 
 Si \texttt{canBeWinningLoop()} retorna true, en la  linea~\ref{line:lookingForWinner}, 
 sabemos que si $e'$ cambia su estado es porque $e' \in \WESS$. Para ver si este cambio se produce, se realiza una computación de punto fijo basada en la solución del problema monolítico~(\ref{chpt:algoMono}). 
-Sin embargo, el método \texttt{findNewGoalsIn} aplica una optimización basada en Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}; solo considera estados que están en un $\NONE$-loop a través de la nueva transición ($\SCC$).
+Sin embargo, el método \texttt{findNewGoalsIn} aplica una optimización basada en Lema~\ref{lem:newWinnersLosersAreNonePredecessors}; solo considera estados que están en un $\NONE$-loop a través de la nueva transición ($\SCC$).
 
 Si \texttt{canBeWinningLoop()} retorna false, entonces debemos comprobar si $e' \in \LESS$.
 %  By Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}
   %, we only consider states that are in a $\NONE$-loop 
 %via the $e \step{\l}{} e'$ (i.e, the set $\SCC$). 
-Esto puede hacerse de forma más eficiente que con un punto fijo usando el Lemma~\ref{lem:findErrorsWorks} que muestra que alcanza con observar si no es posible escapar de $\SCC$ alcanzando en un paso un estado que no esté en $\LES$. 
+Esto puede hacerse de forma más eficiente que con un punto fijo usando el Lema~\ref{lem:findErrorsWorks} que muestra que alcanza con observar si no es posible escapar de $\SCC$ alcanzando en un paso un estado que no esté en $\LES$. 
 
 
 
@@ -122,16 +122,16 @@ Por motivos de eficiencia, \texttt{findNewGoalsIn} y
 
 Habiendo argumentado que la propiedad~~\ref{def:invariant} es válida, la correctitud y completitud se desprenden de las siguientes observaciones:
 $i)$ El \texttt{main loop} termina cuando logró determinar que 
-$\init{e}$ se encuentra en $\LESS$ o $\WESS$. Esto en peor caso eventualmente sucede cuando $ES = E$.
-$ii)$ Las lineas ~\ref{line:controller-start} a ~\ref{line:controller-end} extraen un director del conjunto de estados ganadoes
-($\Goals$). Usamos el mismo punto fijo descripto en el Algorithm 4 de 	\cite{Huang:2008:DCD} para computar un ranking (line~\ref{line:controller-start}) y una función determinística 
-(line~\ref{line:controller-end}) que retorna cuál transición controlable debe ser habilitada, cumpliendo la condición de un director.
+$\init{e}$ se encuentra en $\LESS$ o $\WESS$. Esto en el peor caso eventualmente sucede cuando $ES = E$.
+$ii)$ Las lineas ~\ref{line:controller-start} a ~\ref{line:controller-end} extraen un director del conjunto de estados ganadores
+($\Goals$). Usamos el mismo punto fijo descripto en el Algoritmo 4 de 	\cite{Huang:2008:DCD} para computar un ranking (linea~\ref{line:controller-start}) y una función determinística 
+(linea~\ref{line:controller-end}) que retorna cuál transición controlable debe ser habilitada, cumpliendo la condición de un director.
 
 \begin{theorem}[Correctitud y Completitud]
 Sea $\E = (E,A_E^C)$ un problema de control composicional según la Definición~\ref{def:control-problem}. Existe una solución para $\E$ si y solo si el algoritmo SCD retorna un director para $\E$.
 \end{theorem}
 
 Demostración (Correctitud y completitud):
-El teorema se desprende del invariante de ciclo del algoritmo (Definition~\ref{def:invariant}), el
-Lemma~\ref{lem:WESandLesMonotonicity}, la correctitud del algoritmo 4 de \cite{Huang:2008:DCD} y el hecho de que en el peor caso todas las transiciones son agregadas a la estructura de exploración. Entonces,  $E = \structure = 
+El teorema se desprende del invariante de ciclo del algoritmo (Definición~\ref{def:invariant}), el
+Lema~\ref{lem:WESandLesMonotonicity}, la correctitud del algoritmo 4 de \cite{Huang:2008:DCD} y el hecho de que en el peor caso todas las transiciones son agregadas a la estructura de exploración. Entonces,  $E = \structure = 
 \unexploredToBottom{\structure} = \unexploredToTop{\structure}$.

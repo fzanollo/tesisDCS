@@ -29,7 +29,7 @@ $w.w' \in L^\sigma(\unexploredToBottom{\structure}) = L^\sigma(\unexploredToBott
 
 Para demostrar que $\LES \subseteq \LESS$, asumimos que existe un estado $s \in \LES \setminus \LESS$. Como $s \notin \LESS$, tiene un controlador $\sigma$ en $\unexploredToTop{\structure'}$, pero $s \in \LES$ por lo que no puede existir un controlador válido $\sigma'$ para $s$ en $\unexploredToTop{\structure}$. Esto es falso, más aún, mostraremos que si $\sigma$ es un controlador para $s$ en $\unexploredToTop{\structure'}$, entonces hay un controlador válido $\sigma'$ para $s$ en cualquier $\unexploredToTop{Z}$ si $Z \subseteq \structure$.
 
-$\sigma$ es un controlador valido en $\unexploredToTop{\structure'}$, por lo que cualquier palabra en $\L^\sigma(\unexploredToTop{\structure'})$ puede ser extendida para alcanzar un estado marcado. Solo hay una cantidad finita de estados en  $\unexploredToTop{\structure'}$, por lo que deben existir $w'$ y $w''$ tal que $w.w'.w'' \in \L^\sigma(\unexploredToTop{\structure'})$, $w.w'$ llega a un estado marcado, y $w.w'.w''$ llega al mismo estado que $w.w'$.
+$\sigma$ es un controlador válido en $\unexploredToTop{\structure'}$, por lo que cualquier palabra en $\L^\sigma(\unexploredToTop{\structure'})$ puede ser extendida para alcanzar un estado marcado. Solo hay una cantidad finita de estados en  $\unexploredToTop{\structure'}$, por lo que deben existir $w'$ y $w''$ tal que $w.w'.w'' \in \L^\sigma(\unexploredToTop{\structure'})$, $w.w'$ llega a un estado marcado, y $w.w'.w''$ llega al mismo estado que $w.w'$.
 
 Si $w.w'.w''$ está en $\L^\sigma(Z)$, entonces no hay nada que hacer, es claro que $\sigma$ tiene la misma forma de extender $w$ en $\unexploredToTop{Z}$. Si no, notemos que $w.w'.w'' = w_0.l.w_1$ tal que $w_0$ es el prefijo más largo de $w.w'.w''$ en $\L^\sigma(Z)$, esto significa que $w_0.l$ alcanza el estado marcado ganador $\top$, y desde ahí toda extensión de la palabra solo puede permanecer en ese mismo estado, por lo tanto, $\sigma$ también es un controlador válido en  $\unexploredToTop{Z}$.
  
@@ -100,13 +100,13 @@ Lo que no es tan claro, es que $s$ no tiene nuevos controladores posibles si tie
 	$\WESS$ que evita $e \step{\l}{} e'$, la única diferencia entre $\unexploredToBottom{\structure}$ y $\unexploredToBottom{\structure'}$. Este controlador entonces es también un controlador para $s$ en $\WES$ llegando a un absurdo. 
 	
 	Asumimos $e' \notin \LESS$ y usamos un testigo $s$ de $\LESS \neq \LES$ para llegar a una contradicción. Notar que como $e' \notin \LESS$, hay un controlador $\sigma$ desde $e'$ en  
-	$\unexploredToTop{\structure'}$. Como $s \notin \LES$ también debe haber un controlador $\sigma'$ desde $s$ en $\unexploredToTop{\structure}$. Construimos un nuevo controlador para $\unexploredToTop{\structure'}$ desde $s$ que funciona exactamente como $\sigma'$ pero cuando alcanza $e \step{\l}{} e'$ se comporta como $\sigma$. Este nuevo controlador prueba que $s \notin \LESS$ lo cual es una contradicción.)\\
+	$\unexploredToTop{\structure'}$. Como $s \notin \LES$ también debe haber un controlador $\sigma'$ desde $s$ en $\unexploredToTop{\structure}$. Construimos un nuevo controlador para $\unexploredToTop{\structure'}$ desde $s$ que funciona exactamente como $\sigma'$ pero cuando alcanza $e \step{\l}{} e'$ se comporta como $\sigma$. Este nuevo controlador prueba que $s \notin \LESS$ lo cual es una contradicción).\\
 
 
 Probamos ambas implicaciones por contradicción. 
 
 Primero asumimos que $e' \not \in 
-\WESS \setminus \WES$. Notar que como $e' \notin \WES$ entonces $e' \notin \WESS$. Como $\WESS \neq \WES$ y por la monotonicidad del (Lemma\ref{lem:WESandLesMonotonicity}) debe existir un estado $s$ tal que $s \in \WESS \setminus 
+\WESS \setminus \WES$. Notar que como $e' \notin \WES$ entonces $e' \notin \WESS$. Como $\WESS \neq \WES$ y por la monotonicidad del (Lema\ref{lem:WESandLesMonotonicity}) debe existir un estado $s$ tal que $s \in \WESS \setminus 
 \WES$, entonces $s$ debe tener un controlador en $\WESS $. Este controlador no puede alcanzar $e'$ porque si lo hiciera, debería haber un controlador para $e'$ y comenzamos asumiendo que $e' 
 \notin \WESS$. Más aún, si el controlador alcanzara $e$, entonces $\l$ debe ser controlable (si fuera no controlable, el controlador alcanzaría $e'$ lo cual ya establecimos que no es posible). Entonces, el controlador evita $e \step{\l}{} e'$ lo que significa que debe ser también un controlador para $s$ en $\unexploredToBottom{\structure}$ (i.e.,  $s \in \WES$) y alcanzamos una contradicción.
 
@@ -117,10 +117,10 @@ Ahora asumimos $e' \not\in \LESS \setminus \LES$. Notar que como $e' \notin \LES
 \end{proof}
 
 \begin{proof}
-	(Idea: Para probar que $e' \in \WESS \setminus \WES$ implica \texttt{canBeWinningLoop($\SCC$)}, asumimos \\ $\neg$\texttt{canBeWinningLoop($\SCC$)} y mostramos que $e' \notin \WESS 
+	(Idea: Para probar que $e' \in \WESS \setminus \WES$ implica \\ \texttt{canBeWinningLoop($\SCC$)}, asumimos $\neg$\texttt{canBeWinningLoop($\SCC$)} y mostramos que $e' \notin \WESS 
 	\setminus \WES$. Para esto, basta con ver que si
 	$\neg$\texttt{canBeWinningLoop($\SCC$)} entonces para alcanzar un estado marcado desde $e'$ se debe salir de $\SCC$ a un estado $s \notin \SCC \cup \WES$ lo que implica $s \notin \WESS$ 
-	ya que $s$ no tiene ningún camino de estados $\NONE$ que llegue a $e \step{\l}{} e'$  (Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}).
+	ya que $s$ no tiene ningún camino de estados $\NONE$ que llegue a $e \step{\l}{} e'$  (Lema~\ref{lem:newWinnersLosersAreNonePredecessors}).
 	Como $s$ no tiene controlador en $\unexploredToBottom{\structure'}$, es imposible que $e'$ tenga uno. 
 	
 	Para probar que \texttt{canBeWinningLoop($\SCC$)} implica $e' \notin \LESS$ construimos un controlador $\sigma'$ para $e'$ en $\unexploredToTop{\structure'}$ de la siguiente forma:
@@ -128,13 +128,13 @@ Ahora asumimos $e' \not\in \LESS \setminus \LES$. Notar que como $e' \notin \LES
 	$\SCC \cap \LES= \emptyset$. Tan pronto como la traza sale de $\SCC$ a un estado $s'$ usamos el controlador para $s'$ en $\unexploredToTop{\structure'}$. 
 	Como $s'$ no puede alcanzar $e \step{\l}{\structure'} 
 	e'$ usando estados $\NONE$, por el 
-	Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, $s'$ debe tener el controlador que necesitamos.)	\\
+	Lema~\ref{lem:newWinnersLosersAreNonePredecessors}, $s'$ debe tener el controlador que necesitamos).	\\
 
 
 Sea $e' \in \WESS \setminus \WES$ pero $\neg$\texttt{canBeWinningLoop($\SCC$)}.
 Existe un controlador $\sigma$ para $e'$ en $\unexploredToBottom{\structure'}$, esto significa que debe existir un camino $w$ desde $e'$ hasta un estado marcado $m$. 
 Dado que $\neg$\texttt{canBeWinningLoop($\SCC$)}, no hay estados marcados en $\SCC$, $w$ debe salir de $\SCC$. 
-Sea $s$ el primer estado que alcanza $w$ fuera de $\SCC$, $s$ pertenece a $\LES \cup \NONE$, y no tiene un camino de estados $\NONE$ hasta $e'$ entonces según Lemma~\ref{lem:newWinnersLosersAreNonePredecessors} $s$ va a seguir sin cambiar su estado.
+Sea $s$ el primer estado que alcanza $w$ fuera de $\SCC$, $s$ pertenece a $\LES \cup \NONE$, y no tiene un camino de estados $\NONE$ hasta $e'$ entonces según Lema~\ref{lem:newWinnersLosersAreNonePredecessors} $s$ va a seguir sin cambiar su estado.
 Dado que $s \notin \WESS$, $s$ no tiene un controlador en $\unexploredToBottom{\structure'}$, pero $\sigma$ acepta corridas que llevan a $s$, llegamos a un absurdo.
 
 Asumiendo \texttt{canBeWinningLoop($\SCC$)} simplemente construimos un controlador $\sigma^4$ para $e'$ en $\unexploredToTop{\structure'}$ para probar que $e' \notin \LESS$
@@ -149,7 +149,7 @@ Usamos los controladores $\sigma_{s'}$ donde $s'$ es tal que existe $s \in \SCC$
 
 Probaremos que $\sigma^4$ es $controllable$ y $non-blocking$.
 
-Dado que habilitamos todas las transiciones no controlables, $\sigma^4$ es trivialmente $controllable$.
+Dado que habilitamos todas las transiciones no controlables, $\sigma^4$ es trivialmente \\ $controllable$.
 
 Para $non-blocking$, sea $w$ compatible con $\sigma^4$, mostraremos que puede ser extendido. Si $w = w_0.w_1$ y $w_0$ es la palabra más corta tal que existe una $s' \notin \SCC \wedge s' \notin \LES$ y $e' \runw{w_0}{\unexploredToTop{\structure'}} s'$. Entonces por definición de $\sigma^4$ sabemos que  $\sigma^4(w_0.w_1.w_2) = \sigma_{s'}(w_1.w_2)$ para todo $w_2$. Ya que $\sigma_{s'}$ es $non-blocking$, existe un $w_2$ tal que $\sigma_{s'}(w_1.w_2)$ alcanza un estado marcado. Entonces $\sigma^4(w_0.w_1)$ puede ser extendido para alcanzar ese estado marcado. 
 
@@ -169,11 +169,11 @@ Si $p' \in \SCC$, entonces $w.l'$ puede extenderse para llegar a cualquier $s$ e
 	$\SCC \cap \LES= \emptyset$. Tan pronto como la traza sale de $\SCC$ al estado $s'$ usamos el controlador de $s'$ en $\unexploredToTop{\structure'}$. 
 	Como $s'$ no puede alcanzar $e \step{\l}{\structure'} 
 	e'$ usando estados $\NONE$, por el 
-	Lemma~\ref{lem:newWinnersLosersAreNonePredecessors}, $s'$ debe tener tal controlador. 
+	Lema~\ref{lem:newWinnersLosersAreNonePredecessors}, $s'$ debe tener tal controlador. 
 	
 	Cuando el \texttt{if} es false, alcanza con probar que $P = \SCC \subseteq \LESS$. Alcanzamos una contradicción asumiendo que $s \in \SCC \setminus \LESS$: Si $s 
 	\notin \LESS$ entonces tiene un controlador $\sigma$ que acepta una traza $w$ alcanzando un estado marcado. Como no hay estados marcados en $\SCC$, $w$ alcanza un estado $s' \notin \SCC$. Como el
-	\texttt{if} era false, $s' \in \LESS$ por lo que $\sigma$ no es un controlador.)\\
+	\texttt{if} era false, $s' \in \LESS$ por lo que $\sigma$ no es un controlador).\\
 	
 
 
@@ -184,7 +184,7 @@ Esto significa que ningún estado $s' \notin \SCC \wedge s' \notin \LES$ puede s
 
 En el caso de que la declaración $\texttt{if}$ sea verdad, probaremos que $e' \notin \LESS$:
 
-Usamos el mismo $\sigma^4$ de la demostración Lemma \ref{lem:canBeWinningLoopWorks}. Ya sabemos que $\sigma^4$ es tanto $controllable$ como $non-blocking$ en esta situación por el Lemma anterior.\\
+Usamos el mismo $\sigma^4$ de la demostración Lema \ref{lem:canBeWinningLoopWorks}. Ya sabemos que $\sigma^4$ es tanto $controllable$ como $non-blocking$ en esta situación por el Lema anterior.\\
 
 De otra forma entramos en el bloque $\texttt{else}$:
 

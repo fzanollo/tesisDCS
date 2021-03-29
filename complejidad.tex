@@ -17,11 +17,11 @@ Usaremos $|S_C|$ y $|T_C|$ para referirnos al número de estados y transiciones 
 \begin{enumerate}
 	\item O(findNewGoalsIn($loop$))$ <= O(|S_{ES}| \times |T_{ES}|)$: 
 	Un punto fijo progresivamente remueve todos los estados que no son ganadores en $\unexploredToBottom{\structure'}$.
-	En el peor caso se deben remover $|S_{ES}|$ estados, y el costo de remover cada un estado está acotado por $|T_{ES}|$.
+	En el peor caso se deben remover $|S_{ES}|$ estados, y el costo de remover cada estado está acotado por $|T_{ES}|$.
 	Cada iteración ejecuta otro punto fijo que va quitando los estados que son perdedores (en $\unexploredToBottom{\structure'}$)
 	o son inalcanzables desde dentro de $C$.
 	Esto se obtiene al chequear todas las transiciones entrantes y salientes para cada estado ($O(|T_{ES}|)$). 
-	Luego, cada iteración del primer punto fijo realiza una exploración "backwards $BFS$" sobre $C$ ($O(|T_{ES}|)$), comenzando desde los estados marcados de $C$ (o estados que tienen un hijo en $\Goals$). Cuando la exploración termina, todos los estados de $C$ que no fueron alcanzados son removidos.
+	Luego, cada iteración del primer punto fijo realiza una exploración ``backwards $BFS$'' sobre $C$ ($O(|T_{ES}|)$), comenzando desde los estados marcados de $C$ (o estados que tienen un hijo en $\Goals$). Cuando la exploración termina, todos los estados de $C$ que no fueron alcanzados son removidos.
 	
 	\item O(findNewErrorsIn($loops$))$ <= O(|S_{ES}| \times |A_E|)$: Simplemente iteramos sobre todos los estados del loop y chequeamos si hay al menos un estado con un hijo NONE fuera del loop. Como nuestro autómata es determinístico sabemos que para cualquier estado $s$, 
 	$|hijos(s)|<=|A_E|$ (la cantidad de eventos). Además, la cantidad de estados del $loops$ está acotada por $S_{ES}$.
@@ -65,7 +65,7 @@ $|S_E|$ y $|X_m - X_t|$.
 Aunque $|S_E| \geq |X_m - X_t|$, el número de estados marcados no terminales puede sufrir proporcionalmente la misma explosión que los estados de la planta.
 Por lo tanto, en el peor caso, $O(|S_E|) = O(|X_m - X_t|)$. Lo que permite la afirmación de que la última iteración de nuestro algoritmo tiene una complejidad peor caso comparable a la complejidad de 
 \cite{Huang:2007:Optimal}.
-Sin embargo, nuestro trabajo sufre una penalidad a nivel de complejidad a raíz de intentar resolver el problema antes de conocer la composición completa de la planta. En \DCS el loop es ejecuta hasta
+Sin embargo, nuestro trabajo sufre una penalidad a nivel de complejidad a raíz de intentar resolver el problema antes de conocer la composición completa de la planta. En \DCS el loop se ejecuta hasta
 |$T_E$| veces, cada vez que a $\structure$ se le agrega una transición. Este es el costo en complejidad a pagar por la construcción on-the-fly. 
 Los resultados experimentales muestran que esta complejidad teórica adicional puede compensarse con el tiempo ganado al evitar la construcción completa del state space, y en consecuencia tener iteraciones menos costosas sobre un espacio menor. 
 
