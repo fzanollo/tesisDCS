@@ -60,7 +60,7 @@ Para explicar el algoritmo y argumentar su correctitud y completitud introducimo
 	\bot) \, | \, $ $ \exists s' \ldot (s, \l, s') \in (\D_E \setminus \D_\structure)\}$ 
 \end{definition}
 
-Usamos estos problemas de control para decidir tempranamente si un estado $s$ es ganador o perdedor en $E$ basado en lo que exploramos previamente en $\structure$. Si $s$ es ganador en $\unexploredToBottom{\structure}$ esto significa que sin importar a dónde lleven las transiciones no exploradas, $s$ también va a ser ganador en $E$. Similarmente, $s$ es perdedor en $E$ si es perdedor en $\unexploredToTop{\structure}$.
+Usamos estos problemas de control para decidir tempranamente si un estado $s$ es ganador o perdedor en $E$ basados en lo que exploramos previamente en $\structure$. Si $s$ es ganador en $\unexploredToBottom{\structure}$ esto significa que sin importar a dónde lleven las transiciones no exploradas, $s$ también va a ser ganador en $E$. Similarmente, $s$ es perdedor en $E$ si es perdedor en $\unexploredToTop{\structure}$.
 El Lema~\ref{lem:WESandLesMonotonicity} refuerza este razonamiento.
 
 
@@ -76,7 +76,7 @@ $Goals$ y $\NONE$ se usan para este propósito.
 
 
 
-En el peor caso, si no se pudo concluir nada antes de componer la planta en su totalidad, se perdió tiempo en los puntos fijos, intentando clasificar estados, y se realiza una última vez el algoritmo clásico con la planta totalmente explorada. Esto garantiza la completitud del algoritmo, como se detalla en mayor profundidad en el capítulo~\ref{chpt:dcs}.
+En el peor caso, si no se pudo concluir nada antes de componer la planta en su totalidad, se perdió tiempo en los puntos fijos, intentando clasificar estados, y se realiza una última vez el algoritmo clásico con la planta totalmente explorada. Esto garantiza la completitud del algoritmo, como se detalla con mayor profundidad en el capítulo~\ref{chpt:dcs}.
 
 \begin{lstlisting}[language={pseudocode},label={lst:on-the-fly},caption={Nuestro enfoque on-the-fly},float=ht]
 Algorithm genericOTF-Exploration($E, A_E^C$):

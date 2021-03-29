@@ -97,7 +97,7 @@ Dentro de la batería queremos destacar algunos de especial interés, agrupados 
 % FALENCIAS AL ENCONTRAR ERRORES
 Un estado deadlock (sin transiciones de salida) es obviamente un error, ya que si caemos en él no podemos alcanzar nunca un estado marcado. Ahora, ¿qué pasa si tenemos un conjunto de estados conectados entre sí pero sin conexión a otros fuera del conjunto?. Depende de si existe un estado marcado dentro del conjunto o no, ya que de no haberlo no tenemos forma de alcanzar uno (no podemos salir del conjunto). 
 
-La figura \ref{fig:falenciasErrores} ejemplifica este caso, el conjunto o rama $B$ fue totalmente explorado y no contiene ningún estado marcado. En este momento es importante que agreguemos todos los estados de $B$ a $\Errors$, de no hacerlo podríamos incurrir en una falla al propagar goal desde otra rama. Es decir, si se mira primero la rama de abajo y no lo marcamos como error (a pesar de estar completamente explorado), entonces al mirar la de arriba diremos que es goal y propagaremos dicha información, equivocadamente, más allá de $e$. 
+La figura \ref{fig:falenciasErrores} ejemplifica este caso, el conjunto o rama $B$ fue totalmente explorado y no contiene ningún estado marcado. En este momento es importante que agreguemos todos los estados de $B$ a $\Errors$, de no hacerlo podríamos incurrir en una falla al propagar goal desde otra rama. Es decir, si se mira primero la rama de abajo y no marcamos sus estados como error (a pesar de estar completamente explorada), entonces al mirar la de arriba diremos que es goal y propagaremos dicha información, equivocadamente, más allá de $e$. 
 
 Este problema se evita respetando el invariante presentado en la propiedad \ref{def:invariant}, ya que si una rama $B$ cuya raíz es $s$ está totalmente explorada, entonces $E_s \subseteq E$ es la reducción del problema que decide si $s$ es un estado ganador o perdedor. Además, como está totalmente explorada $\unexploredToBottom{E_s} = \unexploredToTop{E_s}$, por lo que $W_{\unexploredToBottom{E_s}} \cup L_{\unexploredToTop{E_s}} = S_{E_{s}}$ y no puede darse el caso de la figura \ref{fig:falenciasErrores} en el que los estados de la rama no fueron clasificados.
 
@@ -110,7 +110,7 @@ Este problema se evita respetando el invariante presentado en la propiedad \ref{
 
 \FloatBarrier
 \textbf{Test 8} Fig \ref{fig:test8} 
-Este es un caso muy similar al presentado como ejemplo pero en lugar de una rama perdedora (llamada B) totalmente explorada a partir de u23 tenemos un solo estado (3). Si no se señala el estado 3 como error, porque no se detecta que es un livelock, entonces podríamos sacar la conclusión errada de que la planta es controlable; ya que 2 forma un loop con el estado inicial marcado. Los livelocks y las ramas perdedoras son difíciles de detectar hasta ser totalmente exploradas, pero en ese momento deben ser categorizados como errores, de otra forma no pueden distinguirse las ramas ya confirmadas como error y las parcialmente exploradas. Una vez que el estado 3 es marcado como error, concluir que la planta no es controlable resulta sencillo.
+Este es un caso muy similar al presentado como ejemplo pero en lugar de una rama perdedora (llamada B) totalmente explorada a partir de u23 tenemos un solo estado (3). Si no se señala el estado 3 como error, porque no se detecta que es un livelock, entonces podríamos sacar la conclusión errada de que la planta es controlable; ya que 2 forma un loop con el estado inicial marcado. Los livelocks y las ramas perdedoras son difíciles de detectar hasta ser totalmente exploradas, pero en ese momento sus estados deben ser categorizados como errores, de otra forma no pueden distinguirse las ramas ya confirmadas como error y las parcialmente exploradas. Una vez que el estado 3 es marcado como error, concluir que la planta no es controlable resulta sencillo.
 
 \begin{figure}[h]
  \centering
@@ -165,7 +165,7 @@ Como se detalló en el capítulo \ref{chpt:dcs}, al momento de propagar resultad
 \end{figure}
 
 \textbf{Test 1} Fig \ref{fig:test1}
-En este test, al descubrir que el estado 2 es ganador y propagar esa información, debe decidirse si el estado 0 es ganador. En principio parecería que no, puesto que un evento no controlable puede forzarlo a 3, pero es necesario darse cuenta que, si bien 0 puede ser forzado a 3, luego está obligado a volver, por lo que siempre hay una extensión que alcanza a 2. Por ende existe un director, que es el mismo autómata.
+En este test, al descubrir que el estado 2 es ganador y propagar esa información, debe decidirse si el estado 0 es ganador. En principio parecería que no, puesto que un evento no controlable puede forzarlo a 3, pero es necesario darse cuenta de que, si bien 0 puede ser forzado a 3, luego está obligado a volver, por lo que siempre hay una extensión que alcanza a 2. Por ende existe un director, que es el mismo autómata.
 \begin{figure}[h]
  \centering
  \includegraphics[scale=0.7]{figures/tests/test1.png}
