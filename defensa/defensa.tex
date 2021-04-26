@@ -1,4 +1,4 @@
-\documentclass{beamer}
+\documentclass[handout]{beamer}
 \usetheme{Darmstadt}
 \usecolortheme{seahorse}
 %-------------------------------------------------------
@@ -25,7 +25,7 @@
 % qué toma de input (autómatas, modelo de la realidad, en general son varios)
 % detalles de los autómatas (estado inicial, marcados, etc) con ejemplo de avión
 % la composición explota, los algor clásicos rompen acá (i.e. decir que existe algor monolítico)
-% idea general: componer mientras exploras
+% idea general: componer mientras exploras y terminar al tener conclusión (con suerte antes de ver todo)
 % [buscar] ejemplo simple para explicar composición (mostrar planta completa)
 
 % DEFINICIONES (ANTECEDENTES)
@@ -45,7 +45,6 @@
 
 % TESTS
 % implementación en MTSA, explicación mini de la herramienta
-% la exploración es guiada por una heurísitca, hay varias, dos las hizo dany
 % hicimos tests, medio TDD
 
 % BENCHMARK
@@ -55,8 +54,7 @@
 % QUÉ VIMOS (CONCLUSIONES)
 % entender el problema
 % soluciones existentes, idea nueva
-% nuevo algoritmo
-% ``demo'' de corrección y completitud
+% nuevo algoritmo, ``demo'' de corrección y completitud
 % implementación
 % batería de tests
 % benchmark confirma que mantiene eficiencia
@@ -77,5 +75,36 @@
 %-------------------------------------------------------
 \section{Introducción}\include{intro}
 %-------------------------------------------------------
+\section{Conocimiento previo}\include{background}
+%-------------------------------------------------------
+\section{On-the-fly}\include{on-the-fly}
+%-------------------------------------------------------
+\section{Implementación y Tests}
+%-------------------------------------------------------
+\section{Benchmark}
+%-------------------------------------------------------
+\begin{frame}{Qué vimos}
+    \begin{itemize}
+    \item Entendimos el problema
+    \pause
+    \item Soluciones existentes y la idea ``nueva'' (exploración on-the-fly)
+    \pause
+    \item Nuevo algoritmo, parte de su demostración (corrección y completitud)
+    \pause
+    \item Implementación en MTSA
+    \pause
+    \item Batería de tests, TDD
+    \pause
+    \item Benchmark y resultados versus la versión anterior, no se perdió eficiencia.
+    \end{itemize}
+
+    \begin{block}{}
+    La idea de exploración on-the-fly, y gran parte de la estructura del algoritmo, se puede aplicar a otro tipo de problemas (además de non-blocking), ej: GR1 (próximamente).
+    \end{block}
+\end{frame}
+%-------------------------------------------------------
+\begin{frame}{Preguntas}
+    Gracias, vuelvan prontos [img de apu]
+\end{frame}
 %-------------------------------------------------------
 \end{document}
