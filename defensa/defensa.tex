@@ -1,0 +1,81 @@
+\documentclass{beamer}
+\usetheme{Darmstadt}
+\usecolortheme{seahorse}
+%-------------------------------------------------------
+\usepackage[spanish]{babel} % Para separar correctamente las palabras
+\usepackage[utf8]{inputenc} % Este paquete permite poner acentos y eñes usando codificación
+\usepackage[most]{tcolorbox}
+
+\usepackage{multicol}
+\usepackage{listings}
+\lstset{
+    language=C,
+    backgroundcolor=\color{black!5}, % set backgroundcolor
+    basicstyle=\footnotesize,% basic font setting
+}
+
+\newcommand<>{\reveal}[1]{\mbox{}\visible#2{#1}}
+
+\title[DCS non-blocking]{Directed Controller Synthesis for Non-Maximal Blocking Requirements}
+\author[Duran, Zanollo]{Matias Duran, Florencia Zanollo}
+\date[12/5/21]{12 de Mayo de 2021}
+%-------------------------------------------------------
+% INTRO
+% intro sobre qué queremos (programa que soluciona problemas por nosotros)
+% qué toma de input (autómatas, modelo de la realidad, en general son varios)
+% detalles de los autómatas (estado inicial, marcados, etc) con ejemplo de avión
+% la composición explota, los algor clásicos rompen acá (i.e. decir que existe algor monolítico)
+% idea general: componer mientras exploras
+% [buscar] ejemplo simple para explicar composición (mostrar planta completa)
+
+% DEFINICIONES (ANTECEDENTES)
+% def pasos y corridas
+% controlador
+% vemos en particular problemas non-blocking (i.e. loop para ganadores, no-controlables no joden)
+% estados ganadores y perdedores (estados desde donde hay una estrategia==controlador ganadora/perdedora)
+
+% ON-THE-FLY
+% explicar exploración parcial (lo visto hasta ahora)
+% estados ganadores y perdedores ahora (antes era facil, ahora tenemos que ver a dónde van)
+% el concepto de ``frontera'' (en el sentido de transiciones existentes sin explorar) top, bottom
+% actualizamos estado solo cuando estamos seguros (ganador en bottom / perdedor en top)
+% exploramos de a una transición [e -l-> e']
+% esto actualiza antecesores de e
+% idea central de que ganador necesita loop
+
+% TESTS
+% implementación en MTSA, explicación mini de la herramienta
+% la exploración es guiada por una heurísitca, hay varias, dos las hizo dany
+% hicimos tests, medio TDD
+
+% BENCHMARK
+% usamos mismo benchmark que dany
+% resultados vs DCS version 1.0, monolítico, y la nuestra (DCS2)
+
+% QUÉ VIMOS (CONCLUSIONES)
+% entender el problema
+% soluciones existentes, idea nueva
+% nuevo algoritmo
+% ``demo'' de corrección y completitud
+% implementación
+% batería de tests
+% benchmark confirma que mantiene eficiencia
+% esta idea se puede aplicar a otro tipo de problemas (que no sean non-blocking), ej GR1 vuelvan prontos
+
+%-------------------------------------------------------
+\begin{document}
+%-------------------------------------------------------
+\begin{frame}[plain]
+
+\titlepage
+
+\end{frame}
+%-------------------------------------------------------
+\begin{frame}[plain]{Índice}
+    \tableofcontents
+\end{frame}
+%-------------------------------------------------------
+\section{Introducción}\include{intro}
+%-------------------------------------------------------
+%-------------------------------------------------------
+\end{document}
