@@ -1,4 +1,4 @@
-\documentclass[handout]{beamer}
+\documentclass{beamer}
 \usetheme{Darmstadt}
 \usecolortheme{seahorse}
 %-------------------------------------------------------
@@ -14,7 +14,7 @@
     basicstyle=\footnotesize,% basic font setting
 }
 
-\newcommand<>{\reveal}[1]{\mbox{}\visible#2{#1}}
+\newcommand<>{\reveal}[1]{\mbox{}\visible#2{#1}} % ej: \reveal<5->{text} aparece de 5 en adelante
 
 \title[DCS non-blocking]{Directed Controller Synthesis for Non-Maximal Blocking Requirements}
 \author[Duran, Zanollo]{Matias Duran, Florencia Zanollo}
@@ -85,21 +85,16 @@
 %-------------------------------------------------------
 \section{Conclusión}
 \begin{frame}[plain]{Qué vimos}
-    \begin{itemize}
+    \begin{itemize}[<+->]
     \item Entendimos el problema
-    \pause
     \item Soluciones existentes y la idea ``nueva'' (exploración on-the-fly)
-    \pause
     \item Nuevo algoritmo, parte de su demostración (corrección y completitud)
-    \pause
     \item Implementación en MTSA
-    \pause
     \item Batería de tests, TDD
-    \pause
     \item Benchmark y resultados versus la versión anterior. Así como también versus otras herramientas del estado del arte. No se perdió eficiencia, teniendo en cuenta la confianza ganada en correctitud.
     \end{itemize}
 
-    \begin{block}{}
+    \begin{block}<7->{}
     La idea de exploración on-the-fly, y gran parte de la estructura del algoritmo, se puede aplicar a otro tipo de problemas, ej: GR1 (próximamente).
     \end{block}
 \end{frame}
