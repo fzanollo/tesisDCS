@@ -6,6 +6,9 @@
 % exploramos de a una transición [e -l-> e']
 % esto actualiza antecesores de e
 % idea central de que ganador necesita loop
+
+
+%dividimos en dos la explicación on-the-fly
 %-------------------------------------------------------
 \begin{frame}{Exploración parcial}
     i.e. es lo visto hasta el momento
@@ -19,20 +22,41 @@
     def el concepto de ``frontera'' (en el sentido de transiciones existentes sin explorar) top, bottom
 \end{frame}
 %-------------------------------------------------------
-\begin{frame}{Conclusión sobre un estado}
+\begin{frame}{Nueva definición de ganadores/perdedores}
     actualizamos estado solo cuando estamos seguros (ganador en bottom / perdedor en top)
+    Obs: los estados ganadores/perdedores según esta definición son ganadores en la planta completa (WESy LES son monótonos).
 \end{frame}
-%-------------------------------------------------------
+%------------------------------------------------------- %parte 2
 \begin{frame}{Detalles de la exploración}
-    exploramos de a una transición [e -l-> e']. 
+    exploramos de a una transición $e \step{\l}{} e'$. 
     ejemplo de la tesis como animación?. 
 \end{frame}
 %-------------------------------------------------------
-\begin{frame}{Sólo actualizamos antecesores}
-    explicar por qué o lema o ej de imágen, ver la mejor manera
+\begin{frame}{Propagar información}
+    Lema2 ganador/perdedor es antecesor explicar por qué o lema o ej de imágen, ver la mejor manera\\
+    Lema3 hay info para propagar si e' era conocido Y era gandor/perdedor (cc. no sabemos nada nuevo)
 \end{frame}
 %-------------------------------------------------------
-\begin{frame}{Ganador necesita tener un loop}
-    idea central de que ganador necesita loop, esto no sería mejor decirlo antes? por ej cuando hablamos de ganadores?
+\begin{frame}{Obtener nueva información (Ganador)}
+    Lema4 como dijimos antes, necesitamos un loop para ganar, entonces sólo va a haber ganadores nuevos al encontrarnos dicho loop (i.e. el e' es uno que vimos Y no es ni ganador/perdedor porque sino cae en el caso anterior)
 \end{frame}
 %-------------------------------------------------------
+\begin{frame}{Obtener nueva información (Perdedor)}
+    Lema5 si ya exploraste todo y no hay marcados por ningún lado entonces obvio que no podés llegar a ninguno [dibujo]
+\end{frame}
+%-------------------------------------------------------
+\begin{frame}{Resúmen del nuevo algoritmo}
+    \begin{itemize}
+     \item Clasificamos (ganador/perdedor) cuando estamos seguros. %i.e. no se cambia una vez que está
+     \item Propagamos a los antecesores afectados (si hay información respecto a e').
+     \item Tratamos de obtener nueva información sólo al cerrar loops.
+    \end{itemize}
+    
+    \begin{block}{Observación:}
+        Sólo hacemos nuevos cálculos cuando son necesarios.
+    \end{block}
+    
+    Nos interesa saber qué tan buena es la eficiencia del algoritmo, en tiempo de cómputo.
+\end{frame}
+
+

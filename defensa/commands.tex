@@ -1,0 +1,50 @@
+% Math
+
+\newcommand{\card}[1]{\lvert#1\rvert}
+\newcommand{\<}{\langle}
+\renewcommand{\>}{\rangle}
+\newcommand{\ldot}{\;.\;}
+\newcommand{\lcom}{\,,\,}
+\newcommand{\primeI}[1]{{#1}'}
+\newcommand{\primeII}[1]{{#1}'\!\!\:'}
+\newcommand{\into}{\mapsto}
+\newcommand{\Nat}{\mathbb{N}}
+\newcommand{\dotrightarrow}{\clipbox{0pt 0 {.675\width} 0}{\ensuremath{\rightarrow}} \makebox[1.1pt]{} {\cdot} {\cdot} {\cdot} \makebox[1.1pt]{} \clipbox{{.55\width} 0 0pt 0}{\ensuremath{\rightarrow}}}
+\newcommand{\longdotrightarrow}{\clipbox{0pt 0 {.55\width} 0}{\ensuremath{\rightarrow}} \makebox[2pt]{} {\cdot} \makebox[1pt]{} {\cdot} \makebox[1pt]{} {\cdot} \makebox[2pt]{} \clipbox{{.45\width} 0 0pt 0}{\ensuremath{\rightarrow}}}
+
+% Supervisory Control
+
+\renewcommand{\l}{\ell}
+\renewcommand{\ll}{{\bar{\l}}}
+\renewcommand{\d}{\delta}
+\newcommand{\init}[1]{\bar{#1}} % #1 state name
+\newcommand{\state}[2]{{#1}^{#2}}
+\newcommand{\s}[1]{\state{e}{#1}}
+
+\newcommand{\D}{\rightarrow}
+\newcommand{\B}{\rightsquigarrow}
+
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\G}{\mathcal{G}}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\R}{\mathcal{R}}
+\newcommand{\W}{\mathcal{W}}
+
+\renewcommand{\L}{\mathcal{L}}
+\renewcommand{\P}{\mathcal{P}}
+\renewcommand{\S}{\mathcal{S}}
+
+\newcommand{\w}{\ensuremath{\omega}}
+
+\newcommand{\notstep}[2]{\overset{#1}{\not\D}_{#2}}
+\newcommand{\step}[2]{\overset{#1}{\D}_{#2}}
+\newcommand{\mstep}[2]{\overset{#1}{\twoheadrightarrow}_{#2}}
+\newcommand{\lstep}[2]{\overset{#1}{\longrightarrow}_{#2}}
+\newcommand{\walk}[2]{\overset{#1}{\Rightarrow}_{#2}}
+\newcommand{\hop}[2]{\overset{#1}{\B}_{#2}}
+\newcommand{\runw}[2]{\,\overset{#1}{\dotrightarrow}_{#2}\,}
+\newcommand{\run}[3]{
+\,\overset{#1\ldots#2}{\longdotrightarrow}_{#3}\,}
+\newcommand{\runlst}[3]{
+\overset{#1\quad#2}{\raisebox{.1pt}{-}{\,\cdot\cdot\cdot}\!\D}_{#3}}

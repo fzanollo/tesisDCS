@@ -29,6 +29,9 @@
     basicstyle=\footnotesize,% basic font setting
 }
 
+\usepackage{trimclip}
+\input{commands}
+
 \newcommand<>{\reveal}[1]{\mbox{}\visible#2{#1}} % ej: \reveal<5->{text} aparece de 5 en adelante
 
 \title[DCS non-blocking]{Directed Controller Synthesis for Non-Maximal Blocking Requirements}
@@ -74,7 +77,6 @@
 % batería de tests
 % benchmark confirma que mantiene eficiencia
 % esta idea se puede aplicar a otro tipo de problemas (que no sean non-blocking), ej GR1 vuelvan prontos
-
 %-------------------------------------------------------
 \begin{document}
 %-------------------------------------------------------

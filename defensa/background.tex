@@ -4,19 +4,55 @@
 % vemos en particular problemas non-blocking (i.e. loop para ganadores, no-controlables no joden)
 % estados ganadores y perdedores (estados desde donde hay una estrategia==controlador ganadora/perdedora)
 %-------------------------------------------------------
-\begin{frame}{Pasos y corridas (run)}
-    definición
+\begin{frame}{Problema de control non-blocking}
+    \begin{block}{¿Cuál es la entrada de un problema de control?}
+        conjunto de autómatas, la composición de esos es la planta completa que no queremos calcular\\
+        controlables y no controlables\\
+        estados marcados, se quiere tener la posibilidad de visitar infinitas veces, al menos uno
+        [dibujo de no controlables no joden VER FACAS]
+    \end{block}
+
+    \begin{block}{¿Qué devuelve?}
+        Una estrategia ganadora (llamada controlador) o afirmación de que no existe.
+    \end{block}
+
+\end{frame}
+%-------------------------------------------------------
+\begin{frame}{Acciones, pasos y corridas (run)}
+    \begin{itemize}
+     \item Un paso es $t \step{\l}{T} t'$ [imagen]
+     \item Una corrida de una palabra $w = \l_0,\ldots,\l_k$ en $T$, es $t_0 \runw{w}{T} t_{k+1}$ [imagen]
+    \end{itemize}
 \end{frame}
 %-------------------------------------------------------
 \begin{frame}{Controlador}
-    definición
-\end{frame}
-%-------------------------------------------------------
-\begin{frame}{Non-blocking}
-    definición detalle de loop para ganadores, no-controlables no joden. ¿con imágenes de ejemplo?
+    Es una restricción de la planta (la composición de todos los autómatas) y debe cumplir:
+
+    \begin{itemize}
+     \item Puede prohibir pasos controlables.
+     \item Debe mantener todos los no-controlables.
+     \item Todas las corridas posibles en la planta restringida pasan por algún estado marcado.
+    \end{itemize}
 \end{frame}
 %-------------------------------------------------------
 \begin{frame}{Estados ganadores y perdedores}
-    estados desde donde hay una estrategia==controlador ganadora/perdedora. Agregar ejemplos
+    Si existe un controlador comenzando desde un estado, es decir, existe estrategia ganadora a partir del estado, entonces lo consideramos estado ganador. 
+    Caso contrario, el estado es perdedor y debemos evitarlo.
+    
+    [Agregar ejemplos imágenes]
+    
+    \begin{block}{Observación}
+        En particular nos interesa mucho si el estado inicial es ganador/perdedor, ya que eso nos dice si existe o no un controlador \textit{empezando} desde ahí.
+    \end{block}
+
+\end{frame}
+%-------------------------------------------------------
+\begin{frame}{Particularidades de non-blocking}
+    \begin{block}{Necesitamos un ciclo (loop) para ganar}
+        a qué nos referimos con loop\\
+        La única forma de visitar infinitas veces un estado es que la corrida sea un ciclo.
+    \end{block}
+    
+    [pictures pictures and more pictures]
 \end{frame}
 %-------------------------------------------------------
