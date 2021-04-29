@@ -1,6 +1,21 @@
 \documentclass{beamer}
-\usetheme{Darmstadt}
-\usecolortheme{seahorse}
+\usetheme{metropolis}
+% \setbeamertemplate{navigation symbols}{} 
+
+\AtBeginEnvironment{alltt}{\setlength{\topsep}{0pt}}
+
+\titlegraphic{\hfill\includegraphics[height=1cm]{figures/logo-dc.eps}}
+\usepackage{textpos} 
+
+\addtobeamertemplate{frametitle}{}{%
+	\begin{textblock*}{0mm}(\textwidth-2cm,-1cm)
+		\includegraphics[height=1cm]{figures/logofondonegro.eps}
+    \end{textblock*}
+}
+\setbeamertemplate{section in toc}[ball unnumbered] % index with bullet points
+\setbeamercolor{block body}{bg=structure!10} % visible blocks
+\setbeamercolor{block title}{bg=structure!20}
+\setbeamertemplate{blocks}[rounded][shadow] %round the edges of the blocks and cast a shadow
 %-------------------------------------------------------
 \usepackage[spanish]{babel} % Para separar correctamente las palabras
 \usepackage[utf8]{inputenc} % Este paquete permite poner acentos y eñes usando codificación
@@ -99,10 +114,13 @@
     \end{block}
 \end{frame}
 %-------------------------------------------------------
-\begin{frame}[plain]{Preguntas?}
+\begin{frame}[plain]{\null} % el null esta para forzar el header, alto trucazo
     \begin{columns}
     \begin{column}{0.5\textwidth}
-        Gracias, vuelvan prontos\\ \scriptsize{(para ver GR1)}
+        \Huge ¿Preguntas?\\
+        
+        \normalsize Gracias, vuelvan prontos\\ 
+        \scriptsize (para ver GR1)
     \end{column}
     \begin{column}{0.5\textwidth}
         \includegraphics[scale=0.5]{figures/apu.png}
