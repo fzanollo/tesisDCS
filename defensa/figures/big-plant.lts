@@ -1,0 +1,27 @@
+set Controlables = {despegar, aterrizar, mensaje, cargarBateria, cancelarMensaje, esperar}
+set NoControlables = {mensajeRecibido, pocaBateria, descarga}
+
+Avion = EnTierra,
+EnTierra = (despegar -> EnAire),
+EnAire = (aterrizar -> EnTierra | mensaje -> EsperandoConfirmacion | pocaBateria -> aterrizar -> EnTierra),
+EsperandoConfirmacion = (esperar -> EsperandoConfirmacion | mensajeRecibido -> EnAire | pocaBateria -> cancelarMensaje -> aterrizar -> EnTierra).
+
+Central = Idle,
+Idle = (mensaje -> RecibiendoMensaje),
+RecibiendoMensaje = (mensajeRecibido -> Idle | cancelarMensaje -> Idle).
+
+Bateria(N=10) = Completa,
+Completa = (despegar -> Carga[10]),
+Carga[i:1..10] = (descarga -> Carga[i-1] | aterrizar -> Carga[i] | cargarBateria -> Completa),
+Carga[0] = (pocaBateria -> aterrizar -> PocaBateria | aterrizar -> Completa),
+PocaBateria = (cargarBateria -> Completa).
+
+||Plant = (Avion || Central || Bateria).
+
+controllerSpec Goal = {
+  controllable = {Controlables}
+  marking = {mensajeRecibido}
+  nonblocking
+}
+
+heuristic ||DirectedController = Plant~{Goal}.
