@@ -6,10 +6,11 @@
 %-------------------------------------------------------
 \begin{frame}{Problema de control non-blocking}
     \begin{block}{¿Cuál es la entrada de un problema de control?}
-        conjunto de autómatas, la composición de esos es la planta completa que no queremos calcular\\
-        controlables y no controlables\\
-        estados marcados, se quiere tener la posibilidad de visitar infinitas veces, al menos uno
-        [dibujo de no controlables no joden VER FACAS]
+        \begin{itemize}
+          \item conjunto de autómatas (la composición de ellos es la planta completa que no queremos calcular)
+          \item acciones controlables y no controlables
+          \item estados marcados u objetivos (se quiere tener la \textit{posibilidad} de visitar infinitas veces \textit{al menos uno})
+        \end{itemize}
     \end{block}
 
     \begin{block}{¿Qué devuelve?}
@@ -19,14 +20,30 @@
 \end{frame}
 %-------------------------------------------------------
 \begin{frame}{Acciones, pasos y corridas (run)}
+    \begin{figure}
+        \begin{overprint}
+        \onslide<1>\includegraphics[width=\textwidth]{figures/1accion.png} 
+        \onslide<2>\includegraphics[width=\textwidth]{figures/2paso.png} 
+        \onslide<3->\includegraphics[width=\textwidth]{figures/3run.png} 
+        \end{overprint}
+    \end{figure}
+
     \begin{itemize}
-     \item Un paso es $t \step{\l}{T} t'$ [imagen]
-     \item Una corrida de una palabra $w = \l_0,\ldots,\l_k$ en $T$, es $t_0 \runw{w}{T} t_{k+1}$ [imagen]
+     \item Acción es una transición entre los estados.
+     \pause
+     \item Un paso es $t \step{\l}{T} t'$, toma en cuenta el estado de partida y llegada.
+     \pause
+     \item Una corrida de una palabra $w = \l_0,\ldots,\l_k$ en $T$, es $t_0 \runw{w}{T} t_{k+1}$, es decir, varios pasos.
     \end{itemize}
+    
 \end{frame}
 %-------------------------------------------------------
 \begin{frame}{Controlador}
-    Es una restricción de la planta (la composición de todos los autómatas) y debe cumplir:
+    \begin{figure}
+     \includegraphics[width=\textwidth]{figures/director.png}
+    \end{figure}
+
+    Es una restricción de la planta (la composición de todos los autómatas) que cumple las reglas:
 
     \begin{itemize}
      \item Puede prohibir pasos controlables.

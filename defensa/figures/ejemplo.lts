@@ -14,7 +14,7 @@ Bateria = Completa,
 Completa = (despegar -> Completa | pocaBateria -> aterrizar -> PocaBateria | aterrizar -> Completa),
 PocaBateria = (cargarBateria -> Completa).
 
-||Plant = (Avion || Central || Bateria).
+||Planta = (Avion || Central || Bateria).
 
 controllerSpec Goal = {
   controllable = {Controlables}
@@ -22,4 +22,4 @@ controllerSpec Goal = {
   nonblocking
 }
 
-heuristic ||DirectedController = Plant~{Goal}.
+heuristic ||Director = Planta~{Goal}.
