@@ -44,11 +44,45 @@
 \end{frame}
 %-------------------------------------------------------
 \begin{frame}{Obtener nueva información (Ganador)}
-    Lema4 explicar que necesitamos un loop para ganar, entonces sólo va a haber ganadores nuevos al encontrarnos dicho loop (i.e. el e' es uno que vimos Y no es ni ganador/perdedor porque sino cae en el caso anterior)
+	Como vimos, queremos trazas que visiten \textbf{infinitas} veces un estado marcado.
+	
+	\pause
+	
+	Una traza infinita en un autómata finito solo puede ocurrir si forma un \textbf{ciclo} (loop).
+	
+	\pause
+		
+	Ese ciclo debe tener un \textbf{estado marcado} o previamente \textbf{clasificado ganador}.
+	
+	\pause
+	
+	Al explorar una nueva transición, (si $e'$ no estaba clasificado) analizamos el ciclo \textbf{mas grande} que forma. Si no podemos ganar en ese ciclo, no obtuvimos nuevos ganadores.
+	
+	\pause
+
+	Además, el ciclo debe ser \textbf{controlablemente cerrado}. Intuición: Si una transición no controlable sale del ciclo, un controlador no puede mantenerse ahí dentro y ganar. Y si por no mantenerse adentro, va a un estado no explorado, \textbf{somos pesimistas} y asumimos que pierde.
 \end{frame}
 %-------------------------------------------------------
 \begin{frame}{Obtener nueva información (Perdedor)}
-    Lema5 si ya exploraste todo y no hay marcados por ningún lado entonces obvio que no podés llegar a ninguno [dibujo]
+	Descubrimos nuevos estados perdedores cuando \textbf{seguro} sabemos que no forman trazas con infinitos estados marcados.
+	
+	\pause 
+	
+	Esto es obvio cuando el estado solo tiene la traza vacía. \textbf{No puede ir a ningún otro estado}.
+	
+	\pause 
+	
+	Más difícil de detectar son los \textbf{ciclos sin estados marcados}.
+	
+	\pause
+	
+	\begin{block}{caso general}
+		Si en todos los descendientes de un estado $e$, no hay ningún \textbf{ciclo ganador}, entonces $e$ tiene que ser perdedor. 
+		
+		Tenemos que chequear \textbf{todos} los descendientes, porque siendo \textbf{optimistas}, un descendiente desconocido podría ser ganador.
+	\end{block}
+	
+	%acá decir que en la posta es + dificil xq podes tener un descendiente que sea ganador pero sos perdedor xq se te propaga perdedor de otro descendiente que no podes evitar, pero que esta es la forma de detectar "nuevos" perdedores.
 \end{frame}
 %-------------------------------------------------------
 \begin{frame}{Resúmen del nuevo algoritmo}
