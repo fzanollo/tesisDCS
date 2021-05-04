@@ -31,7 +31,7 @@
 \begin{frame}{Nueva definición de ganadores/perdedores}
     Antes era simple reconocer ganadores/perdedores porque contábamos con toda la información de la planta; ahora debemos ``imaginar'' a dónde van a parar las transiciones no vistas.
     
-    Actualizamos estados sólo cuando estamos seguros, es decir, señalamos ganadores sólo al pensar una frontera pesimista y perdedores en el caso contrario.
+    Actualizamos estados sólo cuando estamos seguros, es decir, señalamos ganadores sólo al pensar una frontera pesimista y perdedores en frontera optimista.
     
     \begin{block}{Observación}
         Los estados ganadores/perdedores según esta definición son ganadores/perdedores en la planta completa, es decir, una vez que clasificamos un estado nunca debemos reconsiderarlo.
@@ -44,7 +44,7 @@
 \end{frame}
 %-------------------------------------------------------
 \begin{frame}{Obtener nueva información (Ganador)}
-    Lema4 como dijimos antes, necesitamos un loop para ganar, entonces sólo va a haber ganadores nuevos al encontrarnos dicho loop (i.e. el e' es uno que vimos Y no es ni ganador/perdedor porque sino cae en el caso anterior)
+    Lema4 explicar que necesitamos un loop para ganar, entonces sólo va a haber ganadores nuevos al encontrarnos dicho loop (i.e. el e' es uno que vimos Y no es ni ganador/perdedor porque sino cae en el caso anterior)
 \end{frame}
 %-------------------------------------------------------
 \begin{frame}{Obtener nueva información (Perdedor)}
