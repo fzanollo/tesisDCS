@@ -130,4 +130,46 @@
     \end{columns}
 \end{frame}
 %-------------------------------------------------------
+\begin{frame}{Bonus track: Detalles de la exploración}    
+    \begin{columns}
+    \begin{column}{0.8\textwidth}
+        \begin{figure}
+        \centering
+            \begin{overprint}
+                \onslide<1>\includegraphics[scale=0.55]{../figures/ejemplo_on-the-fly/5.pdf}
+                \onslide<2>\includegraphics[scale=0.55]{../figures/ejemplo_on-the-fly/1.pdf}
+                \onslide<3>\includegraphics[scale=0.55]{../figures/ejemplo_on-the-fly/2.pdf}
+                \onslide<4>\includegraphics[scale=0.55]{../figures/ejemplo_on-the-fly/3.pdf}
+                \onslide<5->\includegraphics[scale=0.55]{../figures/ejemplo_on-the-fly/4.pdf}
+            \end{overprint}
+        \end{figure}
+    \end{column}
+    \begin{column}{0.4\textwidth}
+        \hspace{-50pt}
+        \begin{overprint}
+            \onslide<2>Empieza por el estado \textbf{0} y mira los pasos:
+                \begin{itemize}
+                 \item $0 \step{1}{} 1$
+                 \item $1 \step{2}{} 2$
+                 \item $0 \step{3(u)}{} 3$
+                 \item $1 \step{4(c)}{} 3$
+                \end{itemize}
+
+            \onslide<3>Explora el paso $3 \step{5}{} 1$\\
+            Cierra loop pero todavía no hay estado marcado (u objetivo).
+                 
+            \onslide<4>Mira los pasos:
+                \begin{itemize}
+                 \item $2 \step{6}{} 4$
+                 \item $4 \step{7}{} 2$
+                \end{itemize}
+                Cierra loop que incluye el estado marcado \textbf{4}, encontramos una parte ganadora, propagamos esa información.
+                
+            \onslide<5->Explora $3 \step{8}{} 5$, encuentra que \textbf{5} es perdedor y propaga la información. Llega al inicial entonces concluye que no hay controlador.
+        \end{overprint}
+    \end{column}
+    \end{columns}
+
+\end{frame}
+%-------------------------------------------------------
 \end{document}
