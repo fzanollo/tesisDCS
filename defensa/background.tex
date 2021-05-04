@@ -4,21 +4,6 @@
 % vemos en particular problemas non-blocking (i.e. loop para ganadores, no-controlables no joden)
 % estados ganadores y perdedores (estados desde donde hay una estrategia==controlador ganadora/perdedora)
 %-------------------------------------------------------
-\begin{frame}{Problema de control non-blocking}
-    \begin{block}{¿Cuál es la entrada de un problema de control?}
-        \begin{itemize}
-          \item conjunto de autómatas (la composición de ellos es la planta completa que no queremos calcular)
-          \item acciones controlables y no controlables
-          \item estados marcados u objetivos (se quiere tener la \textit{posibilidad} de visitar infinitas veces \textit{al menos uno})
-        \end{itemize}
-    \end{block}
-
-    \begin{block}{¿Qué devuelve?}
-        Una estrategia ganadora (llamada controlador) o afirmación de que no existe.
-    \end{block}
-
-\end{frame}
-%-------------------------------------------------------
 \begin{frame}{Acciones, pasos y corridas (run)}
     \begin{figure}
         \begin{overprint}
@@ -38,16 +23,46 @@
     
 \end{frame}
 %-------------------------------------------------------
+\begin{frame}{Problema de control non-blocking}
+    \begin{block}{¿Cuál es la entrada de un problema de control?}
+        \begin{itemize}
+          \item conjunto de autómatas (la composición de ellos es la planta completa que no queremos calcular)
+          \item acciones controlables y no controlables
+          \item estados marcados u objetivos (se quiere tener la \textit{posibilidad} de visitar infinitas veces \textit{al menos uno})
+        \end{itemize}
+    \end{block}
+
+    \begin{block}{¿Qué devuelve?}
+        Una estrategia ganadora (llamada controlador) o afirmación de que no existe.
+    \end{block}
+
+\end{frame}
+%-------------------------------------------------------
+\begin{frame}{En nuestro ejemplo}
+    \begin{description}
+     \item[Conjunto de autómatas] Avión, Batería.
+     \item[Acciones controlables] despegar, aterrizar, mensaje, cargarBateria, cancelarMensaje.
+     \item[Acciones no-controlables] mensajeRecibido, pocaBateria.
+     \item[Objetivo] Enviar \textit{mensaje}.
+    \end{description}
+    
+    \textbf{Planta} (composición de todos los autómatas)
+    \begin{figure}
+     \includegraphics[width=\textwidth]{figures/planta.png}
+    \end{figure}
+    
+\end{frame}
+%-------------------------------------------------------
 \begin{frame}{Controlador}
     \begin{figure}
      \includegraphics[width=\textwidth]{figures/director.png}
     \end{figure}
 
-    Es una restricción de la planta (la composición de todos los autómatas) que cumple las reglas:
+    Es una restricción de la planta que cumple las reglas:
 
     \begin{itemize}
      \item Puede prohibir pasos controlables.
-     \item Debe mantener todos los no-controlables.
+     \item Mantiene todas las acciones no-controlables.
      \item Todas las corridas posibles en la planta restringida pasan por algún estado marcado.
     \end{itemize}
 \end{frame}

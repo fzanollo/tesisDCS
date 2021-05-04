@@ -33,17 +33,21 @@
 %-------------------------------------------------------
 \begin{frame}{Autómatas} 
     \begin{figure}
-     \includegraphics[width=0.55\textwidth]{figures/bateria.png}
+     \includegraphics[width=\textwidth]{figures/avion.png}
     \end{figure}
 
-
-    detalles de los autómatas finitos (estado inicial, marcados (ver si va), etc)
+    \begin{itemize}
+     \item Estados finitos, en este caso del 0 al 3 (4 estados).
+     \item Estado inicial, en los ejemplos siempre será el 0.
+     \item Acciones o eventos, en el ejemplo: despegar, aterrizar, cargarBateria, mensaje, mensajeRecibido, cancelarMensaje.
+    \end{itemize}
+    
 \end{frame}
 %-------------------------------------------------------
 \begin{frame}{Componentes}
     \begin{figure}
-     \includegraphics[width=0.95\textwidth]{figures/avion.png}
-     \includegraphics[width=0.55\textwidth]{figures/bateria.png}
+     \includegraphics[width=\textwidth]{figures/avion.png}
+     \includegraphics[width=0.6\textwidth]{figures/bateria.png}
     \end{figure}
 \end{frame}
 %-------------------------------------------------------
@@ -51,15 +55,13 @@
     \begin{figure}
      \includegraphics[width=\textwidth]{figures/planta.png}
     \end{figure}
-
-    ejemplo simple para explicar composición (mostrar planta completa)
-    explicar por arriba cómo se compone o cuál es la idea (la planta refleja el comportamiento del todo) (reglas para sincronización entre las partes)
+    En nuestro caso el autómata \textit{Batería} contiene la información de cómo actuar (qué acciones se pueden hacer) en caso de tener poca batería.\\ 
+    Al componer con el autómata \textit{Avión} se restringen las acciones pero también hay un aumento de estados; ya que no es lo mismo estar en el aire con poca batería o completa.
+%     explicar por arriba cómo se compone o cuál es la idea (la planta refleja el comportamiento del todo) (reglas para sincronización entre las partes) NO QUEDARA MUY TECNICO ESTO?
 \end{frame}
 %-------------------------------------------------------
 \begin{frame}{Explosión de estados}
-    La composición explota, es prohibitiva para algoritmos monolíticos (los que analizan la planta completa).
-    
-    Así queda el muy simple ejemplo anterior si la batería tiene un contador de carga:
+    La composición muchas veces explota en tamaño y termina siendo prohibitiva para algoritmos monolíticos (los que analizan la planta completa). Así queda el muy simple ejemplo anterior si la batería tiene un contador de carga:
     \begin{figure}
     	\includegraphics[width=\textwidth]{figures/big-plant.png}
     \end{figure}

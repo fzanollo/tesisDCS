@@ -1,18 +1,18 @@
-set Controlables = {despegar, aterrizar, mensaje, cargarBateria, cancelarMensaje, esperar}
+set Controlables = {despegar, aterrizar, mensaje, cargarBateria, cancelarMensaje}
 set NoControlables = {mensajeRecibido, pocaBateria}
 
 Avion = EnTierra,
-EnTierra = (despegar -> EnAire),
-EnAire = (aterrizar -> EnTierra | mensaje -> EsperandoConfirmacion | pocaBateria -> aterrizar -> EnTierra),
-EsperandoConfirmacion = (esperar -> EsperandoConfirmacion | mensajeRecibido -> EnAire | pocaBateria -> cancelarMensaje -> aterrizar -> EnTierra).
+EnTierra = (despegar -> EnAire | cargarBateria -> EnTierra),
+EnAire = (aterrizar -> EnTierra | mensaje -> EsperandoConfirmacion),
+EsperandoConfirmacion = (mensajeRecibido -> EnAire | cancelarMensaje -> aterrizar -> EnTierra).
 
 Central = Idle,
 Idle = (mensaje -> RecibiendoMensaje),
 RecibiendoMensaje = (mensajeRecibido -> Idle | cancelarMensaje -> Idle).
 
 Bateria = Completa,
-Completa = (despegar -> Completa | pocaBateria -> aterrizar -> PocaBateria | aterrizar -> Completa),
-PocaBateria = (cargarBateria -> Completa).
+Completa = (despegar -> Completa | pocaBateria -> PocaBateria | aterrizar -> Completa | mensaje -> Completa | mensajeRecibido -> Completa),
+PocaBateria = (cargarBateria -> Completa | aterrizar -> PocaBateria | cancelarMensaje -> PocaBateria).
 
 ||Planta = (Avion || Central || Bateria).
 
