@@ -29,7 +29,7 @@
 \end{frame}
 %-------------------------------------------------------
 \begin{frame}{Nueva definición de ganadores/perdedores}
-    Antes era simple reconocer ganadores/perdedores porque contábamos con toda la información de la planta; ahora debemos ``imaginar'' a dónde van a parar las transiciones no vistas.
+    En la versión monolítica es más simple reconocer ganadores/perdedores porque se cuenta con toda la información de la planta; en on-the-fly debemos ``imaginar'' a dónde van a parar las transiciones no vistas.
     
     Actualizamos estados sólo cuando estamos seguros, es decir, señalamos ganadores sólo al pensar una frontera pesimista y perdedores en frontera optimista.
     
@@ -39,8 +39,20 @@
 \end{frame}
 %------------------------------------------------------- %parte 2
 \begin{frame}{Propagar información}
-    Lema2 ganador/perdedor es antecesor explicar por qué o lema o ej de imágen, ver la mejor manera\\
-    Lema3 hay info para propagar si e' era conocido Y era gandor/perdedor (cc. no sabemos nada nuevo)
+	Si estamos explorando una transición nueva $e \step{\l}{} e'$:
+	
+	\pause
+	
+	Un estado $s$ es un \textbf{nuevo} ganador/perdedor si: sin explorar la última transición no teníamos suficiente información y ahora sí.
+	
+	\pause
+	
+	$s$ solo tiene nueva información si \textbf{puede alcanzar} la nueva transición. ($s$ tiene que ser un antecesor de $e$).
+	
+	\pause 
+	
+	si no sabemos si $e'$ gana o pierde, no tenemos información para propagar, porque \textbf{la transición nueva va a lo desconocido}.
+
 \end{frame}
 %-------------------------------------------------------
 \begin{frame}{Obtener nueva información (Ganador)}
