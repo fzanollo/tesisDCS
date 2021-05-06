@@ -56,11 +56,7 @@
 \end{frame}
 %-------------------------------------------------------
 \begin{frame}{Obtener nueva información (Ganador)}
-	Como vimos, queremos trazas que visiten \textbf{infinitas} veces un estado marcado.
-	
-	\pause
-	
-	Una traza infinita en un autómata finito solo puede ocurrir si forma un \textbf{ciclo} (loop).
+	Como vimos, queremos trazas que visiten \textbf{infinitas} veces un estado marcado. \pause Una traza infinita en un autómata finito solo puede ocurrir si forma un \textbf{ciclo} (loop).
 	
 	\pause
 		
@@ -68,11 +64,11 @@
 	
 	\pause
 	
-	Al explorar una nueva transición, (si $e'$ no estaba clasificado) analizamos el ciclo \textbf{mas grande} que forma. Si no podemos ganar en ese ciclo, no obtuvimos nuevos ganadores.
+	Al explorar una nueva transición ($e \step{\l}{} e'$), en el caso que $e'$ no esté clasificado, analizamos el ciclo \textbf{mas grande} que forma. Si no podemos ganar en ese ciclo, no obtuvimos nuevos ganadores.
 	
 	\pause
 
-	Además, el ciclo debe ser \textbf{controlablemente cerrado}. Intuición: Si una transición no controlable sale del ciclo, un controlador no puede mantenerse ahí dentro y ganar. Y si por no mantenerse adentro, va a un estado no explorado, \textbf{somos pesimistas} y asumimos que pierde.
+	Para ganar el ciclo debe ser \textbf{controlablemente cerrado}. Intuición: Si una transición no controlable sale del ciclo, un controlador no puede mantenerse ahí dentro y ganar. Y si por no mantenerse adentro, va a un estado no explorado, \textbf{somos pesimistas} y asumimos que pierde.
 \end{frame}
 %-------------------------------------------------------
 \begin{frame}{Obtener nueva información (Perdedor)}
