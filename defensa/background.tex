@@ -39,14 +39,13 @@
 \end{frame}
 %-------------------------------------------------------
 \begin{frame}{En nuestro ejemplo}
-    \begin{description}
-     \item[Conjunto de autómatas] Avión, Batería.
-     \item[Acciones controlables] despegar, aterrizar, mensaje, cargarBateria, cancelarMensaje.
-     \item[Acciones no-controlables] mensajeRecibido, pocaBateria.
-     \item[Objetivo] Enviar \textit{mensaje}.
-    \end{description}
+    \textbf{Conjunto de autómatas} Avión, Batería.\\
+    \textbf{Acciones controlables} despegar, aterrizar, mensaje, cargarBateria, cancelarMensaje.\\
+    \textbf{Acciones no-controlables} mensajeRecibido, pocaBateria.\\
+    \textbf{Objetivo} Enviar \textit{mensaje}.
     
-    \textbf{Planta} (composición de todos los autómatas)
+    \vspace{-10pt}\noindent\rule{\textwidth}{0.2pt}
+    Un algoritmo monolítico debe hacer la composición de todos los autómatas (usualmente llamado \textbf{Planta}) antes de empezar
     \begin{figure}
      \includegraphics[width=\textwidth]{figures/planta.png}
     \end{figure}

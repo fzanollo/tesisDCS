@@ -31,7 +31,7 @@
 \begin{frame}{Nueva definición de ganadores/perdedores}
     En la versión monolítica es más simple reconocer ganadores/perdedores porque se cuenta con toda la información de la planta; en on-the-fly debemos ``imaginar'' a dónde van a parar las transiciones no vistas.
     
-    Actualizamos estados sólo cuando estamos seguros, es decir, señalamos ganadores sólo al pensar una frontera pesimista y perdedores en frontera optimista.
+    Actualizamos estados sólo cuando estamos seguros, es decir, clasificamos ganadores sólo al pensar una frontera pesimista y perdedores en frontera optimista.
     
     \begin{block}{Observación}
         Los estados ganadores/perdedores según esta definición son ganadores/perdedores en la planta completa, es decir, una vez que clasificamos un estado nunca debemos reconsiderarlo.
@@ -51,7 +51,7 @@
 	
 	\pause 
 	
-	si no sabemos si $e'$ gana o pierde, no tenemos información para propagar, porque \textbf{la transición nueva va a lo desconocido}.
+	Si no sabemos si $e'$ gana o pierde, no tenemos información para propagar, porque \textbf{la transición nueva va a lo desconocido}.
 
 \end{frame}
 %-------------------------------------------------------
@@ -60,15 +60,15 @@
 	
 	\pause
 		
-	Ese ciclo debe tener un \textbf{estado marcado} o previamente \textbf{clasificado ganador}.
+	Para que exista la chance de ganar, ese ciclo debe tener un \textbf{estado marcado} o previamente \textbf{clasificado ganador}.
 	
 	\pause
 	
-	Al explorar una nueva transición ($e \step{\l}{} e'$), en el caso que $e'$ no esté clasificado, analizamos el ciclo \textbf{mas grande} que forma. Si no podemos ganar en ese ciclo, no obtuvimos nuevos ganadores.
+	Al explorar una nueva transición ($e \step{\l}{} e'$) y en el caso que $e'$ no esté clasificado, analizamos el ciclo \textbf{mas grande} que forma. Si no podemos ganar en él, no obtuvimos nuevos ganadores.
 	
 	\pause
 
-	Para ganar el ciclo debe ser \textbf{controlablemente cerrado}. Intuición: Si una transición no controlable sale del ciclo, un controlador no puede mantenerse ahí dentro y ganar. Y si por no mantenerse adentro, va a un estado no explorado, \textbf{somos pesimistas} y asumimos que pierde.
+	Para realmente ser ganador, el ciclo debe ser \textbf{controlablemente cerrado}. Intuición: Si una transición no controlable sale del ciclo, un controlador no puede mantenerse ahí dentro y ganar. Y si por no mantenerse adentro, va a un estado no explorado, \textbf{somos pesimistas} y asumimos que pierde.
 \end{frame}
 %-------------------------------------------------------
 \begin{frame}{Obtener nueva información (Perdedor)}
@@ -84,7 +84,7 @@
 	
 	\pause
 	
-	\begin{block}{caso general}
+	\begin{block}{Caso General}
 		Si en todos los descendientes de un estado $e$, no hay ningún \textbf{ciclo ganador}, entonces $e$ tiene que ser perdedor. 
 		
 		Tenemos que chequear \textbf{todos} los descendientes, porque siendo \textbf{optimistas}, un descendiente desconocido podría ser ganador.
