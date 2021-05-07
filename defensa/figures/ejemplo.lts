@@ -11,10 +11,10 @@ Idle = (mensaje -> RecibiendoMensaje),
 RecibiendoMensaje = (mensajeRecibido -> Idle | cancelarMensaje -> Idle).
 
 Bateria = Completa,
-Completa = (despegar -> Completa | pocaBateria -> PocaBateria | aterrizar -> Completa | mensaje -> Completa | mensajeRecibido -> Completa),
-PocaBateria = (cargarBateria -> Completa | aterrizar -> PocaBateria | cancelarMensaje -> PocaBateria).
+Completa = (despegar -> Completa | pocaBateria -> PocaBateria | mensaje -> Completa | mensajeRecibido -> Completa),
+PocaBateria = (cargarBateria -> Completa).
 
-||Planta = (Avion || Central || Bateria).
+||Planta = (Avion || Bateria).
 
 controllerSpec Goal = {
   controllable = {Controlables}

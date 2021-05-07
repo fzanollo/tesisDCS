@@ -44,10 +44,10 @@
     \textbf{Acciones no-controlables} mensajeRecibido, pocaBateria.\\
     \textbf{Objetivo} Enviar \textit{mensaje}.
     
-    \vspace{-10pt}\noindent\rule{\textwidth}{0.2pt}
+    \vspace{-15pt}\noindent\rule{\textwidth}{0.2pt}
     Un algoritmo monolítico debe hacer la composición de todos los autómatas (usualmente llamado \textbf{Planta}) antes de empezar
     \begin{figure}
-     \includegraphics[width=\textwidth]{figures/planta.png}
+     \includegraphics[width=0.85\textwidth]{figures/plantaMarcada.png}
     \end{figure}
     
 \end{frame}
@@ -58,11 +58,13 @@
     \end{figure}
 
     Es una restricción de la planta que cumple las reglas:
-
     \begin{itemize}
      \item Puede prohibir pasos controlables.
      \item Mantiene todas las acciones no-controlables.
-     \item Todas las corridas posibles en la planta restringida pasan por algún estado marcado.
+     \item Todas las corridas posibles en la planta restringida tienen que poder extenderse para alcanzar algún estado marcado.
+         \begin{itemize}
+            \item Incluso las que ya pasaron por estados marcados, es decir, se debe poder pasar infinitas veces por los marcados.
+         \end{itemize}
     \end{itemize}
 \end{frame}
 %-------------------------------------------------------
