@@ -6,10 +6,6 @@ EnTierra = (despegar -> EnAire | cargarBateria -> EnTierra),
 EnAire = (aterrizar -> EnTierra | mensaje -> EsperandoConfirmacion),
 EsperandoConfirmacion = (mensajeRecibido -> EnAire | cancelarMensaje -> aterrizar -> EnTierra).
 
-Central = Idle,
-Idle = (mensaje -> RecibiendoMensaje),
-RecibiendoMensaje = (mensajeRecibido -> Idle | cancelarMensaje -> Idle).
-
 Bateria = Completa,
 Completa = (despegar -> Completa | pocaBateria -> PocaBateria | mensaje -> Completa | mensajeRecibido -> Completa),
 PocaBateria = (cargarBateria -> Completa).
